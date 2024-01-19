@@ -6,4 +6,8 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(HappyLittleStudents
-        main.c)
+        main.c
+        Srutture/Strutture.h
+        Input/file_reading.h
+        Input/file_reading.c
+        Srutture/Strutture.c)

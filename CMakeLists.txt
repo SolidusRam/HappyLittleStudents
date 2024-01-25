@@ -10,4 +10,7 @@ add_executable(HappyLittleStudents
         Srutture/Strutture.h
         Input/file_reading.h
         Input/file_reading.c
-        Srutture/Strutture.c)
+        Srutture/Strutture.c
+        Game/game.c
+        Game/game.h
+)

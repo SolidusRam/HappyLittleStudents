@@ -12,6 +12,9 @@ typedef enum effects{NESSUNO,SCARTAP,RUBA,SCAMBIADS,SCARTADS,SCARTAE,SCARTAC,
 typedef enum dmg_type{STUDIO,SOPRAVVIVENZA,SOCIALE,ESAME};
 
 typedef struct Cfu_cards {
+    //delete this later
+    int num;
+    //
     char name[MAX_CHAR];
     int cfu_points;
     enum effects effect;
@@ -39,6 +42,7 @@ typedef struct Player{
     struct Player *next;
 
 }Player;
+
 
 
 

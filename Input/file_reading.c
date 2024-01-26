@@ -1,13 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "file_reading.h"
 
 
 
 CFU_Cards* card_reading()
 {
+    //modificare il path del file
     FILE *file = fopen("C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\carte.txt", "r");
     if (file == NULL) {
         printf("Could not open file\n");
@@ -24,8 +21,8 @@ CFU_Cards* card_reading()
             exit(2);
         }
 
-        fscanf(file, "%d %d %d %[^\n]",&(new_card->num), &(new_card->cfu_points),
-               &(new_card->effect), &(new_card->name));
+        fscanf(file, "%d %d %d %[^\n]",&(new_card->num),
+               &(new_card->effect),&(new_card->cfu_points), &(new_card->name));
         new_card->next = NULL;
 
         if (head == NULL) {
@@ -43,20 +40,53 @@ CFU_Cards* card_reading()
     return head;
 }
 
-void print_cards(CFU_Cards* head) {
-    CFU_Cards* temp = head;
-    while (temp != NULL) {
-        printf("Name: %s, Points: %d, Effect: %d\n", temp->name, temp->cfu_points, temp->effect);
-        temp = temp->next;
+/** \brief Legge il file di testo carte ostacolo.
+ * Contiene un controllo sulla corretta lettura del file, restituisce null in caso
+ * il file sia vuoto oppure il file non e' contenuto nel path indicato.
+ * @return riferimento al primo valore dellla lista
+ */
+//La funzione non riesce a leggere i caratteri speciali
+DMG_cards* dmg_reading() {
+    FILE *file = fopen("C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\ostacoli.txt", "r");
+    if (file == NULL) {
+        printf("Could not open file\n");
+        return NULL;
     }
+
+    DMG_cards *head = NULL;
+    DMG_cards *temp = NULL;
+
+    char name[MAX_CHAR];
+    char desc[DESC_MAX_CHAR];
+    int num_rows;
+
+    enum dmg_type type = STUDIO; // Start with the first type
+
+    while (fscanf(file, "%d\n", &num_rows) != EOF) {
+        for (int i = 0; i < num_rows; i++) {
+            fgets(name,MAX_CHAR,file);
+            fgets(desc,DESC_MAX_CHAR,file);
+
+            DMG_cards *new_card = malloc(sizeof(DMG_cards));
+            strcpy(new_card->name, name);
+            strcpy(new_card->desc, desc);
+            new_card->type = type;
+            new_card->next = NULL;
+
+            if (head == NULL) {
+                head = new_card;
+                temp = new_card;
+            } else {
+                temp->next = new_card;
+                temp = new_card;
+            }
+        }
+        type++; // Move to the next type
+    }
+
+    fclose(file);
+
+    return head;
 }
 
-void free_cards(CFU_Cards* head) {
-    CFU_Cards* temp;
-
-    while (head != NULL) {
-        temp = head;
-        head = head->next;
-        free(temp);
-    }
-}
+void character_reading(Character *characters, int numCharacters);

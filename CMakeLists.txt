@@ -7,10 +7,10 @@ include_directories(.)
 
 add_executable(HappyLittleStudents
         main.c
-        Srutture/Strutture.h
+        Strutture/Strutture.h
         Input/file_reading.h
         Input/file_reading.c
-        Srutture/Strutture.c
+        Strutture/Strutture.c
         Game/game.c
         Game/game.h
 )

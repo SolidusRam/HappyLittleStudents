@@ -1,17 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "input/file_reading.h"
+#include "Strutture/Strutture.h"
 
 
 int main() {
-    CFU_Cards* head = card_reading();
-    if (head == NULL) {
+    DMG_cards * cards = dmg_reading();
+    if (cards == NULL) {
         return 1;
     }
 
+    /*
     print_cards(head);
 
-    // Free the memory when you're done
-    free_cards(head);
+    printf("-----");
+    shuffleCFU(&head);
+
+    print_cards(head);
+    */
+
+    print_dmg_cards(cards);
+
+    free_dmg_cards(cards);
+
     return 0;
 }

@@ -20,4 +20,5 @@ CFU_Cards *card_reading();
 
 void character_reading(Character *characters, int numCharacters);
 
+
 #endif //_PR1_PROGETTO_FILE_READING_H

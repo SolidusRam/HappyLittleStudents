@@ -93,7 +93,7 @@ void free_cards(CFU_Cards* head);
 void free_dmg_cards(DMG_cards * head);
 
 
-//funzioni di controllo
+//funzioni per stampa di controllo
 void print_cards(CFU_Cards*);
 void print_dmg_cards(DMG_cards *);
 

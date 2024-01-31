@@ -81,6 +81,7 @@ typedef struct Player{
     CFU_Cards hand[HAND];
     DMG_cards dmg[DMG_POINTS];
     struct Player *next;
+    Character character;
 
 }Player;
 

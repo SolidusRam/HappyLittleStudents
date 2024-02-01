@@ -64,7 +64,6 @@ void print_cards(CFU_Cards* head) {
     while (temp != NULL) {
         printf("Name: %s, Points: %d, Effect: %d\n",
                temp->name, temp->cfu_points, temp->effect);
-
         temp = temp->next;
     }
 }
@@ -114,10 +113,10 @@ void free_players(Player *head) {
         Player *nextPlayer = current->next;
 
         // Free the player's CFU cards
-        free_cards(nextPlayer->hand);
+        free_cards(current->hand);
 
         // Free the player's obstacle cards
-        free_dmg_cards(nextPlayer->dmg);
+        free_dmg_cards(current->dmg);
 
         // Free the player
         free(current);

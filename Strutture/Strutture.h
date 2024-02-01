@@ -77,8 +77,8 @@ typedef struct Player{
     int cfu_score;
     CFU_Cards *hand;
     DMG_cards *dmg;
-    struct Player *next;
     Character character;
+    struct Player *next;
 
 }Player;
 

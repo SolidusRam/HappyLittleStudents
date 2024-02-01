@@ -13,7 +13,15 @@ void startgame()
 Player *create_player()
 {
     Player *newPlayer = (Player*)malloc(sizeof(Player));
-    //username preso da input
+    if(newPlayer==NULL)
+    {
+        printf("Errore di memoria per player");
+        return NULL;
+    }
+
+    newPlayer->username[0]='\0';
+    newPlayer->hand=NULL;
+    newPlayer->dmg=NULL;
     newPlayer->cfu_score = 0;
     newPlayer->next=NULL;
     return newPlayer;

@@ -5,15 +5,15 @@
 
 int main() {
 
-    /*
-    DMG_cards * cards = dmg_reading();
+
+    CFU_Cards * cards = card_reading();
     if (cards == NULL) {
         return 1;
     }
 
 
-    print_cards(head);
-
+    print_cards(cards);
+/*
     printf("-----");
     shuffleCFU(&head);
 
@@ -25,6 +25,7 @@ int main() {
     free_dmg_cards(cards);
     */
 
+/*
     Character characters[4];
     character_reading(characters, 4);
 
@@ -36,6 +37,6 @@ int main() {
         }
         printf("\n");
     }
-
+*/
     return 0;
 }

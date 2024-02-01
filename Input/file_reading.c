@@ -12,8 +12,31 @@ CFU_Cards* card_reading()
     }
 
     CFU_Cards *head = NULL;
-    CFU_Cards *temp = NULL;
+    CFU_Cards **last_ptr = &head;
 
+    while (1) {
+        int num_cards;
+        if (fscanf(file, "%d", &num_cards) != 1) {
+            break;
+        }
+
+        CFU_Cards template_card;
+        fscanf(file, "%d %d ", &template_card.effect, &template_card.cfu_points);
+        fgets(template_card.name, MAX_CHAR, file);
+        template_card.name[strcspn(template_card.name, "\n")] = 0;  // remove newline character
+
+        for (int i = 0; i < num_cards; i++) {
+            CFU_Cards *new_card = malloc(sizeof(CFU_Cards));
+            *new_card = template_card;
+            new_card->next = NULL;
+
+            *last_ptr = new_card;
+            last_ptr = &new_card->next;
+        }
+    }
+
+/*
+    CFU_Cards *temp = NULL;
     while (!feof(file)) {
         CFU_Cards *new_card = malloc(sizeof(CFU_Cards));
         if (new_card == NULL) {
@@ -35,6 +58,9 @@ CFU_Cards* card_reading()
             temp->next = new_card;
         }
     }
+*/
+
+
 
     fclose(file);
     return head;

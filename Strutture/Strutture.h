@@ -75,8 +75,8 @@ typedef struct Character{
 typedef struct Player{
     char username[MAX_CHAR];
     int cfu_score;
-    CFU_Cards hand[HAND];
-    DMG_cards dmg[DMG_POINTS];
+    CFU_Cards *hand;
+    DMG_cards *dmg;
     struct Player *next;
     Character character;
 

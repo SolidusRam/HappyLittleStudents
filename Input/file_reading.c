@@ -35,33 +35,6 @@ CFU_Cards* card_reading()
         }
     }
 
-/*
-    CFU_Cards *temp = NULL;
-    while (!feof(file)) {
-        CFU_Cards *new_card = malloc(sizeof(CFU_Cards));
-        if (new_card == NULL) {
-            printf("Memory allocation failed\n");
-            exit(2);
-        }
-
-        fscanf(file, "%d %d %d %[^\n]",&(new_card->num),
-               &(new_card->effect),&(new_card->cfu_points), &(new_card->name));
-        new_card->next = NULL;
-
-        if (head == NULL) {
-            head = new_card;
-        } else {
-            temp = head;
-            while (temp->next != NULL) {
-                temp = temp->next;
-            }
-            temp->next = new_card;
-        }
-    }
-*/
-
-
-
     fclose(file);
     return head;
 }

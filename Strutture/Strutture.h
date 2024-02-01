@@ -84,17 +84,17 @@ typedef struct Player{
 
 
 
-
 void shuffleCFU(CFU_Cards**);
 
 void free_cards(CFU_Cards* head);
 void free_dmg_cards(DMG_cards * head);
+void free_players(Player *head);
 
 
 //funzioni per stampa di controllo
 void print_cards(CFU_Cards*);
 void print_dmg_cards(DMG_cards *);
 
-
+void print_player( Player *player);
 
 #endif //_PR1_PROGETTO_STRUTTURE_H

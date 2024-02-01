@@ -1,18 +1,26 @@
 #include <stdio.h>
 #include "input/file_reading.h"
 #include "Strutture/Strutture.h"
+#include "Game/game.h"
+
+
 
 
 int main() {
 
 
     CFU_Cards * cards = card_reading();
-    if (cards == NULL) {
-        return 1;
-    }
-
 
     print_cards(cards);
+
+    Player *player= create_player();
+
+    fillCFUCards(player,&cards);
+    print_player(player);
+
+    //print_cards(cards);
+    free_players(player);
+    free_cards(cards);
 /*
     printf("-----");
     shuffleCFU(&head);

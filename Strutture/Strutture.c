@@ -69,7 +69,16 @@ void print_cards(CFU_Cards* head) {
     }
 }
 
-
+void print_dmg_cards(DMG_cards* head) {
+    DMG_cards* temp = head;
+    while (temp != NULL) {
+        printf("Name: %s\n", temp->name);
+        printf("Description: %s\n", temp->desc);
+        printf("Type: %d\n", temp->type);
+        printf("\n");
+        temp = temp->next;
+    }
+}
 
 void free_cards(CFU_Cards* head) {
     CFU_Cards* temp;
@@ -91,13 +100,28 @@ void free_dmg_cards(DMG_cards * head){
     }
 }
 
-void print_dmg_cards(DMG_cards* head) {
-    DMG_cards* temp = head;
-    while (temp != NULL) {
-        printf("Name: %s\n", temp->name);
-        printf("Description: %s\n", temp->desc);
-        printf("Type: %d\n", temp->type);
-        printf("\n");
-        temp = temp->next;
+
+
+void print_player( Player *player) {
+    printf("CFU accumulated: %d\n", player->cfu_score);
+    printf("CFU Cards:\n");
+    print_cards(player->hand);
+}
+
+void free_players(Player *head) {
+    Player *current = head;
+    while (current != NULL) {
+        Player *nextPlayer = current->next;
+
+        // Free the player's CFU cards
+        free_cards(nextPlayer->hand);
+
+        // Free the player's obstacle cards
+        free_dmg_cards(nextPlayer->dmg);
+
+        // Free the player
+        free(current);
+
+        current = nextPlayer;
     }
 }

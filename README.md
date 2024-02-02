@@ -3,7 +3,7 @@
 Il progetto per l'esame di PR1 
 
 ### Link alle specifiche:
-[Specifiche v1](Specifiche_testi/Specifiche_v1.0.pdf).
+[Specifiche v1](Specifiche_testi/Specifiche_v1.1.pdf).
 
 ### Scadenze di consegna:
   - Il progetto è suddiviso in tre parti:

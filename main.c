@@ -2,12 +2,12 @@
 #include "input/file_reading.h"
 #include "Strutture/Strutture.h"
 #include "Game/game.h"
-
-
+#include "Input/user_input.h"
 
 
 int main() {
-    setup_game();
+
+    game();
 /*
     printf("-----");
     shuffleCFU(&head);

@@ -1,24 +1,41 @@
 #include "game.h"
 
+void game()
+{
+    CFU_Cards *cfuCards=NULL;
+    DMG_cards *dmgCards=NULL;
+    setup_game(cfuCards,dmgCards);
 
-void setup_game()
+
+
+}
+
+int game_over(){
+
+}
+
+int turn()
+{
+
+}
+
+
+void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards)
 {
     //operazioni di lettura
-    CFU_Cards *cfuCards=card_reading();
-    DMG_cards *dmgCards=dmg_reading();
+    cfuCards=card_reading();
+    dmgCards=dmg_reading();
     printf("lettura finita \n");
     //mix
     shuffleCFU(&cfuCards);
     shuffleDmg(&dmgCards);
     printf("shuffle finito \n");
 
-    //change this later
-    int num_players= 4;
-    //
+    int num_players= players_number();
 
+    //creazione personaggio
     Player *head_player = create_player(&cfuCards);
     Player *current =head_player;
-    printf("primo player creato");
 
     for (int i = 0; i < num_players-1; ++i) {
         current->next = create_player(&cfuCards);
@@ -27,6 +44,7 @@ void setup_game()
     current->next=NULL;
 
 
+    //print di controllo
     print_player(head_player);
     print_cards(cfuCards);
 
@@ -45,7 +63,7 @@ Player *create_player(CFU_Cards **cards)
         return NULL;
     }
     //nome da ottenere tramite input
-    newPlayer->username[0]='vuoto';
+    player_username(newPlayer->username);
     //da generare con lassegnazione
     newPlayer->hand=NULL;
     fillCFUCards(newPlayer,cards);
@@ -65,10 +83,10 @@ void fillCFUCards(Player *player, CFU_Cards **deck_head_ref) {
 
         // Remove the card from the top of the deck
         CFU_Cards *card = *deck_head_ref;
-        *deck_head_ref = card->next;
+        *deck_head_ref = (CFU_Cards *) card->next;
 
         // Add the card to the player's CFU cards
-        card->next = player->hand;
+        card->next = (struct CFU_Cards *) player->hand;
         player->hand = card;
     }
 }

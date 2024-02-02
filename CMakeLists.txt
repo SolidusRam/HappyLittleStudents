@@ -13,4 +13,8 @@ add_executable(HappyLittleStudents
         Strutture/Strutture.c
         Game/game.c
         Game/game.h
+        Input/user_input.c
+        Input/user_input.h
+        Output/stampe.c
+        Output/stampe.h
 )

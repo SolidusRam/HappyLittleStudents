@@ -86,18 +86,21 @@ DMG_cards* dmg_reading() {
     fclose(file);
 
     return head;
+
+    //nome, descrizione, tipo9
 }
 
 void character_reading(Character *characters, int numCharacters)
 {
     FILE *file = fopen("C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\personaggi.txt", "r");
     if (file == NULL) {
-        printf("Cannot open file.\n");
+        printf("Cannot open file. File personaggi\n");
         return;
     }
 
     for (int i = 0; i < numCharacters; i++) {
-        fscanf(file, "%d %d %d %d %s", &characters[i].bonus[0], &characters[i].bonus[1], &characters[i].bonus[2], &characters[i].bonus[3], characters[i].name);
+        fscanf(file, "%d %d %d %d %s",
+               &characters[i].bonus[0], &characters[i].bonus[1], &characters[i].bonus[2], &characters[i].bonus[3], characters[i].name);
     }
 
     fclose(file);

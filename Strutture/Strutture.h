@@ -85,6 +85,7 @@ typedef struct Player{
 
 
 void shuffleCFU(CFU_Cards**);
+void shuffleDmg(DMG_cards **);
 
 void free_cards(CFU_Cards* head);
 void free_dmg_cards(DMG_cards * head);

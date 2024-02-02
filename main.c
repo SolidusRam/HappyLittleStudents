@@ -7,21 +7,7 @@
 
 
 int main() {
-
-
-    CFU_Cards * cards = card_reading();
-
-    //print_cards(cards);
-
-    Player *player= create_player();
-
-    fillCFUCards(player,&cards);
-    print_player(player);
-
-    printf("-----");
-    //print_cards(cards);
-    free_players(player);
-    free_cards(cards);
+    setup_game();
 /*
     printf("-----");
     shuffleCFU(&head);

@@ -1,16 +1,42 @@
 #include "game.h"
 
 
-void startgame()
+void setup_game()
 {
-    CFU_Cards *CfuCards=card_reading();
+    //operazioni di lettura
+    CFU_Cards *cfuCards=card_reading();
     DMG_cards *dmgCards=dmg_reading();
+    printf("lettura finita \n");
+    //mix
+    shuffleCFU(&cfuCards);
+    shuffleDmg(&dmgCards);
+    printf("shuffle finito \n");
 
-    Player *player = create_player();
+    //change this later
+    int num_players= 4;
+    //
+
+    Player *head_player = create_player(&cfuCards);
+    Player *current =head_player;
+    printf("primo player creato");
+
+    for (int i = 0; i < num_players-1; ++i) {
+        current->next = create_player(&cfuCards);
+        current=current->next;
+    }
+    current->next=NULL;
+
+
+    print_player(head_player);
+    print_cards(cfuCards);
+
+    free_players(head_player);
+    free_cards(cfuCards);
+    free_dmg_cards(dmgCards);
 
 }
 
-Player *create_player()
+Player *create_player(CFU_Cards **cards)
 {
     Player *newPlayer = (Player*)malloc(sizeof(Player));
     if(newPlayer==NULL)
@@ -18,17 +44,20 @@ Player *create_player()
         printf("Errore di memoria per player");
         return NULL;
     }
-
-    newPlayer->username[0]='\0';
+    //nome da ottenere tramite input
+    newPlayer->username[0]='vuoto';
+    //da generare con lassegnazione
     newPlayer->hand=NULL;
+    fillCFUCards(newPlayer,cards);
     newPlayer->dmg=NULL;
     newPlayer->cfu_score = 0;
+    //manca il character da assegnare diversamente
     newPlayer->next=NULL;
     return newPlayer;
 }
 
 void fillCFUCards(Player *player, CFU_Cards **deck_head_ref) {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < HAND; i++) {
         if (*deck_head_ref == NULL) {
             printf("Not enough cards in the deck\n");
             return;

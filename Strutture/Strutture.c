@@ -59,6 +59,57 @@ void shuffleCFU(CFU_Cards **head_ref)
     }
 }
 
+void shuffleDmg(DMG_cards **head_ref){
+    srand(time(NULL));
+
+    if (*head_ref == NULL || (*head_ref)->next == NULL) {
+        return;
+    }
+
+    DMG_cards *current = *head_ref;
+    DMG_cards *prev = NULL;
+    int count = 0;
+
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+
+    current = *head_ref;
+
+    for (int i = 0; i < count; i++) {
+        int rand_index = rand() % count;
+
+        DMG_cards *swap_node = *head_ref;
+        DMG_cards *swap_prev = NULL;
+
+        for (int j = 0; j < rand_index; j++) {
+            swap_prev = swap_node;
+            swap_node = swap_node->next;
+        }
+
+        if (prev != NULL) {
+            prev->next = swap_node;
+        } else {
+            *head_ref = swap_node;
+        }
+
+        if (swap_prev != NULL) {
+            swap_prev->next = current;
+        } else {
+            *head_ref = current;
+        }
+
+        DMG_cards *temp = current->next;
+        current->next = swap_node->next;
+        swap_node->next = temp;
+
+        prev = swap_node;
+        current = swap_node->next;
+    }
+}
+
+
 void print_cards(CFU_Cards* head) {
     CFU_Cards* temp = head;
     while (temp != NULL) {
@@ -102,9 +153,16 @@ void free_dmg_cards(DMG_cards * head){
 
 
 void print_player( Player *player) {
-    printf("CFU accumulated: %d\n", player->cfu_score);
-    printf("CFU Cards:\n");
-    print_cards(player->hand);
+    Player * temp = player;
+    while (temp != NULL) {
+        printf("Nikname: %s\n",temp->username);
+        printf("CFU accumulated: %d\n", temp->cfu_score);
+        printf("CFU Cards:\n");
+        print_cards(temp->hand);
+        temp=temp->next;
+    }
+
+
 }
 
 void free_players(Player *head) {

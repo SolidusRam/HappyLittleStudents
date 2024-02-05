@@ -2,16 +2,20 @@
 
 void game()
 {
+    //chiedo il numero di giocatori della partita
+    int num_players= players_number();
+
     CFU_Cards *cfuCards=NULL;
     CFU_Cards *scarti=NULL;
     DMG_cards *dmgCards=NULL;
     Player *players=NULL;
+    Character characters[num_players];
 
-    setup_game(cfuCards,dmgCards,players);
+    setup_game(cfuCards,dmgCards,players,characters,num_players);
     turn(cfuCards,dmgCards,players);
 
 
-
+    game_over();
 }
 
 int turn(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player)
@@ -23,19 +27,23 @@ int turn(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player)
     draw(head_player,&cfuCards);
 
     //estrazione carta danno
-    draw_DMG(dmgCards);
+    if(dmgCards!=NULL){
+        draw_DMG(dmgCards);
+        dmgCards=dmgCards->next;
+    }
+
 
     //azioni giocatori
     Player *temp_player=head_player;
     while (temp_player!=NULL)
     {
-        //mostra le informazionin sul giocatore attuale
+        //mostra le informazioni sul giocatore attuale
 
         //selettore dell'azione contestuale
             //
             //gioca una carta CFU
             //
-                //selettore carta
+                //selettore carta Cfu
 
             //
             //Controlla lo stato dei giocatori
@@ -46,10 +54,14 @@ int turn(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player)
         temp_player=temp_player->next;
     }
 
+    //altro ciclo per la carta CFU instantaneo
+    //di nuovo richiedo le altre due opzioni
+
+    return 0;
 }
 
 
-void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player)
+void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player,Character character[],int num_players)
 {
     //operazioni di lettura
     cfuCards=card_reading();
@@ -58,9 +70,13 @@ void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player)
     //mix
     shuffleCFU(&cfuCards);
     shuffleDmg(&dmgCards);
+    shuffle_characters(character,num_players);
     printf("shuffle finito \n");
 
-    int num_players= players_number();
+
+
+    //lettura personaggi
+    character_reading(character,num_players);
 
     //creazione personaggio
     head_player = create_player(&cfuCards);
@@ -68,6 +84,7 @@ void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player)
 
     for (int i = 0; i < num_players-1; ++i) {
         current->next = create_player(&cfuCards);
+        current->character=character[i];
         current=current->next;
     }
     current->next=NULL;
@@ -92,16 +109,14 @@ Player *create_player(CFU_Cards **cards)
         printf("Errore di memoria per player");
         return NULL;
     }
-    //nome da ottenere tramite input
+    //nome da ottenuto tramite input
     player_username(newPlayer->username);
-    //da generare con lassegnazione
+
     newPlayer->hand=NULL;
     fillCFUCards(newPlayer,cards);
     newPlayer->dmg=NULL;
     newPlayer->cfu_score = 0;
-    //
-    //manca il character da assegnare diversamente
-    //
+
     newPlayer->next=NULL;
     return newPlayer;
 }

@@ -87,7 +87,7 @@ DMG_cards* dmg_reading() {
 
     return head;
 
-    //nome, descrizione, tipo9
+    //nome, descrizione, tipo
 }
 
 void character_reading(Character *characters, int numCharacters)

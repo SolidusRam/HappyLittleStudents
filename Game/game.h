@@ -6,7 +6,7 @@
 #include "Input/user_input.h"
 
 void game();
-void setup_game(CFU_Cards *,DMG_cards*,Player *);
+void setup_game(CFU_Cards *,DMG_cards*,Player *,Character[],int);
 
 int turn(CFU_Cards *,DMG_cards*,Player *);
 int game_over();

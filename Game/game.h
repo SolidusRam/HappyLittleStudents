@@ -6,13 +6,16 @@
 #include "Input/user_input.h"
 
 void game();
-void setup_game(CFU_Cards *,DMG_cards*);
+void setup_game(CFU_Cards *,DMG_cards*,Player *);
 
-int turn();
+int turn(CFU_Cards *,DMG_cards*,Player *);
 int game_over();
 
 Player *create_player(CFU_Cards **);
 
 void fillCFUCards(Player *player, CFU_Cards ** deck_head_ref) ;
+void draw(Player*,CFU_Cards**);
+
+void draw_DMG(DMG_cards*);
 
 #endif //HAPPYLITTLESTUDENTS_GAME_H

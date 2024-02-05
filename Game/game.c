@@ -3,24 +3,53 @@
 void game()
 {
     CFU_Cards *cfuCards=NULL;
+    CFU_Cards *scarti=NULL;
     DMG_cards *dmgCards=NULL;
-    setup_game(cfuCards,dmgCards);
+    Player *players=NULL;
+
+    setup_game(cfuCards,dmgCards,players);
+    turn(cfuCards,dmgCards,players);
 
 
 
 }
 
-int game_over(){
-
-}
-
-int turn()
+int turn(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player)
 {
 
+    //salvataggio stato in file.save
+
+    //pesca carte in difetto dal turno precendente
+    draw(head_player,&cfuCards);
+
+    //estrazione carta danno
+    draw_DMG(dmgCards);
+
+    //azioni giocatori
+    Player *temp_player=head_player;
+    while (temp_player!=NULL)
+    {
+        //mostra le informazionin sul giocatore attuale
+
+        //selettore dell'azione contestuale
+            //
+            //gioca una carta CFU
+            //
+                //selettore carta
+
+            //
+            //Controlla lo stato dei giocatori
+            //
+            //Esci dal gioco
+            //
+
+        temp_player=temp_player->next;
+    }
+
 }
 
 
-void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards)
+void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards,Player *head_player)
 {
     //operazioni di lettura
     cfuCards=card_reading();
@@ -34,8 +63,8 @@ void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards)
     int num_players= players_number();
 
     //creazione personaggio
-    Player *head_player = create_player(&cfuCards);
-    Player *current =head_player;
+    head_player = create_player(&cfuCards);
+    Player *current = head_player;
 
     for (int i = 0; i < num_players-1; ++i) {
         current->next = create_player(&cfuCards);
@@ -48,6 +77,7 @@ void setup_game(CFU_Cards *cfuCards,DMG_cards *dmgCards)
     print_player(head_player);
     print_cards(cfuCards);
 
+    //memory free
     free_players(head_player);
     free_cards(cfuCards);
     free_dmg_cards(dmgCards);
@@ -69,7 +99,9 @@ Player *create_player(CFU_Cards **cards)
     fillCFUCards(newPlayer,cards);
     newPlayer->dmg=NULL;
     newPlayer->cfu_score = 0;
+    //
     //manca il character da assegnare diversamente
+    //
     newPlayer->next=NULL;
     return newPlayer;
 }
@@ -89,4 +121,51 @@ void fillCFUCards(Player *player, CFU_Cards **deck_head_ref) {
         card->next = (struct CFU_Cards *) player->hand;
         player->hand = card;
     }
+}
+
+void draw(Player *head, CFU_Cards **deck_head_ref)
+{
+    Player *current_player =head;
+
+    while(current_player!=NULL)
+    {
+        // Count the number of cards in the player's hand
+        int hand_size = 0;
+        CFU_Cards *current = current_player->hand;
+        while (current != NULL) {
+            hand_size++;
+            current = current->next;
+        }
+
+        // Draw cards from the deck until the player has 5 cards
+        while (hand_size < HAND) {
+            if (*deck_head_ref == NULL) {
+                //aggiungere la funzione di mescolamento quando le carte sono finite
+                printf("finite le carte inizio un nuovo mescolamento\n");
+                return;
+            }
+
+            // Remove the card from the top of the deck
+            CFU_Cards *card = *deck_head_ref;
+            *deck_head_ref = card->next;
+
+            // Add the card to the player's hand
+            card->next = current_player->hand;
+            current_player->hand = card;
+
+            hand_size++;
+        }
+        current_player=current_player->next;
+    }
+}
+
+void draw_DMG(DMG_cards *head){
+    //per ora solo stampa
+    if(head!=NULL) {
+        printf("Name: %s\n", head->name);
+        printf("Description: %s\n", head->desc);
+        printf("Type: %d\n", head->type);
+        printf("\n");
+    }
+
 }

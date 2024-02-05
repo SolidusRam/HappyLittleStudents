@@ -109,7 +109,6 @@ void shuffleDmg(DMG_cards **head_ref){
     }
 }
 
-
 void print_cards(CFU_Cards* head) {
     CFU_Cards* temp = head;
     while (temp != NULL) {
@@ -149,7 +148,6 @@ void free_dmg_cards(DMG_cards * head){
         free(temp);
     }
 }
-
 
 
 void print_player( Player *player) {

@@ -109,6 +109,7 @@ void shuffleDmg(DMG_cards **head_ref){
     }
 }
 
+
 void shuffle_characters(Character *array,size_t n) {
     srand(time(NULL));
     if (n > 1) {
@@ -164,18 +165,7 @@ void free_dmg_cards(DMG_cards * head){
 }
 
 
-void print_player( Player *player) {
-    Player * temp = player;
-    while (temp != NULL) {
-        printf("Nikname: %s\n",temp->username);
-        printf("CFU accumulated: %d\n", temp->cfu_score);
-        printf("CFU Cards:\n");
-        print_cards(temp->hand);
-        temp=temp->next;
-    }
 
-
-}
 
 void free_players(Player *head) {
     Player *current = head;

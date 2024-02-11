@@ -4,6 +4,7 @@
 #include "Input/file_reading.h"
 #include "Strutture/Strutture.h"
 #include "Input/user_input.h"
+#include "Output/stampe.h"
 
 void game();
 void setup_game(CFU_Cards *,DMG_cards*,Player *,Character[],int);

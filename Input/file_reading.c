@@ -5,9 +5,9 @@
 CFU_Cards* card_reading()
 {
     //modificare il path del file
-    FILE *file = fopen("C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\carte.txt", "r");
+    FILE *file = fopen(CARTE, "r");
     if (file == NULL) {
-        printf("Could not open file\n");
+        printf("Could not open file CFU\n");
         exit(1);
     }
 
@@ -46,7 +46,7 @@ CFU_Cards* card_reading()
  */
 //La funzione non riesce a leggere i caratteri speciali
 DMG_cards* dmg_reading() {
-    FILE *file = fopen("C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\ostacoli.txt", "r");
+    FILE *file = fopen(OSTACOLI, "r");
     if (file == NULL) {
         printf("Could not open file\n");
         return NULL;
@@ -92,7 +92,7 @@ DMG_cards* dmg_reading() {
 
 void character_reading(Character *characters, int numCharacters)
 {
-    FILE *file = fopen("C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\personaggi.txt", "r");
+    FILE *file = fopen(PERSONAGGI, "r");
     if (file == NULL) {
         printf("Cannot open file. File personaggi\n");
         return;

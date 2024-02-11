@@ -9,9 +9,9 @@
 #include "Strutture/Strutture.h"
 // file name:
 
-#define CARTE "Specifiche_testi/carte.txt"
-#define OSTACOLI "Specifiche_testi/ostacoli.txt"
-#define PERSONAGGI "Specifiche_testi/personaggi.txt"
+#define CARTE "C:\\Users\\realr\\CLionProjects\\HappyLittleStudents\\Specifiche_testi\\carte.txt"
+#define OSTACOLI "C:\\Users\\realr\\CLionProjects\\HappyLittleStudents\\Specifiche_testi\\ostacoli.txt"
+#define PERSONAGGI "C:\\Users\\realr\\CLionProjects\\HappyLittleStudents\\Specifiche_testi\\personaggi.txt"
 
 
 DMG_cards *dmg_reading();

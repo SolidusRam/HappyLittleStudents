@@ -3,6 +3,8 @@
 #include "stdio.h"
 #include "Strutture/Strutture.h"
 
+
 void current_player_info(Player *);
+void print_player( Player *player);
 
 #endif //HAPPYLITTLESTUDENTS_STAMPE_H

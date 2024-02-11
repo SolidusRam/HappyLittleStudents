@@ -3,7 +3,6 @@
 
 int players_number()
 {
-
     int ngiocatori;
     int is_valid=0;
 
@@ -33,7 +32,7 @@ void player_username(char username[MAX_CHAR])
     int is_valid = 0;
 
     while (is_valid==0) {
-        printf("Inserisci una stringa: ");
+        printf("Inserisci una nikname: ");
         scanf("%32s", username);
 
         if (strlen(username) <= 32) {

@@ -7,9 +7,10 @@
 #include "Output/stampe.h"
 
 void game();
-void setup_game(CFU_Cards *,DMG_cards*,Player *,Character[],int);
+void setup_game(CFU_Cards **,DMG_cards**,Player **,Character[],int);
 
-int turn(CFU_Cards *,DMG_cards*,Player *);
+int turn(CFU_Cards**,DMG_cards*,Player *);
+
 int game_over();
 
 Player *create_player(CFU_Cards **);

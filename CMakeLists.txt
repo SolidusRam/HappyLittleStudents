@@ -17,4 +17,6 @@ add_executable(HappyLittleStudents
         Input/user_input.h
         Output/stampe.c
         Output/stampe.h
+        Input/salvataggi.c
+        Input/salvataggi.h
 )

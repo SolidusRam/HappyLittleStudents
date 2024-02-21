@@ -11,10 +11,11 @@ void game()
 
     //inzializzo le varibili
     // CFU_Cards *scarti;
+    //definire meglio il numero delle carte per allocare bene la memoria
 
-    CFU_Cards *cfuCards= malloc(sizeof(CFU_Cards)*50);
+    CFU_Cards *cfuCards= malloc(sizeof(CFU_Cards)*74);
 
-    DMG_cards *dmgCards= malloc(sizeof(DMG_cards)*50);
+    DMG_cards *dmgCards= malloc(sizeof(DMG_cards)*28);
 
     Player *players = malloc(sizeof (Player)*num_players);
 
@@ -85,6 +86,7 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
 {
     //operazioni di lettura
     num_players=3;
+    // debug data
     *cfuCards=card_reading();
     *dmgCards=dmg_reading();
     printf("lettura finita \n");

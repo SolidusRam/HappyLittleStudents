@@ -13,7 +13,7 @@ int turn(CFU_Cards**,DMG_cards*,Player *);
 
 int game_over();
 
-Player *create_player(CFU_Cards **);
+Player *create_player();
 
 void fillCFUCards(Player *player, CFU_Cards ** deck_head_ref) ;
 void draw(Player*,CFU_Cards**);

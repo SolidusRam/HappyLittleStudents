@@ -3,6 +3,7 @@
 void game()
 {
 
+    //chiedo se si vuole leggere e caricare il file di salvataggio
     //chiedo il numero di giocatori della partita
     //int num_players= players_number();
     int num_players=3;
@@ -17,7 +18,7 @@ void game()
 
     DMG_cards *dmgCards= malloc(sizeof(DMG_cards)*28);
 
-    Player *players = malloc(sizeof (Player)*num_players);
+    Player *players;
 
 
     setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
@@ -181,7 +182,7 @@ void draw_DMG(DMG_cards *head){
 
 }
 
-Player *create_player(CFU_Cards **cards)
+Player *create_player()
 {
     Player *newPlayer = malloc(sizeof(Player));
     if(newPlayer==NULL)

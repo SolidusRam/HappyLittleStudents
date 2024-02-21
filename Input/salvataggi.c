@@ -1,11 +1,9 @@
 #include "salvataggi.h"
 
-
-
-void printFileContents(const char* filename) {
-    FILE *file = fopen(filename, "rb");
+void printFileContents(Player **head_player) {
+    FILE *file = fopen(FILENAME, "rb");
     if (file == NULL) {
-        printf("Cannot open file %s\n", filename);
+        printf("Cannot open file %s\n", FILENAME);
         return;
     }
 
@@ -14,89 +12,54 @@ void printFileContents(const char* filename) {
 
     printf("Number of players: %d\n", numPlayers);
 
-    Player player;
+    *head_player= create_player();
+    Player *current = *head_player;
+
+    for (int i = 0; i < numPlayers; i++) {
+
+        int numCarteDanno;
 
 
-    //for (int i = 0; i < numPlayers; i++) {
+        fread(current, sizeof(Player), 1, file);
 
-    char username[MAX_CHAR];
-    Character character;
-    int punti;
-    char nomeChar[MAX_CHAR];
-    int arr[4];
+        CFU_Cards *current_card = malloc(sizeof(CFU_Cards));
+        current->hand=current_card;
 
-    char stringa[MAX_CHAR];
-    int a,b,c,d,e;
+        DMG_cards *current_dmg= malloc(sizeof(DMG_cards));
+        current->dmg=current_dmg;
 
-    CFU_Cards mano;
-    CFU_Cards mano2;
+        for (int j=0;j<HAND;j++) {
 
-    fread(&player, sizeof(Player), 1, file);
-/*
-        fread(username,sizeof (username),1,file);
-        fread(nomeChar, sizeof(nomeChar),1,file);
-        for (int i = 0; i < 4; ++i) {
-            fread(&arr[i], sizeof(arr[i]),1,file);
+            fread(current_card, sizeof(CFU_Cards), 1, file);
+            if (j < 4) { // if not the last card
+                current_card->next = malloc(sizeof(CFU_Cards));
+                current_card = current_card->next;
+            } else {
+                current_card->next = NULL; // end of the list
+            }
+
         }
-        //fread(&character, sizeof(Character),1,file);
-        fread(&punti, sizeof(punti),1,file);
 
-        //fread(&a,sizeof (a),1,file);
+        fread(&numCarteDanno, sizeof(int), 1, file);
 
-        //fread(&player, sizeof(Player), 1, file);
-        //printf("%s, %d, %s\n",player.username,player.cfu_score,player.character.name);
-        //printf("%p",player.hand);
-    fread(stringa,sizeof(4*8),1,file);
-        fread(stringa, sizeof(stringa),1,file);
-*/
-    for (int i=0;i<5;i++) {
-        fread(&mano, sizeof(CFU_Cards), 1, file);
-        fread(&mano2, sizeof(CFU_Cards), 1, file);
-        printf("%s", mano2.name);
+        for (int j = 0; j < numCarteDanno; ++j) {
+            fread(current_dmg, sizeof(DMG_cards), 1, file);
+            if (j < numCarteDanno) { // if not the last card
+                current_dmg->next = malloc(sizeof(DMG_cards));
+                current_dmg = current_dmg->next;
+            } else {
+                current_dmg->next = NULL; // end of the list
+            }
+        }
+
+        if (i < numPlayers - 1) { // if not the last player
+            current->next = create_player();
+            current = current->next;
+        } else {
+            current->next = NULL; // end of the list
+        }
+
     }
-
     int pazzodicazzo=1000;
 }
-// Read the number of CFU cards in hand
 
-
-
-
-//////
-
-/*
-while (fread(&temp, sizeof(CFU_Cards), 1, file) == 1) {
-    CFU_Cards *node = malloc(sizeof(CFU_Cards));
-    *node = temp;
-    node->next = NULL;
-
-    if (head == NULL) {
-        head = node;
-    } else {
-        current->next = node;
-    }
-    current = node;
-}
-print_cards(head);*/
-
-
-
-
-
-
-
-/*
-    Player player;
-    for (int i = 0; i < numPlayers; i++) {
-        fread(&player, sizeof(Player), 1, file);
-        // Print the player information here...
-    }
-
-    int count=0;
-    char buffer[32];
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        printf("  %s", buffer);
-        count++;
-
-    }
-*/

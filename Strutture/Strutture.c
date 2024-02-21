@@ -123,6 +123,26 @@ void shuffle_characters(Character *array,size_t n) {
     }
 }
 
+Player *create_player()
+{
+    Player *newPlayer = malloc(sizeof(Player));
+    if(newPlayer==NULL)
+    {
+        printf("Errore di memoria per player");
+        return NULL;
+    }
+    //nome da ottenuto tramite input
+    //player_username(newPlayer->username);
+
+    newPlayer->hand=NULL;
+    //fillCFUCards(newPlayer,cards);
+    newPlayer->dmg=NULL;
+    newPlayer->cfu_score = 0;
+
+    newPlayer->next=NULL;
+    return newPlayer;
+}
+
 
 void print_cards(CFU_Cards* head) {
     CFU_Cards* temp = head;

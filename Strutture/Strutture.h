@@ -87,6 +87,7 @@ void shuffleCFU(CFU_Cards**);
 void shuffleDmg(DMG_cards **);
 void shuffle_characters(Character*,size_t);
 
+Player *create_player();
 
 void free_cards(CFU_Cards* head);
 void free_dmg_cards(DMG_cards * head);

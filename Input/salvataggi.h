@@ -1,8 +1,10 @@
 
 #ifndef HAPPYLITTLESTUDENTS_SALVATAGGI_H
 #define HAPPYLITTLESTUDENTS_SALVATAGGI_H
-#import "Strutture/strutture.h"
+
+#import "Strutture/Strutture.h"
 #import "Game/game.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>

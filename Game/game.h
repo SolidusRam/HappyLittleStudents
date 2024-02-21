@@ -5,6 +5,7 @@
 #include "Strutture/Strutture.h"
 #include "Input/user_input.h"
 #include "Output/stampe.h"
+#include "Game/game_mechanics.h"
 
 void game();
 void setup_game(CFU_Cards **,DMG_cards**,Player **,Character[],int);
@@ -13,11 +14,7 @@ int turn(CFU_Cards**,DMG_cards*,Player *);
 
 int game_over();
 
-Player *create_player();
-
 void fillCFUCards(Player *player, CFU_Cards ** deck_head_ref) ;
-void draw(Player*,CFU_Cards**);
 
-void draw_DMG(DMG_cards*);
 
 #endif //HAPPYLITTLESTUDENTS_GAME_H

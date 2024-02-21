@@ -19,4 +19,6 @@ add_executable(HappyLittleStudents
         Output/stampe.h
         Input/salvataggi.c
         Input/salvataggi.h
+        Game/game_mechanics.c
+        Game/game_mechanics.h
 )

@@ -1,6 +1,6 @@
 #include "salvataggi.h"
 
-void printFileContents(Player **head_player) {
+void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
     FILE *file = fopen(FILENAME, "rb");
     if (file == NULL) {
         printf("Cannot open file %s\n", FILENAME);
@@ -14,7 +14,7 @@ void printFileContents(Player **head_player) {
 
     *head_player= create_player();
     Player *current = *head_player;
-
+    //inizio lettura player
     for (int i = 0; i < numPlayers; i++) {
 
         int numCarteDanno;
@@ -60,6 +60,79 @@ void printFileContents(Player **head_player) {
         }
 
     }
-    int pazzodicazzo=1000;
-}
+    //letti player completamente
+    //inizio lettura mazzo
+    int numCarte;
+    fread(&numCarte, sizeof(int ),1,file);
 
+    CFU_Cards *prev_card = NULL;
+    for (int i = 0; i < numCarte; i++) {
+        CFU_Cards *new_card = malloc(sizeof(CFU_Cards));
+        if (new_card == NULL) {
+            printf("Impossibile allocare memoria.\n");
+            return ;
+        }
+
+        fread(new_card, sizeof(CFU_Cards), 1, file);
+        new_card->next = NULL;
+
+        if (prev_card == NULL) {
+            *mazzo = new_card; // Prima carta
+        } else {
+            prev_card->next = new_card; // Carte successive
+        }
+
+        prev_card = new_card;
+    }
+    //fine lettura mazzo
+
+    int numScarti;
+    fread(&numScarti, sizeof(int ),1,file);
+
+    CFU_Cards *prev_scarto = NULL;
+    for (int i = 0; i < numScarti; i++) {
+        CFU_Cards *new_card = malloc(sizeof(CFU_Cards));
+        if (new_card == NULL) {
+            printf("Impossibile allocare memoria.\n");
+            return;
+        }
+
+        fread(new_card, sizeof(CFU_Cards), 1, file);
+        new_card->next = NULL;
+
+        if (prev_scarto == NULL) {
+            *scarti = new_card; // Prima carta
+        } else {
+            prev_scarto->next = new_card; // Carte successive
+        }
+
+        prev_scarto = new_card;
+    }
+    //fine lettura scarti
+    //inizio lettura danno
+    int numDanno;
+    fread(&numDanno, sizeof(int ),1,file);
+
+    DMG_cards *prev_dmg = NULL;
+    for (int i = 0; i < numDanno; i++) {
+        DMG_cards *new_card = malloc(sizeof(DMG_cards));
+        if (new_card == NULL) {
+            printf("Impossibile allocare memoria.\n");
+            return;
+        }
+
+        fread(new_card, sizeof(DMG_cards), 1, file);
+        new_card->next = NULL;
+
+        if (prev_dmg == NULL) {
+            *danno = new_card; // Prima carta
+        } else {
+            prev_dmg->next = new_card; // Carte successive
+        }
+
+        prev_dmg = new_card;
+    }
+    //fine lettura danno
+
+    int debug=1000;
+}

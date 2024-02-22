@@ -14,7 +14,7 @@
 
 #define FILENAME "C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\savegame.sav"
 
-void printFileContents(Player **head_player);
+void lettura_salvataggio(Player **head_player,CFU_Cards**,DMG_cards**,CFU_Cards ** );
 
 
 #endif //HAPPYLITTLESTUDENTS_SALVATAGGI_H

@@ -1,5 +1,7 @@
 #include "salvataggi.h"
 
+
+
 void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
     FILE *file = fopen(FILENAME, "rb");
     if (file == NULL) {
@@ -25,8 +27,6 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
         CFU_Cards *current_card = malloc(sizeof(CFU_Cards));
         current->hand=current_card;
 
-        DMG_cards *current_dmg= malloc(sizeof(DMG_cards));
-        current->dmg=current_dmg;
 
         for (int j=0;j<HAND;j++) {
 
@@ -42,9 +42,13 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
 
         fread(&numCarteDanno, sizeof(int), 1, file);
 
-        for (int j = 0; j < numCarteDanno; ++j) {
+
+        DMG_cards *current_dmg= malloc(sizeof(DMG_cards)*numCarteDanno);
+        current->dmg=current_dmg;
+
+        for (int j = 0; j < numCarteDanno; j++) {
             fread(current_dmg, sizeof(DMG_cards), 1, file);
-            if (j < numCarteDanno) { // if not the last card
+            if (j < numCarteDanno-1) { // if not the last card
                 current_dmg->next = malloc(sizeof(DMG_cards));
                 current_dmg = current_dmg->next;
             } else {
@@ -61,6 +65,7 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
 
     }
     //letti player completamente
+
     //inizio lettura mazzo
     int numCarte;
     fread(&numCarte, sizeof(int ),1,file);
@@ -111,7 +116,7 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
     //fine lettura scarti
     //inizio lettura danno
     int numDanno;
-    fread(&numDanno, sizeof(int ),1,file);
+    fread(&numDanno, sizeof(int),1,file);
 
     DMG_cards *prev_dmg = NULL;
     for (int i = 0; i < numDanno; i++) {
@@ -133,6 +138,96 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
         prev_dmg = new_card;
     }
     //fine lettura danno
+    fclose(file);
+    int pazzodicazzo=1000;
+}
 
+void scrittura_salvataggio(Player **head_player, CFU_Cards **mazzo, DMG_cards **danno, CFU_Cards **scarti) {
+    FILE *file = fopen(FILENAME, "wb");
+    if (file == NULL) {
+        printf("Cannot open file %s\n", FILENAME);
+        return;
+    }
+
+    Player *current = *head_player;
+    int numPlayers = 0;
+    while (current != NULL) {
+        numPlayers++;
+        current = current->next;
+    }
+    fwrite(&numPlayers, sizeof(int), 1, file);
+
+    current = *head_player;
+    for (int i = 0; i < numPlayers; i++) {
+        fwrite(current, sizeof(Player), 1, file);
+
+        CFU_Cards *current_card = current->hand;
+        for (int j = 0; j < HAND; j++) {
+            fwrite(current_card, sizeof(CFU_Cards), 1, file);
+            current_card = current_card->next;
+        }
+
+        int numCarteDanno = 0;
+        DMG_cards *current_dmg = current->dmg;
+        while (current_dmg != NULL) {
+            numCarteDanno++;
+            current_dmg = current_dmg->next;
+        }
+        fwrite(&numCarteDanno, sizeof(int), 1, file);
+
+        current_dmg = current->dmg;
+        for (int j = 0; j < numCarteDanno; j++) {
+            fwrite(current_dmg, sizeof(DMG_cards), 1, file);
+            current_dmg = current_dmg->next;
+        }
+
+        current = current->next;
+    }
+
+    // Write deck
+    int numCarte = 0;
+    CFU_Cards *current_deck_card = *mazzo;
+    while (current_deck_card != NULL) {
+        numCarte++;
+        current_deck_card = current_deck_card->next;
+    }
+    fwrite(&numCarte, sizeof(int), 1, file);
+
+    current_deck_card = *mazzo;
+    for (int i = 0; i < numCarte; i++) {
+        fwrite(current_deck_card, sizeof(CFU_Cards), 1, file);
+        current_deck_card = current_deck_card->next;
+    }
+
+    // Write discards
+    int numScarti = 0;
+    CFU_Cards *current_discard_card = *scarti;
+    while (current_discard_card != NULL) {
+        numScarti++;
+        current_discard_card = current_discard_card->next;
+    }
+    fwrite(&numScarti, sizeof(int), 1, file);
+
+    current_discard_card = *scarti;
+    for (int i = 0; i < numScarti; i++) {
+        fwrite(current_discard_card, sizeof(CFU_Cards), 1, file);
+        current_discard_card = current_discard_card->next;
+    }
+
+    // Write damage
+    int numDanno = 0;
+    DMG_cards *current_dmg_card = *danno;
+    while (current_dmg_card != NULL) {
+        numDanno++;
+        current_dmg_card = current_dmg_card->next;
+    }
+    fwrite(&numDanno, sizeof(int), 1, file);
+
+    current_dmg_card = *danno;
+    for (int i = 0; i < numDanno; i++) {
+        fwrite(current_dmg_card, sizeof(DMG_cards), 1, file);
+        current_dmg_card = current_dmg_card->next;
+    }
     int debug=1000;
+    fclose(file);
 }

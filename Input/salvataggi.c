@@ -1,7 +1,5 @@
 #include "salvataggi.h"
 
-
-
 void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
     FILE *file = fopen(FILENAME, "rb");
     if (file == NULL) {

@@ -132,7 +132,7 @@ Player *create_player()
         return NULL;
     }
     //nome da ottenuto tramite input
-    //player_username(newPlayer->username);
+    player_username(newPlayer->username);
 
     newPlayer->hand=NULL;
     //fillCFUCards(newPlayer,cards);

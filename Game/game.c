@@ -2,52 +2,61 @@
 
 void game()
 {
+    //int save=0;
 
-    //chiedo se si vuole leggere e caricare il file di salvataggio
-    //chiedo il numero di giocatori della partita
     //int num_players= players_number();
     int num_players=3;
 
     Character characters[num_players];
 
     //inzializzo le varibili
-    // CFU_Cards *scarti;
     //definire meglio il numero delle carte per allocare bene la memoria
 
-    CFU_Cards *cfuCards= malloc(sizeof(CFU_Cards)*74);
+    CFU_Cards *cfuCards= malloc(sizeof(CFU_Cards)*TOTALCFU);
+    CFU_Cards *scarti= malloc(sizeof(CFU_Cards)*TOTALCFU);
 
-    DMG_cards *dmgCards= malloc(sizeof(DMG_cards)*28);
+    DMG_cards *dmgCards= malloc(sizeof(DMG_cards)*TOTALDMG);
 
     Player *players;
 
+    //chiedo se si vuole leggere e caricare il file di salvataggio
+    //chiedo il numero di giocatori della partita
 
+    //se il gioco non è stato caricato dal salvataggio preparo il setup
     setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
     print_player(players);
-    //print_cards(cfuCards);
+    print_cards(cfuCards);
 
+    //prima di iniziare i giocatori devono avere 5 carte CFU
 
+    int check=0;
     //turno da reiterare per variabile di ritorno
-    //turn(&cfuCards,dmgCards,players);
+    for(int turn_number=0;check==0;turn_number++)
+    {
+        check=turn(&cfuCards,dmgCards,players,turn_number);
+    }
 
+    free_cards(scarti);
     free_cards(cfuCards);
     free_dmg_cards(dmgCards);
     free_players(players);
     game_over();
 }
 
-int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player)
+int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number)
 {
 
     //salvataggio stato in file.save
 
+    //stampa del numero turno
+    printf("%d",turn_number);
     //pesca carte in difetto dal turno precendente
     draw(head_player,cfuCards);
 
     //estrazione carta danno
     if(dmgCards!=NULL){
         draw_DMG(dmgCards);
-        dmgCards=dmgCards->next;
     } else{
         printf("Errore la carta DMG non esiste");
     }
@@ -74,20 +83,23 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player)
         temp_player=temp_player->next;
     }
     if(temp_player==NULL)
-        printf("Nessuno gioca");
+    {
+        printf("Nessuno gioca Errore");
+        return 1;
+    }
+
 
     //altro ciclo per la carta CFU instantaneo
     //di nuovo richiedo le altre due opzioni
 
-    return 0;
+    //codice di uscita !=0
+    return 1;
 }
 
 
 void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[],int num_players)
 {
     //operazioni di lettura
-    num_players=3;
-    // debug data
     *cfuCards=card_reading();
     *dmgCards=dmg_reading();
     printf("lettura finita \n");
@@ -104,6 +116,8 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     shuffle_characters(character,num_players);
 
     //creazione personaggio
+    //sto chiedendo anche l'username
+
     *head_player = create_player(cfuCards);
     Player *current = *head_player;
 
@@ -113,17 +127,6 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
         current=current->next;
     }
     current->next=NULL;
-
-
-    /*print di controllo
-    print_player(head_player);
-    print_cards(cfuCards);
-     */
-
-    /*memory free
-    free_players(head_player);
-    free_cards(cfuCards);
-    free_dmg_cards(dmgCards);*/
 
 }
 

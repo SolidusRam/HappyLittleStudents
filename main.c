@@ -7,12 +7,8 @@
 
 int main() {
 
-    //game();
-    Player *giocatori;
-    DMG_cards *danno;
-    CFU_Cards *mazzo ;
-    CFU_Cards *scarti;
-    lettura_salvataggio(&giocatori,&mazzo,&danno,&scarti);
+    game();
+
 
         /*
         DMG_cards * cards = dmg_reading();

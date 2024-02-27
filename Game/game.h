@@ -7,10 +7,11 @@
 #include "Output/stampe.h"
 #include "Game/game_mechanics.h"
 
+
 void game();
 void setup_game(CFU_Cards **,DMG_cards**,Player **,Character[],int);
 
-int turn(CFU_Cards**,DMG_cards*,Player *);
+int turn(CFU_Cards**,DMG_cards*,Player *,int );
 
 int game_over();
 

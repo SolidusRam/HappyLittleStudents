@@ -1,14 +1,18 @@
 #ifndef _PR1_PROGETTO_STRUTTURE_H
 #define _PR1_PROGETTO_STRUTTURE_H
 
+#include "Input/user_input.h"
+
 #include "time.h"
 #include "stdlib.h"
 #include "stdio.h"
+#include "stdbool.h"
 
 #define MAX_CHAR 32
 #define DESC_MAX_CHAR 128
 #define HAND 5
-#define DMG_POINTS 5
+#define TOTALCFU 74
+#define TOTALDMG 28
 
 typedef enum effects{NESSUNO,SCARTAP,RUBA,SCAMBIADS,SCARTADS,SCARTAE,SCARTAC,
                      SCAMBIAP,DOPPIOE,SBIRCIA,SCAMBIAC,ANNULLA,AUMENTA,DIMINUISCI,

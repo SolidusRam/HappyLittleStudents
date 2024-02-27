@@ -28,19 +28,17 @@ int players_number()
 
 void player_username(char username[MAX_CHAR])
 {
-    //stampa qui
-    int is_valid = 0;
+    printf("Enter your username (up to %d characters): ", MAX_CHAR - 1);
 
-    while (is_valid==0) {
-        printf("Inserisci una nikname: ");
-        scanf("%32s", username);
-
-        if (strlen(username) <= 32) {
-            printf("Username inserito\n");
-            is_valid = 1;
-        } else {
-            printf("La stringa è troppo lunga. Per favore, reinserisci.\n");
+    if (fgets(username, MAX_CHAR, stdin) != NULL) {
+        // Remove newline character if present
+        size_t len = strlen(username);
+        if (len > 0 && username[len-1] == '\n') {
+            username[--len] = '\0';
         }
+    } else {
+        printf("Error reading username. Please try again.\n");
     }
-
 }
+
+

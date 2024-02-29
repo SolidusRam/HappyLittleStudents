@@ -7,10 +7,7 @@
 
 int main() {
 
-    //game();
-    char name[32];
-    player_username(name);
-    printf("%s",name);
+    game();
 
         /*
         DMG_cards * cards = dmg_reading();

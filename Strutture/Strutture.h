@@ -78,10 +78,10 @@ typedef struct Character{
 
 typedef struct Player{
     char username[MAX_CHAR];
+    Character character;
     int cfu_score;
     CFU_Cards *hand;
     DMG_cards *dmg;
-    Character character;
     struct Player *next;
 
 }Player;

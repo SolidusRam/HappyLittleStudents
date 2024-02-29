@@ -10,10 +10,10 @@ void game()
     //inzializzo le varibili
     //definire meglio il numero delle carte per allocare bene la memoria
 
-    CFU_Cards *cfuCards= malloc(sizeof(CFU_Cards)*TOTALCFU);
-    CFU_Cards *scarti= malloc(sizeof(CFU_Cards)*TOTALCFU);
+    CFU_Cards *cfuCards;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
+    CFU_Cards *scarti;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
 
-    DMG_cards *dmgCards= malloc(sizeof(DMG_cards)*TOTALDMG);
+    DMG_cards *dmgCards;//1= malloc(sizeof(DMG_cards)*TOTALDMG);
 
     Player *players;
 
@@ -23,8 +23,7 @@ void game()
     load=load_game();
     if (load==1)
     {
-        //inizializzo dal file di salvataggio
-
+        lettura_salvataggio(num_players,&players,&cfuCards,&dmgCards,&scarti);
 
     }
     if(load==2)
@@ -38,7 +37,8 @@ void game()
 
 
     print_player(players);
-    print_cards(cfuCards);
+    int debug=0000;
+    //print_cards(cfuCards);
 
     /*prima di iniziare i giocatori devono avere 5 carte CFU
 
@@ -121,8 +121,6 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     shuffleDmg(dmgCards);
     printf("shuffle finito \n");
 
-
-
     //lettura personaggi
     character_reading(character,num_players);
 
@@ -131,11 +129,11 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     //creazione personaggio
     //sto chiedendo anche l'username
 
-    *head_player = create_player(cfuCards);
+    *head_player = create_player();
     Player *current = *head_player;
 
-    for (int i = 0; i < num_players-1; ++i) {
-        current->next = create_player(cfuCards);
+    for (int i = 0; i < num_players; ++i) {
+        current->next = create_player();
         current->character=character[i];
         player_username(current->username);
         current=current->next;

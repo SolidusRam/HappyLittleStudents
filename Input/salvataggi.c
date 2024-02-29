@@ -1,13 +1,12 @@
 #include "salvataggi.h"
 
-void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
+void lettura_salvataggio(int numPlayers,Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
     FILE *file = fopen(FILENAME, "rb");
     if (file == NULL) {
         printf("Cannot open file %s\n", FILENAME);
         return;
     }
 
-    int numPlayers;
     fread(&numPlayers, sizeof(int), 1, file);
 
     printf("Number of players: %d\n", numPlayers);
@@ -25,6 +24,8 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
         CFU_Cards *current_card = malloc(sizeof(CFU_Cards));
         current->hand=current_card;
 
+        DMG_cards *current_dmg= malloc(sizeof(DMG_cards));
+        current->dmg=current_dmg;
 
         for (int j=0;j<HAND;j++) {
 
@@ -40,13 +41,9 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
 
         fread(&numCarteDanno, sizeof(int), 1, file);
 
-
-        DMG_cards *current_dmg= malloc(sizeof(DMG_cards)*numCarteDanno);
-        current->dmg=current_dmg;
-
-        for (int j = 0; j < numCarteDanno; j++) {
+        for (int j = 0; j < numCarteDanno; ++j) {
             fread(current_dmg, sizeof(DMG_cards), 1, file);
-            if (j < numCarteDanno-1) { // if not the last card
+            if (j < numCarteDanno) { // if not the last card
                 current_dmg->next = malloc(sizeof(DMG_cards));
                 current_dmg = current_dmg->next;
             } else {
@@ -63,7 +60,6 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
 
     }
     //letti player completamente
-
     //inizio lettura mazzo
     int numCarte;
     fread(&numCarte, sizeof(int ),1,file);
@@ -114,7 +110,7 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
     //fine lettura scarti
     //inizio lettura danno
     int numDanno;
-    fread(&numDanno, sizeof(int),1,file);
+    fread(&numDanno, sizeof(int ),1,file);
 
     DMG_cards *prev_dmg = NULL;
     for (int i = 0; i < numDanno; i++) {

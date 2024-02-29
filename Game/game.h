@@ -6,6 +6,7 @@
 #include "Input/user_input.h"
 #include "Output/stampe.h"
 #include "Game/game_mechanics.h"
+#include "Input/salvataggi.h"
 
 
 void game();

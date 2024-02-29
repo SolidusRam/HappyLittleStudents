@@ -30,15 +30,21 @@ void player_username(char username[MAX_CHAR])
 {
     printf("Enter your username (up to %d characters): ", MAX_CHAR - 1);
 
-    if (fgets(username, MAX_CHAR, stdin) != NULL) {
-        // Remove newline character if present
-        size_t len = strlen(username);
-        if (len > 0 && username[len-1] == '\n') {
-            username[--len] = '\0';
+    do {
+        // Input dall'utente (fino a 32 caratteri)
+        printf("Inserisci una stringa (fino a 32 caratteri): ");
+        scanf("%32s", username);
+
+        // Valida la lunghezza dell'input
+        size_t lunghezzaInput = strlen(username);
+        if (lunghezzaInput > 32) {
+            printf("Errore: L'input supera la lunghezza massima di 32 caratteri. Riprova.\n");
+        } else {
+            // Stampa la stringa inserita
+            printf("Hai inserito: %s\n", username);
         }
-    } else {
-        printf("Error reading username. Please try again.\n");
-    }
+    } while (strlen(username) > 32); // Continua finché l'input è troppo lungo
+
 }
 
 int load_game()

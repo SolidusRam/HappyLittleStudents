@@ -7,4 +7,6 @@
 void current_player_info(Player *);
 void print_player( Player *player);
 
+void game_start();
+
 #endif //HAPPYLITTLESTUDENTS_STAMPE_H

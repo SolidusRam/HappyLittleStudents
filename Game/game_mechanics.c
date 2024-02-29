@@ -54,3 +54,4 @@ void draw_DMG(DMG_cards *head){
     }
 
 }
+

@@ -2,12 +2,10 @@
 
 void game()
 {
-    //int save=0;
+    int load=0;
 
-    //int num_players= players_number();
-    int num_players=3;
-
-    Character characters[num_players];
+    Character characters[4];
+    int num_players;
 
     //inzializzo le varibili
     //definire meglio il numero delle carte per allocare bene la memoria
@@ -20,15 +18,29 @@ void game()
     Player *players;
 
     //chiedo se si vuole leggere e caricare il file di salvataggio
-    //chiedo il numero di giocatori della partita
+    game_start();
+    //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
+    load=load_game();
+    if (load==1)
+    {
+        //inizializzo dal file di salvataggio
 
-    //se il gioco non è stato caricato dal salvataggio preparo il setup
-    setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
+
+    }
+    if(load==2)
+    {
+        //chiedo il numero di giocatori della partita
+        num_players=players_number();
+
+        //se il gioco non è stato caricato dal salvataggio preparo il setup
+        setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
+    }
+
 
     print_player(players);
     print_cards(cfuCards);
 
-    //prima di iniziare i giocatori devono avere 5 carte CFU
+    /*prima di iniziare i giocatori devono avere 5 carte CFU
 
     int check=0;
     //turno da reiterare per variabile di ritorno
@@ -36,6 +48,7 @@ void game()
     {
         check=turn(&cfuCards,dmgCards,players,turn_number);
     }
+     */
 
     free_cards(scarti);
     free_cards(cfuCards);
@@ -124,6 +137,7 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     for (int i = 0; i < num_players-1; ++i) {
         current->next = create_player(cfuCards);
         current->character=character[i];
+        player_username(current->username);
         current=current->next;
     }
     current->next=NULL;

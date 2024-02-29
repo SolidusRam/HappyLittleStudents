@@ -7,7 +7,9 @@
 
 int players_number();
 
-void player_username(char username[MAX_CHAR]);
+void player_username(char username[]);
+
+int load_game();
 
 
 #endif //HAPPYLITTLESTUDENTS_USER_INPUT_H

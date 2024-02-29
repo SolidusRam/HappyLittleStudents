@@ -41,4 +41,27 @@ void player_username(char username[MAX_CHAR])
     }
 }
 
+int load_game()
+{
+    int scelta=0;
+    do {
+        printf("Inserisci la tua scelta: ");
+        scanf("%d", &scelta);
+        switch (scelta) {
+            case 1:
+                printf("Hai scelto di caricare la partita.\n");
+                return 1;
+                break;
+            case 2:
+                printf("Hai scelto di iniziare un nuovo salvataggio.\n");
+                return 2;
+                break;
+            default:
+                printf("Scelta non valida.\n");
+                break;
+        }
+    } while (scelta != 1 && scelta != 2);
+}
+
+
 

@@ -33,27 +33,33 @@ void game()
 
         //se il gioco non è stato caricato dal salvataggio preparo il setup
         setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
+
+        //pesco le carte dal mazzo direttamente nel setup
+
     }
 
 
     print_player(players);
-    int debug=0000;
     //print_cards(cfuCards);
+    printf("inizio della partita");
 
-    /*prima di iniziare i giocatori devono avere 5 carte CFU
 
+    /*
     int check=0;
     //turno da reiterare per variabile di ritorno
     for(int turn_number=0;check==0;turn_number++)
     {
         check=turn(&cfuCards,dmgCards,players,turn_number);
     }
-     */
+    */
 
+
+    //memory free
     free_cards(scarti);
     free_cards(cfuCards);
-    free_dmg_cards(dmgCards);
     free_players(players);
+    //questo non funziona
+    //free_dmg_cards(dmgCards);
     game_over();
 }
 
@@ -136,6 +142,7 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
         current->next = create_player();
         current->character=character[i];
         player_username(current->username);
+        fillCFUCards(current,cfuCards);
         current=current->next;
     }
     current->next=NULL;

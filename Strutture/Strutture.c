@@ -177,8 +177,9 @@ void free_dmg_cards(DMG_cards * head){
 
     while (head != NULL) {
         temp = head;
-        head = head->next;
+
         free(temp);
+        temp = head->next;
     }
 }
 

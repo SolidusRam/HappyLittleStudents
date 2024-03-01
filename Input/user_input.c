@@ -31,8 +31,7 @@ void player_username(char username[MAX_CHAR])
     printf("Enter your username (up to %d characters): ", MAX_CHAR - 1);
 
     do {
-        // Input dall'utente (fino a 32 caratteri)
-        printf("Inserisci una stringa (fino a 32 caratteri): ");
+        // Input dall'utente 32 caratteri
         scanf("%32s", username);
 
         // Valida la lunghezza dell'input
@@ -71,3 +70,7 @@ int load_game()
 
 
 
+int ask_for_action(){
+
+    return 1;
+}

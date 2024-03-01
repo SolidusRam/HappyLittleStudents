@@ -48,7 +48,7 @@ CFU_Cards* card_reading()
 DMG_cards* dmg_reading() {
     FILE *file = fopen(OSTACOLI, "r");
     if (file == NULL) {
-        printf("Could not open file\n");
+        printf("Could not open file DMG\n");
         return NULL;
     }
 

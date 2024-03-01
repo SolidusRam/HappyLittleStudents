@@ -2,10 +2,8 @@
 
 void game()
 {
-    int load=0;
-
     Character characters[4];
-    int num_players;
+    int num_players=0;
 
     //inzializzo le varibili
     //definire meglio il numero delle carte per allocare bene la memoria
@@ -20,7 +18,8 @@ void game()
     //chiedo se si vuole leggere e caricare il file di salvataggio
     game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
-    load=load_game();
+    int load=load_game();
+
     if (load==1)
     {
         lettura_salvataggio(num_players,&players,&cfuCards,&dmgCards,&scarti);
@@ -35,7 +34,6 @@ void game()
         setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
         //pesco le carte dal mazzo direttamente nel setup
-
     }
 
 
@@ -63,21 +61,22 @@ void game()
     game_over();
 }
 
+
 int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number)
 {
 
     //salvataggio stato in file.save
 
     //stampa del numero turno
-    printf("%d",turn_number);
-    //pesca carte in difetto dal turno precendente
-    draw(head_player,cfuCards);
+    printf("Inizia il turn %d",turn_number);
+
+
 
     //estrazione carta danno
     if(dmgCards!=NULL){
         draw_DMG(dmgCards);
     } else{
-        printf("Errore la carta DMG non esiste");
+        printf("Errore la carta DMG non esiste bisogna rimescolare");
     }
 
 
@@ -88,25 +87,39 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         //mostra le informazioni sul giocatore attuale
         printf("Giocatore: %s \n",temp_player->username);
         //selettore dell'azione contestuale
-            //
-            //gioca una carta CFU
-            //
-                //selettore carta Cfu
+        int action=ask_for_action();
 
-            //
-            //Controlla lo stato dei giocatori
-            //
-            //Esci dal gioco
-            //
+        switch (action) {
+            case 1:
+                //gioca la carta CFU
+                break;
+            case 2:
+                //Stampa le informazioni del giocatore
+                break;
+            case 3:
+                //esci dal gioco
+                break;
+            default:
+                printf("azione non consentita\n");
+        }
 
         temp_player=temp_player->next;
     }
+
+
+    /*
     if(temp_player==NULL)
     {
         printf("Nessuno gioca Errore");
         return 1;
     }
+    */
 
+
+
+    //pesca carte in difetto dal turno precendente per tutti i giocatori (occhio alle stampe di debung)
+
+    draw(head_player,cfuCards);
 
     //altro ciclo per la carta CFU instantaneo
     //di nuovo richiedo le altre due opzioni
@@ -156,7 +169,6 @@ void fillCFUCards(Player *player, CFU_Cards **deck_head_ref) {
             printf("Not enough cards in the deck\n");
             return;
         }
-
         // Remove the card from the top of the deck
         CFU_Cards *card = *deck_head_ref;
         *deck_head_ref = (CFU_Cards *) card->next;
@@ -166,8 +178,6 @@ void fillCFUCards(Player *player, CFU_Cards **deck_head_ref) {
         player->hand = card;
     }
 }
-
-
 
 
 int game_over(){

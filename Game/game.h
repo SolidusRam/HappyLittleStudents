@@ -1,12 +1,14 @@
 #ifndef HAPPYLITTLESTUDENTS_GAME_H
 #define HAPPYLITTLESTUDENTS_GAME_H
-#include <string.h>
+
 #include "Input/file_reading.h"
 #include "Strutture/Strutture.h"
 #include "Input/user_input.h"
 #include "Output/stampe.h"
 #include "Game/game_mechanics.h"
 #include "Input/salvataggi.h"
+
+#include <string.h>
 
 
 void game();

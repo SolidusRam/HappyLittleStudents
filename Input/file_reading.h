@@ -7,11 +7,17 @@
 #include <string.h>
 
 #include "Strutture/Strutture.h"
-// file name:
 
-#define CARTE "C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\carte.txt"
-#define OSTACOLI "C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\ostacoli.txt"
-#define PERSONAGGI "C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\personaggi.txt"
+
+// file name aggiornare la working directory:
+
+#define CARTEABS "C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\carte.txt"
+#define CARTE "Specifiche_testi/carte.txt"
+#define OSTACOLIABS "C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\ostacoli.txt"
+#define OSTACOLI "Specifiche_testi/ostacoli.txt"
+
+#define PERSONAGGIABS "C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Specifiche_testi\\personaggi.txt"
+#define PERSONAGGI "Specifiche_testi/personaggi.txt"
 
 
 DMG_cards *dmg_reading();

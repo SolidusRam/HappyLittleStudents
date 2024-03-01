@@ -30,3 +30,82 @@ void game_start()
 
 
 }
+void papiro()
+{
+    /*
+
+
+
+
+        ______________________________
+      / \                             \.
+     |   |                            |.
+      \_ |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |                            |.
+         |    ________________________|____
+         |   /                            /.
+          \_/dc__________________________/.
+
+
+
+
+
+
+    printf(""
+           "        ______________________________      \n"
+           "      / \\                             \\.  \n"
+           "     |   |                            |.    \n"
+           "      \\_ |                            |.   \n"
+           "         |                            |.    \n"
+           "         |                            |.    \n"
+           "         |         Hello Word                   |.    \n"
+           "         |                            |.    \n"
+           "         |    ________________________|____ \n"
+           "         |   /                            /.\n"
+           "          \\_/dc__________________________/.\n");
+    */
+    // Define the width of your border
+    int border_width = 27;
+
+    // Define the string to print
+    char *message = "Hello World ";
+
+    // Calculate the number of spaces needed to center the message
+    int spaces_before = (border_width - strlen(message)) / 2;
+    int spaces_after = border_width - strlen(message) - spaces_before;
+
+    // Print the top border
+    printf(""
+           "        ______________________________      \n"
+           "      / \\                             \\.  \n"
+           "     |   |                            |.    \n"
+           "      \\_ |                            |.   \n"
+           "         |                            |.    \n"
+           "         |                            |.    \n");
+
+    // Print the middle part with the message
+    printf("         | ");
+    for (int i = 0; i < spaces_before; i++) {
+        printf(" ");
+    }
+    printf("%s", message);
+    for (int i = 0; i < spaces_after; i++) {
+        printf(" ");
+    }
+    printf("|.\n");
+
+    // Print the bottom border
+    printf("         \\_/dc__________________________/\n");
+
+
+}

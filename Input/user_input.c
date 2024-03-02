@@ -71,6 +71,12 @@ int load_game()
 
 
 int ask_for_action(){
-
-    return 1;
+    int num=0;
+    do {
+        printf("->");
+        scanf("%d",&num);
+        if (!(num >= 1 && num <= 3))
+            printf("scegli un opzione con un numero da 1 a 3");
+    } while (!(num >= 1 && num <= 3));
+    return num;
 }

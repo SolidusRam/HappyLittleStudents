@@ -64,9 +64,7 @@ void game()
 
 int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number)
 {
-
     //salvataggio stato in file.save
-
     //stampa del numero turno
     printf("Inizia il turn %d",turn_number);
 
@@ -80,7 +78,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     }
 
 
-    //azioni giocatori
+    //azioni giocatore
     Player *temp_player=head_player;
     while (temp_player!=NULL)
     {
@@ -88,23 +86,13 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         printf("Giocatore: %s \n",temp_player->username);
         //selettore dell'azione contestuale
         int action=ask_for_action();
-
-        switch (action) {
-            case 1:
-                //gioca la carta CFU
-                break;
-            case 2:
-                //Stampa le informazioni del giocatore
-                break;
-            case 3:
-                //esci dal gioco
-                break;
-            default:
-                printf("azione non consentita\n");
-        }
+        //controllo lazione ed eseguo le prime 2
+        check_action(action,temp_player,head_player);
 
         temp_player=temp_player->next;
     }
+    //altro ciclo per la carta CFU instantaneo
+    //di nuovo richiedo le altre due opzioni
 
 
     /*
@@ -118,11 +106,9 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori (occhio alle stampe di debung)
-
     draw(head_player,cfuCards);
 
-    //altro ciclo per la carta CFU instantaneo
-    //di nuovo richiedo le altre due opzioni
+
 
     //codice di uscita !=0
     return 1;

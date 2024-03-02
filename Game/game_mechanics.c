@@ -55,3 +55,45 @@ void draw_DMG(DMG_cards *head){
 
 }
 
+void check_action(int action,Player *current,Player *head_player)
+{
+    switch (action) {
+        case 1:
+            //gioca la carta CFU
+
+            break;
+        case 2:
+            //Stampa le informazioni del giocatore
+            peek_players(current,head_player);
+            break;
+        case 3:
+            //esci dal gioco
+            printf("Chiusura del gioco ... \n");
+            exit(333);
+            break;
+        default:
+            printf("Azione non consentita\n");
+    }
+    if(action==2){
+        action=ask_for_action();
+        check_action(action,current,head_player);
+    }
+
+}
+
+void peek_players(Player *current,Player *head_player){\
+
+    printf("Stampo le informazioni riguardanti i giocatori:\n");
+    Player *temp=head_player;
+    while(temp!=NULL)
+    {
+        if(current->character.name!=temp->character.name)
+        {
+            printf("%s ha %d punti e tot danni\n",temp->username,temp->cfu_score);
+        }
+        temp=temp->next;
+    }
+}
+void playCFU(Player *current){
+
+}

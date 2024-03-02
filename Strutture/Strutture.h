@@ -86,6 +86,11 @@ typedef struct Player{
 
 }Player;
 
+typedef struct Board{
+    int *temporay_scores;
+
+}Board;
+
 
 void shuffleCFU(CFU_Cards**);
 void shuffleDmg(DMG_cards **);

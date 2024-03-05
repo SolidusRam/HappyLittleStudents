@@ -82,3 +82,13 @@ int ask_for_action(){
     } while (!(num >= 1 && num <= 3));
     return num;
 }
+
+int ask_for_card(){
+    int num;
+    printf("Please enter a number between 1 and 5: ");
+    while(scanf("%d", &num) != 1 || num < 1 || num > 5) {
+        while(getchar() != '\n'); // clear input buffer
+        printf("Invalid input. Please enter a number between 1 and 5: ");
+    }
+    return num;
+}

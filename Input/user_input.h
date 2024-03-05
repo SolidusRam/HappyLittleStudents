@@ -13,4 +13,6 @@ int load_game();
 
 int ask_for_action();
 
+int ask_for_card();
+
 #endif //HAPPYLITTLESTUDENTS_USER_INPUT_H

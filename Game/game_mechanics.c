@@ -94,6 +94,7 @@ void peek_players(Player *current,Player *head_player){\
         temp=temp->next;
     }
 }
+
 void playCFU(Player *player,Board board){
 
     //print carta da selezionare;
@@ -102,17 +103,56 @@ void playCFU(Player *player,Board board){
     printf("Hai in mano queste carte:\n");
     print_cards(temp);
     int countop=1;
-    //suggerimento sulla carta da giocare
+
+    //Suggerimento sulla carta da giocare
     while(temp!=NULL)
     {
         if (temp->effect>=AUMENTA)
         {
             printf("La carta %s per l'opzione %d può essere giocata al calcolo del punteggio\n",temp->name,countop);
         }
+        temp=temp->next;
         countop++;
     }
 
     //chiedo il numero della carta da giocare
-    int scelta;
+    //stampa
+    int scelta=ask_for_card();;
+    check_card(scelta,player->hand);
+    for (int i = 1; i < scelta; ++i) {
+        temp = temp->next;
+    }
+    board.ingame_cards=temp;
+    board.ingame_cards = &board.ingame_cards->next;
 
 }
+
+void check_card(int choice,CFU_Cards*hand){
+    CFU_Cards *tmp=hand;
+    int isvalid=0;
+
+    while (isvalid==0)
+    {
+        for (int i = 1; i < choice; ++i) {
+            tmp=tmp->next;
+        }
+        isvalid = validate(tmp);
+    }
+
+}
+
+int validate(CFU_Cards*card){
+    if(card->effect<AUMENTA)
+    {
+        //Stampo le informazioni della carta (la carta va bene)
+        return 1;
+    }
+    else
+    {
+        //la carta è una carta instantanea
+        printf("La carta che vuoi giocare è una carta instantanea, "
+               "seleziona una carta valida per questo step del gioco\n");
+        return 0;
+    }
+}
+

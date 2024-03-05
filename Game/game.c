@@ -68,10 +68,10 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
     Board board;
-    board.effects= malloc(numplayers);
+    board.ingame_cards= malloc(numplayers);
     board.temporay_scores= malloc(numplayers);
 
-    if(board.effects==NULL||board.temporay_scores==NULL)
+    if(board.ingame_cards==NULL||board.temporay_scores==NULL)
     {
         printf("Errore allocazione Board");
         exit(2);
@@ -130,7 +130,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
     //codice di uscita !=0
-    free(board.effects);
+    free(board.ingame_cards);
     free(board.temporay_scores);
     return 1;
 }

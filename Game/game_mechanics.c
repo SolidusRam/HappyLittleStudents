@@ -60,7 +60,7 @@ void check_action(int action,Player *current,Player *head_player)
     switch (action) {
         case 1:
             //gioca la carta CFU
-
+            return;
             break;
         case 2:
             //Stampa le informazioni del giocatore
@@ -94,6 +94,25 @@ void peek_players(Player *current,Player *head_player){\
         temp=temp->next;
     }
 }
-void playCFU(Player *current){
+void playCFU(Player *player,Board board){
+
+    //print carta da selezionare;
+    CFU_Cards *temp=player->hand;
+
+    printf("Hai in mano queste carte:\n");
+    print_cards(temp);
+    int countop=1;
+    //suggerimento sulla carta da giocare
+    while(temp!=NULL)
+    {
+        if (temp->effect>=AUMENTA)
+        {
+            printf("La carta %s per l'opzione %d può essere giocata al calcolo del punteggio\n",temp->name,countop);
+        }
+        countop++;
+    }
+
+    //chiedo il numero della carta da giocare
+    int scelta;
 
 }

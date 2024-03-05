@@ -14,7 +14,7 @@
 void game();
 void setup_game(CFU_Cards **,DMG_cards**,Player **,Character[],int);
 
-int turn(CFU_Cards**,DMG_cards*,Player *,int );
+int turn(CFU_Cards**,DMG_cards*,Player *,int ,int );
 
 int game_over();
 

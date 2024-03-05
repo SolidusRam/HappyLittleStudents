@@ -15,6 +15,8 @@ void game()
 
     Player *players;
 
+    Board board;
+
     //chiedo se si vuole leggere e caricare il file di salvataggio
     game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
@@ -40,14 +42,14 @@ void game()
     print_player(players);
     //print_cards(cfuCards);
     printf("inizio della partita");
-
-
+    int turn_number=0;
+    turn(&cfuCards,dmgCards,players,turn_number,num_players );
     /*
     int check=0;
     //turno da reiterare per variabile di ritorno
     for(int turn_number=0;check==0;turn_number++)
     {
-        check=turn(&cfuCards,dmgCards,players,turn_number);
+        check=turn(&cfuCards,dmgCards,players,turn_number,numplyers );
     }
     */
 
@@ -62,34 +64,51 @@ void game()
 }
 
 
-int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number)
+int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers)
 {
+    //inizializzo la board i player vengono aggiornati per eliminazione
+    Board board;
+    board.effects= malloc(numplayers);
+    board.temporay_scores= malloc(numplayers);
+
+    if(board.effects==NULL||board.temporay_scores==NULL)
+    {
+        printf("Errore allocazione Board");
+        exit(2);
+    }
+
     //salvataggio stato in file.save
     //stampa del numero turno
-    printf("Inizia il turn %d",turn_number);
+    printf("Inizia il turno numero %d\n",turn_number);
 
 
 
     //estrazione carta danno
     if(dmgCards!=NULL){
         draw_DMG(dmgCards);
+        //to debug
+        board.draftedDMG=dmgCards;
     } else{
         printf("Errore la carta DMG non esiste bisogna rimescolare");
     }
 
-
     //azioni giocatore
     Player *temp_player=head_player;
-    while (temp_player!=NULL)
+    int count=numplayers;
+    while (count!=0)
     {
         //mostra le informazioni sul giocatore attuale
-        printf("Giocatore: %s \n",temp_player->username);
+        printf("Turno del Giocatore: %s \n",temp_player->username);
         //selettore dell'azione contestuale
         int action=ask_for_action();
         //controllo lazione ed eseguo le prime 2
         check_action(action,temp_player,head_player);
-
+        if(action==1)
+        {
+            playCFU(temp_player,board);
+        }
         temp_player=temp_player->next;
+        count--;
     }
     //altro ciclo per la carta CFU instantaneo
     //di nuovo richiedo le altre due opzioni
@@ -111,6 +130,8 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
     //codice di uscita !=0
+    free(board.effects);
+    free(board.temporay_scores);
     return 1;
 }
 
@@ -134,15 +155,18 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     //creazione personaggio
     //sto chiedendo anche l'username
 
+    //creo il primo player
     *head_player = create_player();
     Player *current = *head_player;
+    player_username(current->username);
+    fillCFUCards(current,cfuCards);
 
-    for (int i = 0; i < num_players; ++i) {
+    for (int i = 0; i < num_players-1; ++i) {
         current->next = create_player();
+        current=current->next;
         current->character=character[i];
         player_username(current->username);
         fillCFUCards(current,cfuCards);
-        current=current->next;
     }
     current->next=NULL;
 

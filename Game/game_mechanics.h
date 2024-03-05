@@ -12,6 +12,6 @@ void check_action(int action,Player *current,Player *head_player);
 
 void peek_players(Player *current,Player *head_player);
 
-void playCFU(Player *current);
+void playCFU(Player *,Board );
 
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

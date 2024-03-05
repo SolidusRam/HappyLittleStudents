@@ -144,10 +144,12 @@ Player *create_player()
 
 void print_cards(CFU_Cards* head) {
     CFU_Cards* temp = head;
+    int count=1;
     while (temp != NULL) {
-        printf("Name: %s, Points: %d, Effect: %d\n",
-               temp->name, temp->cfu_points, temp->effect);
+        printf("Carta num:%d Name: %s, Points: %d, Effect: %d\n",
+               count,temp->name, temp->cfu_points, temp->effect);
         temp = temp->next;
+        count++;
     }
 }
 

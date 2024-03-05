@@ -73,6 +73,8 @@ int load_game()
 int ask_for_action(){
     int num=0;
     do {
+        //stampa toga
+        printf("scegli un opzione con un numero da 1 a 3");
         printf("->");
         scanf("%d",&num);
         if (!(num >= 1 && num <= 3))

@@ -14,8 +14,10 @@ void peek_players(Player *current,Player *head_player);
 
 void playCFU(Player *,Board );
 
-void check_card(int choice,CFU_Cards*hand);
+int check_card(int choice,CFU_Cards*hand);
 
 int validate(CFU_Cards*card);
+
+void suggerimento(CFU_Cards *mano);
 
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

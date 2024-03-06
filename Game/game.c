@@ -43,6 +43,7 @@ void game()
     //print_cards(cfuCards);
     printf("inizio della partita");
     int turn_number=0;
+
     turn(&cfuCards,dmgCards,players,turn_number,num_players );
     /*
     int check=0;
@@ -71,6 +72,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     board.ingame_cards= malloc(numplayers);
     board.temporay_scores= malloc(numplayers);
 
+    //allocazione board
     if(board.ingame_cards==NULL||board.temporay_scores==NULL)
     {
         printf("Errore allocazione Board");
@@ -90,13 +92,14 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         board.draftedDMG=dmgCards;
     } else{
         printf("Errore la carta DMG non esiste bisogna rimescolare");
+        //funzione di rimescolamento
     }
 
-    //azioni giocatore
+    //azioni giocatore fase di gioco CFU
     Player *temp_player=head_player;
-    int count=numplayers;
-    while (count!=0)
-    {
+
+    for (int i = 0; i < numplayers; ++i) {
+
         //mostra le informazioni sul giocatore attuale
         printf("Turno del Giocatore: %s \n",temp_player->username);
         //selettore dell'azione contestuale
@@ -108,11 +111,11 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
             playCFU(temp_player,board);
         }
         temp_player=temp_player->next;
-        count--;
     }
+    //calcolo punteggio
+
     //altro ciclo per la carta CFU instantaneo
     //di nuovo richiedo le altre due opzioni
-
 
     /*
     if(temp_player==NULL)
@@ -124,7 +127,8 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
 
-    //pesca carte in difetto dal turno precendente per tutti i giocatori (occhio alle stampe di debung)
+    //pesca carte in difetto dal turno precendente per tutti i giocatori
+    // (occhio alle stampe di debung)
     draw(head_player,cfuCards);
 
 

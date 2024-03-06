@@ -46,6 +46,7 @@ void player_username(char username[MAX_CHAR])
 
 }
 
+//scelgo un numero da 1 a 2
 int load_game()
 {
     int scelta=0;
@@ -68,8 +69,7 @@ int load_game()
     } while (scelta != 1 && scelta != 2);
 }
 
-
-
+//scelgo un numero da 1 a 3
 int ask_for_action(){
     int num=0;
     do {
@@ -78,17 +78,18 @@ int ask_for_action(){
         printf("->");
         scanf("%d",&num);
         if (!(num >= 1 && num <= 3))
-            printf("scegli un opzione con un numero da 1 a 3");
+            printf("Scegli un opzione con un numero da 1 a 3");
     } while (!(num >= 1 && num <= 3));
     return num;
 }
 
+//scelgo un numero da 1 a 5
 int ask_for_card(){
-    int num;
-    printf("Please enter a number between 1 and 5: ");
+    int num=0;
+    printf("Gioca una carta con un numero da 1 a 5: \n");
     while(scanf("%d", &num) != 1 || num < 1 || num > 5) {
         while(getchar() != '\n'); // clear input buffer
-        printf("Invalid input. Please enter a number between 1 and 5: ");
+        printf("Invalid input. Please enter a number between 1 and 5: \n");
     }
     return num;
 }

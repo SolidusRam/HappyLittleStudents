@@ -52,36 +52,33 @@ void draw_DMG(DMG_cards *head){
         printf("Type: %d\n", head->type);
         printf("\n");
     }
-
 }
 
 void check_action(int action,Player *current,Player *head_player)
 {
-    switch (action) {
-        case 1:
-            //gioca la carta CFU
-            return;
-            break;
-        case 2:
-            //Stampa le informazioni del giocatore
-            peek_players(current,head_player);
-            break;
-        case 3:
-            //esci dal gioco
-            printf("Chiusura del gioco ... \n");
-            exit(333);
-            break;
-        default:
-            printf("Azione non consentita\n");
-    }
-    if(action==2){
-        action=ask_for_action();
-        check_action(action,current,head_player);
-    }
-
+    do {
+        switch (action) {
+            case 1:
+                //gioca la carta CFU
+                break;
+            case 2:
+                //Stampa le informazioni del giocatore
+                peek_players(current,head_player);
+                action=ask_for_action();
+                break;
+            case 3:
+                //esci dal gioco
+                printf("Chiusura del gioco ... \n");
+                exit(333);
+                break;
+            default:
+                printf("Azione non consentita\n");
+                exit(1);
+        }
+    } while (action==2);
 }
 
-void peek_players(Player *current,Player *head_player){\
+void peek_players(Player *current,Player *head_player){
 
     printf("Stampo le informazioni riguardanti i giocatori:\n");
     Player *temp=head_player;
@@ -97,28 +94,23 @@ void peek_players(Player *current,Player *head_player){\
 
 void playCFU(Player *player,Board board){
 
-    //print carta da selezionare;
     CFU_Cards *temp=player->hand;
 
     printf("Hai in mano queste carte:\n");
     print_cards(temp);
-    int countop=1;
 
     //Suggerimento sulla carta da giocare
-    while(temp!=NULL)
-    {
-        if (temp->effect>=AUMENTA)
-        {
-            printf("La carta %s per l'opzione %d può essere giocata al calcolo del punteggio\n",temp->name,countop);
-        }
-        temp=temp->next;
-        countop++;
-    }
+    suggerimento(temp);
 
     //chiedo il numero della carta da giocare
     //stampa
-    int scelta=ask_for_card();;
-    check_card(scelta,player->hand);
+
+    int scelta=0;
+    do {
+        scelta=ask_for_card();
+
+    } while (check_card(scelta,player->hand));
+
     for (int i = 1; i < scelta; ++i) {
         temp = temp->next;
     }
@@ -127,18 +119,16 @@ void playCFU(Player *player,Board board){
 
 }
 
-void check_card(int choice,CFU_Cards*hand){
+int check_card(int choice,CFU_Cards*hand){
     CFU_Cards *tmp=hand;
     int isvalid=0;
 
-    while (isvalid==0)
-    {
-        for (int i = 1; i < choice; ++i) {
-            tmp=tmp->next;
-        }
-        isvalid = validate(tmp);
+    for (int i = 1; i < choice; ++i) {
+        tmp=tmp->next;
     }
+    isvalid = validate(tmp);
 
+    return isvalid;
 }
 
 int validate(CFU_Cards*card){
@@ -156,3 +146,13 @@ int validate(CFU_Cards*card){
     }
 }
 
+void suggerimento(CFU_Cards*mano){
+    for (int i = 0; i < HAND; ++i) {
+        if (mano->effect>=AUMENTA)
+        {
+            printf("La carta %s per l'opzione %d può essere giocata "
+                   "dopo il calcolo del punteggio\n",mano->name,i);
+        }
+        mano = mano->next;
+    }
+}

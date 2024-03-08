@@ -89,6 +89,7 @@ typedef struct Player{
 typedef struct Board{
     int *temporay_scores;
     CFU_Cards *ingame_cards;
+    CFU_Cards *instant_cards;
     DMG_cards *draftedDMG;
 
 }Board;

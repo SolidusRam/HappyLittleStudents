@@ -11,7 +11,7 @@ void game()
     CFU_Cards *cfuCards;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
     CFU_Cards *scarti;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
 
-    DMG_cards *dmgCards;//1= malloc(sizeof(DMG_cards)*TOTALDMG);
+    DMG_cards *dmgCards;//= malloc(sizeof(DMG_cards)*TOTALDMG);
 
     Player *players;
 
@@ -71,6 +71,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     Board board;
     board.ingame_cards= malloc(numplayers);
     board.temporay_scores= malloc(numplayers);
+    board.instant_cards= malloc(numplayers);
 
     //allocazione board
     if(board.ingame_cards==NULL||board.temporay_scores==NULL)

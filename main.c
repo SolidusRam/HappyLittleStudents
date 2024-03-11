@@ -4,7 +4,7 @@
 #include "Game/game.h"
 #include "Input/salvataggi.h"
 
-void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[],int num_players)
+void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[4],int num_players)
 {
     //operazioni di lettura
     *cfuCards=card_reading();
@@ -16,7 +16,7 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
     printf("shuffle finito \n");
 
     //lettura personaggi
-    character_reading(character,num_players);
+    character_reading(character,4);
 
     shuffle_characters(character,num_players);
 
@@ -26,10 +26,11 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
     //creo il primo player
     *head_player = create_player();
     Player *current = *head_player;
+    current->character=character[0];
     //player_username(current->username);
     fillCFUCards(current,cfuCards);
 
-    for (int i = 0; i < num_players; ++i) {
+    for (int i = 1; i < num_players; i++) {
         current->next = create_player();
         current=current->next;
         current->character=character[i];
@@ -70,7 +71,7 @@ int main() {
     //bubbleSort(&cfuCards,TOTALCFU);
     printf("%s\n",players->character.name);
     print_cards(cfuCards);
-    turn(&cfuCards,& dmgCards, &players, 1, num_players);
+    turn(&cfuCards,dmgCards, players, 1, num_players);
 
     int ff = 000;
 

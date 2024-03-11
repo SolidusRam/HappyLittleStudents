@@ -106,6 +106,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
         //mostra le informazioni sul giocatore attuale
         printf("Turno del Giocatore: %s \n",temp_player->username);
+        printf("Il tuo personaggio: %s \n",temp_player->character.name);
         //selettore dell'azione contestuale
         //int action=ask_for_action();
         //controllo lazione ed eseguo le prime 2

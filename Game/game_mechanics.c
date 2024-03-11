@@ -125,10 +125,10 @@ void playCFU(Player *player,Board *board,int nplayer){
     score=board->ingame_cards->cfu_points;
 
     //aggiungo bonus in base al personaggio
-    int bonus=board->draftedDMG->type;
-    int perso = player->character.bonus[bonus];
+    int tipo=board->draftedDMG->type;
+    int perso = player->character.bonus[tipo];
 
-    board->temporay_scores[nplayer]=score;
+    board->temporay_scores[nplayer]=score+perso;
 
 
 }

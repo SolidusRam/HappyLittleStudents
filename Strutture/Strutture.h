@@ -91,7 +91,7 @@ typedef struct Board{
     CFU_Cards *ingame_cards;
     CFU_Cards *instant_cards;
     DMG_cards *draftedDMG;
-
+    int *flags;
 }Board;
 
 
@@ -100,6 +100,7 @@ void shuffleDmg(DMG_cards **);
 void shuffle_characters(Character*,size_t);
 
 Player *create_player();
+void initializeBoard(Board* board,int numplayers);
 
 void free_cards(CFU_Cards* head);
 void free_dmg_cards(DMG_cards * head);
@@ -109,6 +110,8 @@ void free_players(Player *head);
 //funzioni per stampa di controllo
 void print_cards(CFU_Cards*);
 void print_dmg_cards(DMG_cards *);
+
+CFU_Cards *swap(CFU_Cards * ptr1, CFU_Cards * ptr2);
 
 
 #endif //_PR1_PROGETTO_STRUTTURE_H

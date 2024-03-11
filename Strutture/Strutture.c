@@ -141,6 +141,13 @@ Player *create_player()
     return newPlayer;
 }
 
+CFU_Cards *swap(CFU_Cards * ptr1, CFU_Cards * ptr2)
+{
+    struct Node* tmp = ptr2->next;
+    ptr2->next = ptr1;
+    ptr1->next = tmp;
+    return ptr2;
+}
 
 void print_cards(CFU_Cards* head) {
     CFU_Cards* temp = head;
@@ -204,4 +211,24 @@ void free_players(Player *head) {
 
         current = nextPlayer;
     }
+}
+
+
+void initializeBoard(Board* board,int numplayer) {
+
+    // Allocate memory for temporary scores
+    board->temporay_scores = (int*)malloc(sizeof(int) * numplayer);
+
+    // Allocate memory for in-game cards
+    board->ingame_cards = (CFU_Cards*)malloc(sizeof(CFU_Cards) * numplayer);
+
+    // Allocate memory for instant cards
+    board->instant_cards = (CFU_Cards*)malloc(sizeof(CFU_Cards) * numplayer);
+
+    // Allocate memory for drafted DMG cards
+    board->draftedDMG = (DMG_cards*)malloc(sizeof(DMG_cards) * numplayer);
+
+    // Allocate memory for flags
+    board->flags = (int*)malloc(sizeof(int) * numplayer);
+
 }

@@ -69,15 +69,18 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
     Board board;
-    board.ingame_cards= malloc(numplayers);
-    board.temporay_scores= malloc(numplayers);
-    board.instant_cards= malloc(numplayers);
+    initializeBoard(&board,numplayers);
+
 
     //allocazione board
     if(board.ingame_cards==NULL||board.temporay_scores==NULL)
     {
         printf("Errore allocazione Board");
         exit(2);
+    }
+
+    for (int i = 0; i < numplayers; ++i) {
+        board.temporay_scores[i]=0;
     }
 
     //salvataggio stato in file.save
@@ -104,16 +107,24 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         //mostra le informazioni sul giocatore attuale
         printf("Turno del Giocatore: %s \n",temp_player->username);
         //selettore dell'azione contestuale
-        int action=ask_for_action();
+        //int action=ask_for_action();
         //controllo lazione ed eseguo le prime 2
-        check_action(action,temp_player,head_player);
-        if(action==1)
-        {
-            playCFU(temp_player,board);
-        }
+        //check_action(action,temp_player,head_player);
+        //if(action==1)
+        //{
+        playCFU(temp_player,&board,i);
+        //}
         temp_player=temp_player->next;
     }
-    //calcolo punteggio
+
+    //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
+    //carte
+
+    for (int i = 0; i < numplayers; ++i) {
+        printf("%d ",board.temporay_scores[i]);
+    }
+
+
 
     //altro ciclo per la carta CFU instantaneo
     //di nuovo richiedo le altre due opzioni
@@ -130,13 +141,15 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori
     // (occhio alle stampe di debung)
-    draw(head_player,cfuCards);
+    //draw(head_player,cfuCards);
 
 
 
     //codice di uscita !=0
     free(board.ingame_cards);
     free(board.temporay_scores);
+    free(board.instant_cards);
+    free(board.flags);
     return 1;
 }
 
@@ -199,3 +212,4 @@ int game_over(){
     printf("\nGame over\n");
     return 0;
 }
+

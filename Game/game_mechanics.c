@@ -92,7 +92,7 @@ void peek_players(Player *current,Player *head_player){
     }
 }
 
-void playCFU(Player *player,Board board){
+void playCFU(Player *player,Board *board,int nplayer){
 
     CFU_Cards *temp=player->hand;
 
@@ -100,22 +100,36 @@ void playCFU(Player *player,Board board){
     print_cards(temp);
 
     //Suggerimento sulla carta da giocare
-    suggerimento(temp);
+    suggerimento(temp,*board);
 
     //chiedo il numero della carta da giocare
     //stampa
 
-    int scelta=0;
+    int scelta=1;
+
+    /*
     do {
         scelta=ask_for_card();
 
     } while (check_card(scelta,player->hand));
 
-    for (int i = 1; i < scelta; ++i) {
+     for (int i = 1; i < scelta; ++i) {
         temp = temp->next;
     }
-    board.ingame_cards=temp;
-    board.ingame_cards = &board.ingame_cards->next;
+    */
+
+
+    addCardToIngameCards(board,temp);
+    //aggiungo punteggio in base alla carta giocata
+    int score=0;
+    score=board->ingame_cards->cfu_points;
+
+    //aggiungo bonus in base al personaggio
+    int bonus=board->draftedDMG->type;
+    int perso = player->character.bonus[bonus];
+
+    board->temporay_scores[nplayer]=score;
+
 
 }
 
@@ -128,7 +142,7 @@ int check_card(int choice,CFU_Cards*hand){
     }
     isvalid = validate(tmp);
 
-    return isvalid;
+    return !isvalid;
 }
 
 int validate(CFU_Cards*card){
@@ -146,13 +160,52 @@ int validate(CFU_Cards*card){
     }
 }
 
-void suggerimento(CFU_Cards*mano){
+void suggerimento(CFU_Cards*mano, Board board){
     for (int i = 0; i < HAND; ++i) {
         if (mano->effect>=AUMENTA)
         {
             printf("La carta %s per l'opzione %d può essere giocata "
                    "dopo il calcolo del punteggio\n",mano->name,i);
+            board.flags[i]=1;
         }
         mano = mano->next;
     }
+}
+
+int bubbleSort(CFU_Cards ** head, int count)
+{
+    CFU_Cards ** h;
+    int i, j, swapped;
+
+    for (i = 0; i <= count; i++) {
+
+        h = head;
+        swapped = 0;
+
+        for (j = 0; j < count - i - 1; j++) {
+
+            CFU_Cards * p1 = *h;
+            CFU_Cards * p2 = p1->next;
+
+            if (p1->cfu_points > p2->cfu_points) {
+
+                /* update the link after swapping */
+                *h = swap(p1, p2);
+                swapped = 1;
+            }
+
+            h = &(*h)->next;
+        }
+
+        /* break if the loop ended without any swap */
+        if (swapped == 0)
+            break;
+    }
+}
+
+void addCardToIngameCards(Board *board, CFU_Cards *card) {
+    CFU_Cards *newNode;
+    newNode = card;
+    newNode->next = board->ingame_cards;
+    board->ingame_cards = newNode;
 }

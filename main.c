@@ -29,7 +29,7 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
     //player_username(current->username);
     fillCFUCards(current,cfuCards);
 
-    for (int i = 0; i < num_players-1; ++i) {
+    for (int i = 0; i < num_players; ++i) {
         current->next = create_player();
         current=current->next;
         current->character=character[i];
@@ -38,14 +38,14 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
     current->next=NULL;
      /*
       *
-      * for (int i = 0; i < num_players-1; ++i) {
+        for (int i = 0; i < num_players-1; ++i) {
         current->next = create_player();
         current=current->next;
         current->character=character[i];
         player_username(current->username);
         fillCFUCards(current,cfuCards);
-    }
-    current->next=NULL;
+        }
+        current->next=NULL;
       *
       * */
 
@@ -62,11 +62,15 @@ int main() {
 
     DMG_cards *dmgCards= malloc(sizeof(DMG_cards)*TOTALDMG);
 
-    Player *players;
+    Player *players =malloc(sizeof(Player)*TOTALDMG);
+
 
     Board board;
     setup_game_test(&cfuCards,& dmgCards, &players, characters, num_players);
-    turn(&cfuCards, dmgCards, players, 1, num_players);
+    //bubbleSort(&cfuCards,TOTALCFU);
+    printf("%s\n",players->character.name);
+    print_cards(cfuCards);
+    turn(&cfuCards,& dmgCards, &players, 1, num_players);
 
     int ff = 000;
 

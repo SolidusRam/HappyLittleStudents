@@ -141,12 +141,10 @@ Player *create_player()
     return newPlayer;
 }
 
-CFU_Cards *swap(CFU_Cards * ptr1, CFU_Cards * ptr2)
-{
-    struct Node* tmp = ptr2->next;
-    ptr2->next = ptr1;
-    ptr1->next = tmp;
-    return ptr2;
+void swap(CFU_Cards *a, CFU_Cards *b) {
+    CFU_Cards temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 void print_cards(CFU_Cards* head) {
@@ -219,6 +217,9 @@ void initializeBoard(Board* board,int numplayer) {
     // Allocate memory for temporary scores
     board->temporay_scores = (int*)malloc(sizeof(int) * numplayer);
 
+//    Allocate memory for effects order
+    board->temporay_scores=(int *) malloc(sizeof(int )*numplayer);
+
     // Allocate memory for in-game cards
     board->ingame_cards = (CFU_Cards*)malloc(sizeof(CFU_Cards) * numplayer);
 
@@ -231,4 +232,13 @@ void initializeBoard(Board* board,int numplayer) {
     // Allocate memory for flags
     board->flags = (int*)malloc(sizeof(int) * numplayer);
 
+}
+
+int copy_array(int a[], int b[], int n, int i)
+{
+    // copying elements from one array to another
+    if (i < n) {
+        b[i] = a[i];
+        copy_array(a, b, n, ++i);
+    }
 }

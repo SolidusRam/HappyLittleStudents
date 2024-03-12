@@ -121,11 +121,20 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
     //carte
 
+
     for (int i = 0; i < numplayers; ++i) {
         printf("%d ",board.temporay_scores[i]);
     }
 
 
+    printf("\n");
+
+
+    effects(&board,numplayers);
+    //print_cards(board.ingame_cards);
+
+    //attivazione effetti carte
+    //effects(&board,numplayers);
 
     //altro ciclo per la carta CFU instantaneo
     //di nuovo richiedo le altre due opzioni
@@ -167,7 +176,7 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     printf("shuffle finito \n");
 
     //lettura personaggi
-    character_reading(character,num_players);
+    character_reading(character);
 
     shuffle_characters(character,num_players);
 

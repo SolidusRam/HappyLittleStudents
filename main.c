@@ -16,7 +16,7 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
     printf("shuffle finito \n");
 
     //lettura personaggi
-    character_reading(character,4);
+    character_reading(character);
 
     shuffle_characters(character,num_players);
 
@@ -66,10 +66,8 @@ int main() {
     Player *players =malloc(sizeof(Player)*TOTALDMG);
 
 
-    Board board;
     setup_game_test(&cfuCards,& dmgCards, &players, characters, num_players);
-    //bubbleSort(&cfuCards,TOTALCFU);
-    printf("%s\n",players->character.name);
+
     print_cards(cfuCards);
     turn(&cfuCards,dmgCards, players, 1, num_players);
 

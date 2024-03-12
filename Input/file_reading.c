@@ -90,7 +90,7 @@ DMG_cards* dmg_reading() {
     //nome, descrizione, tipo
 }
 
-void character_reading(Character *characters, int numCharacters)
+void character_reading(Character *characters)
 {
     FILE *file = fopen(PERSONAGGI, "r");
     if (file == NULL) {
@@ -98,7 +98,7 @@ void character_reading(Character *characters, int numCharacters)
         return;
     }
 
-    for (int i = 0; i < numCharacters; i++) {
+    for (int i = 0; i < NUMCHARACTERS; i++) {
         fscanf(file, "%d %d %d %d %s",
                &characters[i].bonus[0], &characters[i].bonus[1], &characters[i].bonus[2], &characters[i].bonus[3], characters[i].name);
     }

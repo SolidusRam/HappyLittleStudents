@@ -125,11 +125,11 @@ void playCFU(Player *player,Board *board,int nplayer){
     score=board->ingame_cards->cfu_points;
 
     //aggiungo bonus in base al personaggio
-    int tipo=board->draftedDMG->type;
-    int perso = player->character.bonus[tipo];
+    //int tipo=board->draftedDMG->type;
+    //int bonus_char = player->character.bonus[tipo];
 
-    board->temporay_scores[nplayer]=score+perso;
-
+//    board->temporay_scores[nplayer]=score+bonus_char;
+    board->temporay_scores[nplayer]=score;
 
 }
 
@@ -172,35 +172,31 @@ void suggerimento(CFU_Cards*mano, Board board){
     }
 }
 
-int bubbleSort(CFU_Cards ** head, int count)
+int desc_order( int n,int a [n])
 {
-    CFU_Cards ** h;
-    int i, j, swapped;
+    int i, j, t = 0;
 
-    for (i = 0; i <= count; i++) {
+    // iterates the array elements
+    for (i = 0; i < n; i++) {
 
-        h = head;
-        swapped = 0;
+        // iterates the array elements from index 1
+        for (j = i + 1; j < n; j++) {
 
-        for (j = 0; j < count - i - 1; j++) {
-
-            CFU_Cards * p1 = *h;
-            CFU_Cards * p2 = p1->next;
-
-            if (p1->cfu_points > p2->cfu_points) {
-
-                /* update the link after swapping */
-                *h = swap(p1, p2);
-                swapped = 1;
+            // comparing the array elements, to set array
+            // elements in descending order
+            if (a[i] < a[j]) {
+                t = a[i];
+                a[i] = a[j];
+                a[j] = t;
             }
-
-            h = &(*h)->next;
         }
-
-        /* break if the loop ended without any swap */
-        if (swapped == 0)
-            break;
     }
+    // printing the output
+    for (i = 0; i < n; i++) {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+    return 0;
 }
 
 void addCardToIngameCards(Board *board, CFU_Cards *card) {
@@ -208,4 +204,31 @@ void addCardToIngameCards(Board *board, CFU_Cards *card) {
     newNode = card;
     newNode->next = board->ingame_cards;
     board->ingame_cards = newNode;
+}
+
+void effects(Board *board,int numplayer){
+
+    int effects[numplayer];
+
+    copy_array(board->temporay_scores,effects,numplayer,0);
+
+    desc_order(numplayer,effects);
+    //scorro le carte dal punteggio
+    for (int i = 0; i < numplayer; i++) {
+
+        CFU_Cards *tmp=board->ingame_cards;
+
+        //scorro le carte in gioco e vedo se la carta è giocata
+        for (int j = 0; j < numplayer; j++) {
+            if (effects[i] == tmp->cfu_points) {
+                //play effect
+                printf("found %s con effetto %d di punti %d\n",tmp->name,
+                       tmp->effect,tmp->cfu_points);
+                break;
+
+            } else{
+                tmp = tmp->next;
+            }
+        }
+    }
 }

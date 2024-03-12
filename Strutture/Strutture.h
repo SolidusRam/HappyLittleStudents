@@ -88,6 +88,7 @@ typedef struct Player{
 
 typedef struct Board{
     int *temporay_scores;
+    int *effects_order;
     CFU_Cards *ingame_cards;
     CFU_Cards *instant_cards;
     DMG_cards *draftedDMG;
@@ -111,7 +112,8 @@ void free_players(Player *head);
 void print_cards(CFU_Cards*);
 void print_dmg_cards(DMG_cards *);
 
-CFU_Cards *swap(CFU_Cards * ptr1, CFU_Cards * ptr2);
+void swap(CFU_Cards * ptr1, CFU_Cards * ptr2);
 
+int copy_array(int a[], int b[], int n, int i);
 
 #endif //_PR1_PROGETTO_STRUTTURE_H

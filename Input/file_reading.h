@@ -2,6 +2,7 @@
 #ifndef _PR1_PROGETTO_FILE_READING_H
 #define _PR1_PROGETTO_FILE_READING_H
 
+#define NUMCHARACTERS 4
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +25,7 @@ DMG_cards *dmg_reading();
 
 CFU_Cards *card_reading();
 
-void character_reading(Character *characters, int numCharacters);
+void character_reading(Character *characters);
 
 
 #endif //_PR1_PROGETTO_FILE_READING_H

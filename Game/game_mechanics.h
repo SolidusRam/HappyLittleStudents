@@ -23,5 +23,7 @@ void suggerimento(CFU_Cards *mano,Board board);
 void addCardToIngameCards(Board *board, CFU_Cards *card);
 
 //Function to perform bubble sort on the linked list
-int bubbleSort(CFU_Cards ** head, int count);
+int desc_order( int n,int a[n]);
+
+void effects(Board *board ,int numplayer);
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

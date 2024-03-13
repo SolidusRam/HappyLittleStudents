@@ -25,5 +25,5 @@ void addCardToIngameCards(Board *board, CFU_Cards *card);
 //Function to perform bubble sort on the linked list
 int desc_order( int n,int a[n]);
 
-void effects(Board *board ,int numplayer);
+void effects(Board *board ,int numplayer,Player *head);
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

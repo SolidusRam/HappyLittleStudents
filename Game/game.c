@@ -127,10 +127,14 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     }
 
 
+
+
     printf("\n");
 
 
-    effects(&board,numplayers);
+    // in questa fase i giocatori con carte con effetti hanno la possibilità
+    // di giocare l'effetto
+    effects(&board,numplayers,head_player);
     //print_cards(board.ingame_cards);
 
     //attivazione effetti carte

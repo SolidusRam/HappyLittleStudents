@@ -125,11 +125,11 @@ void playCFU(Player *player,Board *board,int nplayer){
     score=board->ingame_cards->cfu_points;
 
     //aggiungo bonus in base al personaggio
-    //int tipo=board->draftedDMG->type;
-    //int bonus_char = player->character.bonus[tipo];
+    int tipo=board->draftedDMG->type;
+    int bonus_char = player->character.bonus[tipo];
 
-//    board->temporay_scores[nplayer]=score+bonus_char;
-    board->temporay_scores[nplayer]=score;
+    board->temporay_scores[nplayer]=score+bonus_char;
+    board->effects_order[nplayer]=score;
 
 }
 
@@ -206,11 +206,11 @@ void addCardToIngameCards(Board *board, CFU_Cards *card) {
     board->ingame_cards = newNode;
 }
 
-void effects(Board *board,int numplayer){
+void effects(Board *board,int numplayer,Player *head){
 
     int effects[numplayer];
 
-    copy_array(board->temporay_scores,effects,numplayer,0);
+    copy_array(board->effects_order,effects,numplayer,0);
 
     desc_order(numplayer,effects);
     //scorro le carte dal punteggio
@@ -218,12 +218,16 @@ void effects(Board *board,int numplayer){
 
         CFU_Cards *tmp=board->ingame_cards;
 
-        //scorro le carte in gioco e vedo se la carta è giocata
+        //scorro le carte in gioco e gioco la carta seguendo l'ordine
         for (int j = 0; j < numplayer; j++) {
             if (effects[i] == tmp->cfu_points) {
                 //play effect
-                printf("found %s con effetto %d di punti %d\n",tmp->name,
-                       tmp->effect,tmp->cfu_points);
+                Player *tmp_player=head;
+                for (int k = j; k > 0; k--) {
+                    tmp_player=tmp_player->next;
+                }
+                printf("found %s con effetto %d di punti %d giocata da %s\n",tmp->name,
+                        tmp->effect,tmp->cfu_points,tmp_player->character.name);
                 break;
 
             } else{

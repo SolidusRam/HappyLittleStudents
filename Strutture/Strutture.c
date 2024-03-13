@@ -218,7 +218,7 @@ void initializeBoard(Board* board,int numplayer) {
     board->temporay_scores = (int*)malloc(sizeof(int) * numplayer);
 
 //    Allocate memory for effects order
-    board->temporay_scores=(int *) malloc(sizeof(int )*numplayer);
+    board->effects_order=(int *) malloc(sizeof(int )*numplayer);
 
     // Allocate memory for in-game cards
     board->ingame_cards = (CFU_Cards*)malloc(sizeof(CFU_Cards) * numplayer);

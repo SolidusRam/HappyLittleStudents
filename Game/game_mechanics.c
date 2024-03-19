@@ -209,6 +209,7 @@ void addCardToIngameCards(Board *board, CFU_Cards *card) {
 void effects(Board *board,int numplayer,Player *head){
 
     int effects[numplayer];
+    int annulla=0;
 
     copy_array(board->effects_order,effects,numplayer,0);
 
@@ -228,11 +229,64 @@ void effects(Board *board,int numplayer,Player *head){
                 }
                 printf("found %s con effetto %d di punti %d giocata da %s\n",tmp->name,
                         tmp->effect,tmp->cfu_points,tmp_player->character.name);
+
+
                 break;
 
             } else{
                 tmp = tmp->next;
             }
         }
+    }
+}
+
+void effects_application(Player *current,Player*head,CFU_Cards*card,Board board,int effect){
+
+
+    switch (effect) {
+
+        /*Scambia la carta punto giocata nel turno da un giocatore G1 con quella di un giocatore G2, con G1 e G2
+        scelti dal giocatore che ha giocato la carta SCAMBIAC*/
+        case SCAMBIAC:
+            //scegli giocatore
+
+            break;
+
+        //Guarda due carte in cima al mazzo, prendine una e scarta l’altra
+        case SBIRCIA:
+
+
+
+            break;
+//        Raddoppia gli effetti delle carte che aumentano o diminuiscono il punteggio (per tutti)
+        case DOPPIOE:
+            break;
+//        Scambia il punteggio del turno maggiore e minore dopo il calcolo del punteggio di base
+        case SCAMBIAP:
+            break;
+//            Scarta da uno a tre carte dalla tua mano
+        case SCARTAC:
+
+            break;
+//        4 [SCARTAE] Scarta una carta CFU punto con effetto e aggiungi il suo punteggio a quello del turno
+        case SCARTAE:
+            break;
+//        3 [SCAMBIADS] Scambia questa carta con quella di un altro giocatore, purché senza effetto
+        case SCAMBIADS:
+            break;
+//            2 [RUBA] Guarda la mano di un collega e ruba una carta a scelta.
+
+        case RUBA:
+            break;
+           // 1 [SCARTAP] Scarta una carta CFU punto e aggiungi il suo punteggio a quello del turno
+
+        case SCARTAP:
+            break;
+
+        case NESSUNO:
+            break;
+        default:
+            exit(333);
+        
     }
 }

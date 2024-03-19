@@ -20,7 +20,7 @@ void game()
     //chiedo se si vuole leggere e caricare il file di salvataggio
     game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
-    int load=load_game();
+    int load=choose2();
 
     if (load==1)
     {

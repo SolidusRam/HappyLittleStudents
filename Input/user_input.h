@@ -9,7 +9,7 @@ int players_number();
 
 void player_username(char username[]);
 
-int load_game();
+int choose2();
 
 int ask_for_action();
 

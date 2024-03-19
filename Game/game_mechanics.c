@@ -240,7 +240,7 @@ void effects(Board *board,int numplayer,Player *head){
     }
 }
 
-void effects_application(Player *current,Player*head,CFU_Cards*card,Board board,int effect){
+void effects_application(Player *current,Player*head,CFU_Cards*mazzo,CFU_Cards *scarti,Board board,int effect){
 
 
     switch (effect) {
@@ -254,9 +254,7 @@ void effects_application(Player *current,Player*head,CFU_Cards*card,Board board,
 
         //Guarda due carte in cima al mazzo, prendine una e scarta l’altra
         case SBIRCIA:
-
-
-
+            sbircia(mazzo,scarti,head);
             break;
 //        Raddoppia gli effetti delle carte che aumentano o diminuiscono il punteggio (per tutti)
         case DOPPIOE:
@@ -286,7 +284,9 @@ void effects_application(Player *current,Player*head,CFU_Cards*card,Board board,
         case NESSUNO:
             break;
         default:
+            printf("Errore nell'applicazione dell'effetto,codice effetto non consentito\n");
             exit(333);
+            break;
         
     }
 }

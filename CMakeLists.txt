@@ -21,4 +21,6 @@ add_executable(HappyLittleStudents
         Input/salvataggi.h
         Game/game_mechanics.c
         Game/game_mechanics.h
+        Game/effects.c
+        Game/effects.h
 )

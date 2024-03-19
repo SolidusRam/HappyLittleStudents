@@ -47,7 +47,7 @@ void player_username(char username[MAX_CHAR])
 }
 
 //scelgo un numero da 1 a 2
-int load_game()
+int choose2()
 {
     int scelta=0;
     do {
@@ -55,11 +55,11 @@ int load_game()
         scanf("%d", &scelta);
         switch (scelta) {
             case 1:
-                printf("Hai scelto di caricare la partita.\n");
+                printf("Hai scelto l'opzione 1.\n");
                 return 1;
                 break;
             case 2:
-                printf("Hai scelto di iniziare un nuovo salvataggio.\n");
+                printf("Hai scelto l'opzione 2.\n");
                 return 2;
                 break;
             default:

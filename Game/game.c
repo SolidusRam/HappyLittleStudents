@@ -44,7 +44,7 @@ void game()
     printf("inizio della partita");
     int turn_number=0;
 
-    turn(&cfuCards,dmgCards,players,turn_number,num_players );
+    turn(&cfuCards,dmgCards,players,turn_number,num_players ,scarti);
     /*
     int check=0;
     //turno da reiterare per variabile di ritorno
@@ -65,7 +65,7 @@ void game()
 }
 
 
-int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers)
+int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards *scarti)
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
     Board board;
@@ -113,18 +113,16 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         //check_action(action,temp_player,head_player);
         //if(action==1)
         //{
+        //gioco la carta CFU
         playCFU(temp_player,&board,i);
         //}
         temp_player=temp_player->next;
     }
 
+
+
     //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
     //carte
-
-
-    for (int i = 0; i < numplayers; ++i) {
-        printf("%d ",board.temporay_scores[i]);
-    }
 
 
 
@@ -134,11 +132,10 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
     // in questa fase i giocatori con carte con effetti hanno la possibilità
     // di giocare l'effetto
-    effects(&board,numplayers,head_player);
-    //print_cards(board.ingame_cards);
 
-    //attivazione effetti carte
-    //effects(&board,numplayers);
+    //effetti giocatore
+    effects(head_player,&cfuCards,&scarti,&board,numplayers);
+
 
     //altro ciclo per la carta CFU instantaneo
     //di nuovo richiedo le altre due opzioni
@@ -162,7 +159,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //codice di uscita !=0
     free(board.ingame_cards);
     free(board.temporay_scores);
-    free(board.instant_cards);
     free(board.flags);
     return 1;
 }

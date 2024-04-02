@@ -153,7 +153,7 @@ void print_cards(CFU_Cards* head) {
     while (temp != NULL) {
         printf("Carta num:%d Name: %s, Points: %d, Effect: %d\n",
                count,temp->name, temp->cfu_points, temp->effect);
-        temp = temp->next;
+        temp = (CFU_Cards *) temp->next;
         count++;
     }
 }
@@ -212,26 +212,18 @@ void free_players(Player *head) {
 }
 
 
-void initializeBoard(Board* board,int numplayer) {
+void initializeBoard(Board* board,int numplayers) {
+    board->temporay_scores = (int*) malloc(numplayers * sizeof(int));
+    board->effects_order = (int*) malloc(numplayers * sizeof(int));
+    board->ingame_cards = (CFU_Cards**) malloc(numplayers * sizeof(CFU_Cards*)); // Allocate the ingame_cards array
+    board->flags = (int*) malloc(numplayers * sizeof(int));
 
-    // Allocate memory for temporary scores
-    board->temporay_scores = (int*)malloc(sizeof(int) * numplayer);
-
-//    Allocate memory for effects order
-    board->effects_order=(int *) malloc(sizeof(int )*numplayer);
-
-    // Allocate memory for in-game cards
-    board->ingame_cards = (CFU_Cards*)malloc(sizeof(CFU_Cards) * numplayer);
-
-    // Allocate memory for instant cards
-    board->instant_cards = (CFU_Cards*)malloc(sizeof(CFU_Cards) * numplayer);
-
-    // Allocate memory for drafted DMG cards
-    board->draftedDMG = (DMG_cards*)malloc(sizeof(DMG_cards) * numplayer);
-
-    // Allocate memory for flags
-    board->flags = (int*)malloc(sizeof(int) * numplayer);
-
+    for (int i = 0; i < numplayers; ++i) {
+        board->temporay_scores[i] = 0;
+        board->effects_order[i] = 0;
+        board->ingame_cards[i] = NULL; // Initialize each pointer to NULL
+        board->flags[i] = 0;
+    }
 }
 
 int copy_array(int a[], int b[], int n, int i)
@@ -241,4 +233,30 @@ int copy_array(int a[], int b[], int n, int i)
         b[i] = a[i];
         copy_array(a, b, n, ++i);
     }
+}
+
+void add_card_to_hand(Player *player, CFU_Cards *new_card) {
+    // Create a new node for the card
+    CFU_Cards *new_node = malloc(sizeof(CFU_Cards));
+    if (new_node == NULL) {
+        printf("Error: could not allocate memory for new card\n");
+        return;
+    }
+
+    // Copy the card data   
+    new_node = new_card;
+
+    // Add the new node to the beginning of the linked list
+    new_node->next = (struct CFU_Cards *) player->hand;
+    player->hand = new_node;
+}
+
+void add_card_to_scarti(CFU_Cards **scarti,CFU_Cards *card) {
+    if (scarti == NULL || card == NULL) {
+        printf("Error: Null pointer passed to add_card_to_scarti\n");
+        return;
+    }
+
+    card->next = (struct CFU_Cards *) *scarti;
+    *scarti = card;
 }

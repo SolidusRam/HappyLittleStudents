@@ -119,10 +119,13 @@ void playCFU(Player *player,Board *board,int nplayer){
     */
 
 
-    addCardToIngameCards(board,temp);
+    //aggiungo la carta in gioco
+    board->ingame_cards[nplayer]=temp;
+
+
     //aggiungo punteggio in base alla carta giocata
     int score=0;
-    score=board->ingame_cards->cfu_points;
+    score=board->ingame_cards[nplayer]->cfu_points;
 
     //aggiungo bonus in base al personaggio
     int tipo=board->draftedDMG->type;
@@ -199,14 +202,8 @@ int desc_order( int n,int a [n])
     return 0;
 }
 
-void addCardToIngameCards(Board *board, CFU_Cards *card) {
-    CFU_Cards *newNode;
-    newNode = card;
-    newNode->next = board->ingame_cards;
-    board->ingame_cards = newNode;
-}
 
-void effects(Board *board,int numplayer,Player *head){
+void effects(Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board,int numplayer){
 
     int effects[numplayer];
     int annulla=0;
@@ -229,6 +226,7 @@ void effects(Board *board,int numplayer,Player *head){
                 }
                 printf("found %s con effetto %d di punti %d giocata da %s\n",tmp->name,
                         tmp->effect,tmp->cfu_points,tmp_player->character.name);
+                effects_application(tmp_player,head,mazzo,scarti,&board,tmp->effect);
 
 
                 break;
@@ -240,7 +238,7 @@ void effects(Board *board,int numplayer,Player *head){
     }
 }
 
-void effects_application(Player *current,Player*head,CFU_Cards*mazzo,CFU_Cards *scarti,Board board,int effect){
+void effects_application(Player *current,Player*head,CFU_Cards*mazzo,CFU_Cards **scarti,Board *board,int effect){
 
 
     switch (effect) {
@@ -251,7 +249,6 @@ void effects_application(Player *current,Player*head,CFU_Cards*mazzo,CFU_Cards *
             //scegli giocatore
 
             break;
-
         //Guarda due carte in cima al mazzo, prendine una e scarta l’altra
         case SBIRCIA:
             sbircia(mazzo,scarti,head);

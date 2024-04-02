@@ -25,9 +25,9 @@ void addCardToIngameCards(Board *board, CFU_Cards *card);
 
 int desc_order( int n,int a[n]);
 
-void effects(Board *board ,int numplayer,Player *head);
+void effects(Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board*,int numplayers);
 
-void effects_application(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards *scarti,Board, int effect);
+void effects_application(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board*, int effect);
 
 
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

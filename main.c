@@ -4,6 +4,7 @@
 #include "Game/game.h"
 #include "Input/salvataggi.h"
 
+//funzione di setup del gioco modidicata per il test
 void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[4],int num_players)
 {
     //operazioni di lettura
@@ -29,6 +30,9 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
     current->character=character[0];
     //player_username(current->username);
     fillCFUCards(current,cfuCards);
+
+    //forzatura sull'effetto
+    current->hand->effect=SBIRCIA;
 
     for (int i = 1; i < num_players; i++) {
         current->next = create_player();
@@ -56,7 +60,7 @@ int main() {
 
 
     Character characters[4];
-    int num_players = 3;
+    int num_players = 2;
 
     CFU_Cards *cfuCards= malloc(sizeof(CFU_Cards)*TOTALCFU);
     CFU_Cards *scarti= malloc(sizeof(CFU_Cards)*TOTALCFU);
@@ -69,7 +73,7 @@ int main() {
     setup_game_test(&cfuCards,& dmgCards, &players, characters, num_players);
 
     print_cards(cfuCards);
-    turn(&cfuCards,dmgCards, players, 1, num_players);
+    turn(&cfuCards,dmgCards, players, 1, num_players,scarti);
 
     int ff = 000;
 

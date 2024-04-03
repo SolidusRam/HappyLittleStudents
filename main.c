@@ -71,7 +71,6 @@ int main() {
 
 
     setup_game_test(&cfuCards,& dmgCards, &players, characters, num_players);
-
     print_cards(cfuCards);
     turn(&cfuCards,dmgCards, players, 1, num_players,scarti);
 

@@ -214,13 +214,13 @@ void free_players(Player *head) {
 
 void initializeBoard(Board* board,int numplayers) {
     board->temporay_scores = (int*) malloc(numplayers * sizeof(int));
-    board->effects_order = (int*) malloc(numplayers * sizeof(int));
+    board->base_scores = (int*) malloc(numplayers * sizeof(int));
     board->ingame_cards = (CFU_Cards**) malloc(numplayers * sizeof(CFU_Cards*)); // Allocate the ingame_cards array
     board->flags = (int*) malloc(numplayers * sizeof(int));
 
     for (int i = 0; i < numplayers; ++i) {
         board->temporay_scores[i] = 0;
-        board->effects_order[i] = 0;
+        board->base_scores[i] = 0;
         board->ingame_cards[i] = NULL; // Initialize each pointer to NULL
         board->flags[i] = 0;
     }
@@ -259,4 +259,103 @@ void add_card_to_scarti(CFU_Cards **scarti,CFU_Cards *card) {
 
     card->next = (struct CFU_Cards *) *scarti;
     *scarti = card;
+}
+
+void remove_card_from_hand(Player *player, int index) {
+    if (player == NULL) {
+        printf("Error: Null pointer passed to remove_card_from_hand\n");
+        return;
+    }
+
+    CFU_Cards *current = player->hand;
+    CFU_Cards *prev = NULL;
+
+    // Find the card at the specified index
+    for (int i = 0; i < index; i++) {
+        if (current == NULL) {
+            printf("Error: Index out of bounds in remove_card_from_hand\n");
+            return;
+        }
+
+        prev = current;
+        current = (CFU_Cards *) current->next;
+    }
+
+    // Remove the card from the linked list
+    if (prev == NULL) {
+        player->hand = (CFU_Cards *) current->next;
+    } else {
+        prev->next = current->next;
+    }
+
+    // Free the memory allocated for the card
+    free(current);
+}
+
+void print_card_info(CFU_Cards *card) {
+    if (card == NULL) {
+        printf("Error: Null pointer passed to print_card_info\n");
+        return;
+    }
+
+    printf("Name: %s\n", card->name);
+    printf("Points: %d\n", card->cfu_points);
+
+    //print dell'effetto utilizzando il nome dell'effetto
+    switch (card->effect) {
+        case NESSUNO:
+            printf("Effect: Nessuno\n");
+            break;
+        case SCARTAP:
+            printf("Effect: Scarta una carta\n");
+            break;
+        case RUBA:
+            printf("Effect: Ruba una carta\n");
+            break;
+        case SCAMBIADS:
+            printf("Effect: Scambia una carta con lo scarto\n");
+            break;
+        case SCARTADS:
+            printf("Effect: Scarta una carta e pesca dallo scarto\n");
+            break;
+        case SCARTAE:
+            printf("Effect: Scarta una carta e pesca dal mazzo\n");
+            break;
+        case SCARTAC:
+            printf("Effect: Scarta una carta e pesca dal mazzo\n");
+            break;
+        case SCAMBIAP:
+            printf("Effect: Scambia una carta con un altro giocatore\n");
+            break;
+        case DOPPIOE:
+            printf("Effect: Doppio effetto\n");
+            break;
+        case SBIRCIA:
+            printf("Effect: Guarda la mano di un altro giocatore\n");
+            break;
+        case SCAMBIAC:
+            printf("Effect: Scambia una carta con un altro giocatore\n");
+            break;
+        case ANNULLA:
+            printf("Effect: Annulla l'effetto di una carta\n");
+            break;
+        case AUMENTA:
+            printf("Effect: Aumenta il punteggio di una carta\n");
+            break;
+        case DIMINUISCI:
+            printf("Effect: Diminuisci il punteggio di una carta\n");
+            break;
+        case INVERTI:
+            printf("Effect: Inverti il punteggio di una carta\n");
+            break;
+        case SALVA:
+            printf("Effect: Salva una carta per il prossimo turno\n");
+            break;
+        case DIROTTA:
+            printf("Effect: Dirotta una carta\n");
+            break;
+        default:
+            printf("Effect: Unknown\n");
+            break;
+    }
 }

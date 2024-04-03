@@ -88,10 +88,11 @@ typedef struct Player{
 
 typedef struct Board{
     int *temporay_scores;
-    int *effects_order;
+    int *base_scores;
     CFU_Cards **ingame_cards;
     DMG_cards *draftedDMG;
     int *flags;
+    int numplayers;
 }Board;
 
 
@@ -118,5 +119,9 @@ int copy_array(int a[], int b[], int n, int i);
 void add_card_to_hand(Player *player, CFU_Cards *new_card);
 
 void add_card_to_scarti(CFU_Cards **scarti, CFU_Cards *card);
+
+void remove_card_from_hand(Player *player, int index);
+
+void print_card_info(CFU_Cards *card);
 
 #endif //_PR1_PROGETTO_STRUTTURE_H

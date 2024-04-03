@@ -136,8 +136,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //effetti giocatore
     effects(head_player,&cfuCards,&scarti,&board,numplayers);
 
-
-    //altro ciclo per la carta CFU instantaneo
+    // altro ciclo per la carta CFU instantaneo
     //di nuovo richiedo le altre due opzioni
 
     /*

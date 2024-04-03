@@ -132,7 +132,7 @@ void playCFU(Player *player,Board *board,int nplayer){
     int bonus_char = player->character.bonus[tipo];
 
     board->temporay_scores[nplayer]=score+bonus_char;
-    board->effects_order[nplayer]=score;
+    board->base_scores[nplayer]=score;
 
 }
 
@@ -175,115 +175,56 @@ void suggerimento(CFU_Cards*mano, Board board){
     }
 }
 
-int desc_order( int n,int a [n])
-{
-    int i, j, t = 0;
-
-    // iterates the array elements
+// Function to sort the arrays in descending order
+void desc_order(int n, int base_score[n], int effect[n], Player* players[n]){
+    int i, j;
+    // Iterate over each element of the base_score array
     for (i = 0; i < n; i++) {
-
-        // iterates the array elements from index 1
+        // For each element, iterate over the remaining elements
         for (j = i + 1; j < n; j++) {
+            // If the current element is less than the next element
+            if (base_score[i] < base_score[j]) {
+                // Swap the base_score elements
+                int temp_score = base_score[i];
+                base_score[i] = base_score[j];
+                base_score[j] = temp_score;
 
-            // comparing the array elements, to set array
-            // elements in descending order
-            if (a[i] < a[j]) {
-                t = a[i];
-                a[i] = a[j];
-                a[j] = t;
-            }
-        }
-    }
-    // printing the output
-    for (i = 0; i < n; i++) {
-        printf("%d ", a[i]);
-    }
-    printf("\n");
-    return 0;
-}
+                // Swap the corresponding effect elements
+                int temp_effect = effect[i];
+                effect[i] = effect[j];
+                effect[j] = temp_effect;
 
-
-void effects(Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board,int numplayer){
-
-    int effects[numplayer];
-    int annulla=0;
-
-    copy_array(board->effects_order,effects,numplayer,0);
-
-    desc_order(numplayer,effects);
-    //scorro le carte dal punteggio
-    for (int i = 0; i < numplayer; i++) {
-
-        CFU_Cards *tmp=board->ingame_cards;
-
-        //scorro le carte in gioco e gioco la carta seguendo l'ordine
-        for (int j = 0; j < numplayer; j++) {
-            if (effects[i] == tmp->cfu_points) {
-                //play effect
-                Player *tmp_player=head;
-                for (int k = j; k > 0; k--) {
-                    tmp_player=tmp_player->next;
-                }
-                printf("found %s con effetto %d di punti %d giocata da %s\n",tmp->name,
-                        tmp->effect,tmp->cfu_points,tmp_player->character.name);
-                effects_application(tmp_player,head,mazzo,scarti,&board,tmp->effect);
-
-
-                break;
-
-            } else{
-                tmp = tmp->next;
+                // Swap the corresponding players
+                Player* temp_player = players[i];
+                players[i] = players[j];
+                players[j] = temp_player;
             }
         }
     }
 }
+/* gli effetti vengono giocati in base al punteggio delle carte in ordine decrecente
+ * base score è il punteggio della carta giocata e ne determina l'ordine
+ *
+ */
+void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int numplayer){
+    int base_score[numplayer];
+    int effect[numplayer];
+    Player* players[numplayer];
+    int i=0;
+    Player *current=head;
+    while(current!=NULL)
+    {
+        base_score[i]=board->base_scores[i];
+        effect[i]=board->ingame_cards[i]->effect;
+        players[i]=current;
+        i++;
+        current=current->next;
+    }
+    desc_order(numplayer, base_score, effect, players);
+    for (int j = 0; j < numplayer; ++j) {
 
-void effects_application(Player *current,Player*head,CFU_Cards*mazzo,CFU_Cards **scarti,Board *board,int effect){
-
-
-    switch (effect) {
-
-        /*Scambia la carta punto giocata nel turno da un giocatore G1 con quella di un giocatore G2, con G1 e G2
-        scelti dal giocatore che ha giocato la carta SCAMBIAC*/
-        case SCAMBIAC:
-            //scegli giocatore
-
-            break;
-        //Guarda due carte in cima al mazzo, prendine una e scarta l’altra
-        case SBIRCIA:
-            sbircia(mazzo,scarti,head);
-            break;
-//        Raddoppia gli effetti delle carte che aumentano o diminuiscono il punteggio (per tutti)
-        case DOPPIOE:
-            break;
-//        Scambia il punteggio del turno maggiore e minore dopo il calcolo del punteggio di base
-        case SCAMBIAP:
-            break;
-//            Scarta da uno a tre carte dalla tua mano
-        case SCARTAC:
-
-            break;
-//        4 [SCARTAE] Scarta una carta CFU punto con effetto e aggiungi il suo punteggio a quello del turno
-        case SCARTAE:
-            break;
-//        3 [SCAMBIADS] Scambia questa carta con quella di un altro giocatore, purché senza effetto
-        case SCAMBIADS:
-            break;
-//            2 [RUBA] Guarda la mano di un collega e ruba una carta a scelta.
-
-        case RUBA:
-            break;
-           // 1 [SCARTAP] Scarta una carta CFU punto e aggiungi il suo punteggio a quello del turno
-
-        case SCARTAP:
-            break;
-
-        case NESSUNO:
-            break;
-        default:
-            printf("Errore nell'applicazione dell'effetto,codice effetto non consentito\n");
-            exit(333);
-            break;
-        
+        printf("Giocatore: %s, gioca la carta con effetto %d\n",players[j]->character.name,effect[j]);
+        printf("Nome carta %s",board->ingame_cards[j]->name);
+        effects_application(players[j], head, mazzo, scarti, board, effect[j],j);
     }
 }

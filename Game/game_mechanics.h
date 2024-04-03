@@ -23,11 +23,9 @@ void suggerimento(CFU_Cards *mano,Board board);
 
 void addCardToIngameCards(Board *board, CFU_Cards *card);
 
-int desc_order( int n,int a[n]);
+void desc_order( int n,int basescore[n],int effects[n],Player *players[n]);
 
 void effects(Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board*,int numplayers);
-
-void effects_application(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board*, int effect);
 
 
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

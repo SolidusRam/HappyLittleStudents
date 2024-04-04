@@ -35,7 +35,7 @@ void effect_RUBA(Player *current, Player *head, Board *board);
 void effect_ANNULLA(Board *board);
 
 //Aumenta di 2 CFU il punteggio del turno di un giocatore a scelta
-void effect_AUMENTA(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board);
+void effect_AUMENTA(Player *current, Player *head, Board *board);
 
 //Diminuisci di 2 CFU il punteggio del turno di un giocatore a scelta
 void effect_DIMINUISCI(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board);
@@ -90,7 +90,7 @@ void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo,
             effect_ANNULLA(board);
             break;
         case AUMENTA:
-            effect_AUMENTA(current_player, head, mazzo, scarti, board);
+            effect_AUMENTA(current_player, head, board);
             break;
         case DIMINUISCI:
             effect_DIMINUISCI(current_player, head, mazzo, scarti, board);

@@ -27,5 +27,7 @@ void desc_order( int n,int basescore[n],int effects[n],Player *players[n]);
 
 void effects(Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board*,int numplayers);
 
+void player_has_instant(Player*head,CFU_Cards **scarti,Board*board);
+
 
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

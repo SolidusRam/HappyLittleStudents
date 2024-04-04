@@ -261,6 +261,45 @@ void effect_ANNULLA(Board *board)
     }
     board->annulla=true;
 }
+
+void effect_AUMENTA(Player *current, Player *head, Board *board)
+{
+    printf("Aumenta di 2 CFU il punteggio del turno di un giocatore a scelta\n");
+    printf("Quale giocatore vuoi scegliere?\n");
+    peek_players(current,head);
+    //probabilmente non aggiorno il punteggio al player corretto
+    int choice;
+    scanf("%d",&choice);
+    while(choice<1 || choice>board->numplayers-1)
+    {
+        printf("Scelta non valida, riprova\n");
+        scanf("%d",&choice);
+    }
+    board->temporay_scores[choice-1]+=2;
+    if(board->molt==true)
+    {
+        board->temporay_scores[choice-1]+=2;
+    }
+}
+
+void effect_DIMINUISCI(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board)
+{
+    printf("Diminuisci di 2 CFU il punteggio del turno di un giocatore a scelta\n");
+    printf("Quale giocatore vuoi scegliere?\n");
+    peek_players(current,head);
+    int choice;
+    scanf("%d",&choice);
+    while(choice<1 || choice>board->numplayers-1)
+    {
+        printf("Scelta non valida, riprova\n");
+        scanf("%d",&choice);
+    }
+    board->temporay_scores[choice-1]-=2;
+    if(board->molt==true)
+    {
+        board->temporay_scores[choice-1]-=2;
+    }
+}
 /*
  * typedef enum effects{NESSUNO,SCARTAP,RUBA,SCAMBIADS,SCARTAE,SCARTAC,
                      SCAMBIAP,DOPPIOE,SBIRCIA,SCAMBIAC,ANNULLA,AUMENTA,DIMINUISCI,

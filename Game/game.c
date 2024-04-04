@@ -72,13 +72,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     initializeBoard(&board,numplayers);
 
 
-    //allocazione board
-    if(board.ingame_cards==NULL||board.temporay_scores==NULL)
-    {
-        printf("Errore allocazione Board");
-        exit(2);
-    }
-
     for (int i = 0; i < numplayers; ++i) {
         board.temporay_scores[i]=0;
     }
@@ -103,7 +96,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     Player *temp_player=head_player;
 
     for (int i = 0; i < numplayers; ++i) {
-
         //mostra le informazioni sul giocatore attuale
         printf("Turno del Giocatore: %s \n",temp_player->username);
         printf("Il tuo personaggio: %s \n",temp_player->character.name);
@@ -136,8 +128,10 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //effetti giocatore
     effects(head_player,&cfuCards,&scarti,&board,numplayers);
 
-    // altro ciclo per la carta CFU instantaneo
-    //di nuovo richiedo le altre due opzioni
+
+    //fase di attivazione delle carte istantanee
+    player_has_instant(head_player,&scarti,&board);
+
 
     /*
     if(temp_player==NULL)

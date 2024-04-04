@@ -86,7 +86,12 @@ void peek_players(Player *current,Player *head_player){
     {
         if(current->character.name!=temp->character.name)
         {
-            printf("%s ha %d punti e tot danni\n",temp->username,temp->cfu_score);
+            printf("%s ha %d punti dallo scorso turno, e tot danni\n",temp->username,temp->cfu_score);
+            while (current->dmg!=NULL)
+            {
+                printf("Carta danno: %s\n",current->dmg->name);
+                current->dmg=current->dmg->next;
+            }
         }
         temp=temp->next;
     }
@@ -230,5 +235,37 @@ void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, in
         printf("Nome carta %s",board->ingame_cards[j]->name);
         effects_application(players[j], head, mazzo, scarti, board, effect[j],j);
 
+    }
+}
+
+//controlla se il giocatore ha carte instantanee scorrendo la mano del giocatore
+//in caso positivo aggiorna il flag di board
+void player_has_instant(Player*head,CFU_Cards **scarti,Board*board){
+
+    Player *current=head;
+    for (int i = 0; i < board->numplayers; ++i)
+    {
+        CFU_Cards *temp=current->hand;
+        for (int j = 0; j < HAND; ++j) {
+            if(temp->effect>=AUMENTA)
+            {
+                printf("Il giocatore %s ha una carta instantanea\n",current->username);
+                printf("Vuoi giocarla? 1 per si, 0 per no\n");
+                int choice;
+                scanf("%d",&choice);
+                while (choice!=1 && choice!=0)
+                {
+                    printf("Scelta non valida, riprova\n");
+                    scanf("%d",&choice);
+                }
+                if(choice==1)
+                {
+                    add_card_to_scarti(scarti,temp);
+                    effects_application(current,head,NULL,scarti,board,temp->effect,0);
+                }
+            }
+            temp = temp->next;
+        }
+        current=current->next;
     }
 }

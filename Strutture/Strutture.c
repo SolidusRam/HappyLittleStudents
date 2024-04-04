@@ -217,6 +217,9 @@ void initializeBoard(Board* board,int numplayers) {
     board->base_scores = (int*) malloc(numplayers * sizeof(int));
     board->ingame_cards = (CFU_Cards**) malloc(numplayers * sizeof(CFU_Cards*)); // Allocate the ingame_cards array
     board->flags = (int*) malloc(numplayers * sizeof(int));
+    board->numplayers= numplayers;
+    board->molt=false;
+    board->annulla=false;
 
     for (int i = 0; i < numplayers; ++i) {
         board->temporay_scores[i] = 0;
@@ -314,9 +317,6 @@ void print_card_info(CFU_Cards *card) {
             break;
         case SCAMBIADS:
             printf("Effect: Scambia una carta con lo scarto\n");
-            break;
-        case SCARTADS:
-            printf("Effect: Scarta una carta e pesca dallo scarto\n");
             break;
         case SCARTAE:
             printf("Effect: Scarta una carta e pesca dal mazzo\n");

@@ -114,7 +114,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         //if(action==1)
         //{
         //gioco la carta CFU
-        playCFU(temp_player,&board,i);
+        playCFU(temp_player,scarti,&board,i);
         //}
         temp_player=temp_player->next;
     }

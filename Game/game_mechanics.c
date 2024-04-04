@@ -92,7 +92,7 @@ void peek_players(Player *current,Player *head_player){
     }
 }
 
-void playCFU(Player *player,Board *board,int nplayer){
+void playCFU(Player *player,CFU_Cards *scarti,Board *board,int nplayer){
 
     CFU_Cards *temp=player->hand;
 
@@ -134,6 +134,9 @@ void playCFU(Player *player,Board *board,int nplayer){
     board->temporay_scores[nplayer]=score+bonus_char;
     board->base_scores[nplayer]=score;
 
+    //aggiungo la carta agli scarti e la rimuovo dalla mano
+    add_card_to_scarti(scarti,board->ingame_cards[nplayer]);
+    remove_card_from_hand(player,nplayer);
 }
 
 int check_card(int choice,CFU_Cards*hand){
@@ -226,5 +229,6 @@ void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, in
         printf("Giocatore: %s, gioca la carta con effetto %d\n",players[j]->character.name,effect[j]);
         printf("Nome carta %s",board->ingame_cards[j]->name);
         effects_application(players[j], head, mazzo, scarti, board, effect[j],j);
+
     }
 }

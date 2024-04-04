@@ -14,7 +14,7 @@
 #define TOTALCFU 74
 #define TOTALDMG 28
 
-typedef enum effects{NESSUNO,SCARTAP,RUBA,SCAMBIADS,SCARTADS,SCARTAE,SCARTAC,
+typedef enum effects{NESSUNO,SCARTAP,RUBA,SCAMBIADS,SCARTAE,SCARTAC,
                      SCAMBIAP,DOPPIOE,SBIRCIA,SCAMBIAC,ANNULLA,AUMENTA,DIMINUISCI,
                      INVERTI,SALVA,DIROTTA};
 
@@ -92,6 +92,8 @@ typedef struct Board{
     CFU_Cards **ingame_cards;
     DMG_cards *draftedDMG;
     int *flags;
+    bool molt;                   //molt è un flag che indica se il giocatore ha giocato una carta DOPPIOE o AUMENTA o DIMINUISCI
+    bool annulla;               //flag che indica se il giocatore ha giocato una carta ANNULLA
     int numplayers;
 }Board;
 

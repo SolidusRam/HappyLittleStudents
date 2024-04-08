@@ -94,6 +94,7 @@ typedef struct Board{
     int *flags;
     bool molt;                   //molt è un flag che indica se il giocatore ha giocato una carta DOPPIOE o AUMENTA o DIMINUISCI
     bool annulla;               //flag che indica se il giocatore ha giocato una carta ANNULLA
+    bool salva;                 //flag che indica se il giocatore ha giocato una carta SALVA
     int numplayers;
 }Board;
 
@@ -125,5 +126,6 @@ void add_card_to_scarti(CFU_Cards **scarti, CFU_Cards *card);
 void remove_card_from_hand(Player *player, int index);
 
 void print_card_info(CFU_Cards *card);
+void add_dmg(Player*player, DMG_cards *new_card);
 
 #endif //_PR1_PROGETTO_STRUTTURE_H

@@ -7,7 +7,8 @@
 
 void effect_NESSUNO(Board*board,int card_index);
 
-//Scambia questa carta con quella di un altro giocatore, purché senza effetto
+//Scambia la carta punto giocata nel turno da un giocatore G1 con quella di un giocatore G2, con G1 e G2
+//scelti dal giocatore che ha giocato la carta SCAMBIAC
 void effect_SCAMBIAC(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board,int card_index);
 
 //Guarda due carte in cima al mazzo, prendine una e scarta l’altra
@@ -38,77 +39,20 @@ void effect_ANNULLA(Board *board);
 void effect_AUMENTA(Player *current, Player *head, Board *board);
 
 //Diminuisci di 2 CFU il punteggio del turno di un giocatore a scelta
-void effect_DIMINUISCI(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board);
+void effect_DIMINUISCI(Player *current, Player *head, Board *board);
 
 //Inverti punteggio minimo e massimo del turno
-void effect_INVERTI(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board);
+void effect_INVERTI(Board *board);
 
 //Mettila carta Ostacolo che stai per prendere in fondo al mazzo
 void effect_SALVA(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board);
 
 //Dai la carta che stai per prendere a un altro giocatore a tua scelta
-void effect_DIROTTA(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board);
+void effect_DIROTTA(Player *current, Player *head, Board *board);
 
 //Raddoppia gli effetti delle carte che aumentano o diminuiscono il punteggio (per tutti)
 void effect_DOPPIOE(Board *board);
 
 
-void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int effect, int card_index) {
-    // Switch on the effect code
-    switch (effect) {
-        case NESSUNO:
-            effect_NESSUNO(board,card_index);
-            break;
-        case SCARTAP:
-            effect_SCARTAP(current_player, scarti, board,card_index);
-            break;
-        case RUBA:
-            effect_RUBA(current_player, head, board);
-            break;
-        case SCAMBIADS:
-            effect_SCAMBIADS(board,card_index);
-            break;
-        case SCARTAE:
-            effect_SCARTAE(current_player, head, mazzo, scarti, board,card_index);
-            break;
-        case SCARTAC:
-            effect_SCARTAC(current_player, scarti);
-            break;
-        case SCAMBIAP:
-            effect_SCAMBIAP(board);
-            break;
-        case DOPPIOE:
-            effect_DOPPIOE(board);
-            break;
-        case SBIRCIA:
-            effect_SBIRCIA(current_player, mazzo, scarti);
-            break;
-        case SCAMBIAC:
-            effect_SCAMBIAC(current_player, head, mazzo, scarti, board, card_index);
-            break;
-        case ANNULLA:
-            effect_ANNULLA(board);
-            break;
-        case AUMENTA:
-            effect_AUMENTA(current_player, head, board);
-            break;
-        case DIMINUISCI:
-            effect_DIMINUISCI(current_player, head, mazzo, scarti, board);
-            break;
-        case INVERTI:
-            effect_INVERTI(current_player, head, mazzo, scarti, board);
-            break;
-        case SALVA:
-            effect_SALVA(current_player, head, mazzo, scarti, board);
-            break;
-        case DIROTTA:
-            effect_DIROTTA(current_player, head, mazzo, scarti, board);
-            break;
-
-        default:
-            printf("Errore nell'applicazione dell'effetto, codice effetto non consentito\n");
-            exit(333);
-    }
-}
-
+void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int effect, int card_index) ;
 #endif //HAPPYLITTLESTUDENTS_EFFECTS_H

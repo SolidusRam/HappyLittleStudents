@@ -2,6 +2,65 @@
 
 #include "effects.h"
 
+void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int effect, int card_index) {
+    // Switch on the effect code
+    switch (effect) {
+        case NESSUNO:
+            effect_NESSUNO(board,card_index);
+            break;
+        case SCARTAP:
+            effect_SCARTAP(current_player, scarti, board,card_index);
+            break;
+        case RUBA:
+            effect_RUBA(current_player, head, board);
+            break;
+        case SCAMBIADS:
+            effect_SCAMBIADS(board,card_index);
+            break;
+        case SCARTAE:
+            effect_SCARTAE(current_player, head, mazzo, scarti, board,card_index);
+            break;
+        case SCARTAC:
+            effect_SCARTAC(current_player, scarti);
+            break;
+        case SCAMBIAP:
+            effect_SCAMBIAP(board);
+            break;
+        case DOPPIOE:
+            effect_DOPPIOE(board);
+            break;
+        case SBIRCIA:
+            effect_SBIRCIA(current_player, mazzo, scarti);
+            break;
+        case SCAMBIAC:
+            effect_SCAMBIAC(current_player, head, mazzo, scarti, board, card_index);
+            break;
+        case ANNULLA:
+            effect_ANNULLA(board);
+            break;
+        case AUMENTA:
+            effect_AUMENTA(current_player, head, board);
+            break;
+        case DIMINUISCI:
+            effect_DIMINUISCI(current_player, head, board);
+            break;
+        case INVERTI:
+            effect_INVERTI(board);
+            break;
+        case SALVA:
+            effect_SALVA(current_player, head, mazzo, scarti, board);
+            break;
+        case DIROTTA:
+            effect_DIROTTA(current_player, head, board);
+            break;
+
+        default:
+            printf("Errore nell'applicazione dell'effetto, codice effetto non consentito\n");
+            exit(333);
+    }
+}
+
+
 void effect_NESSUNO(Board *board, int index)
 {
     board->temporay_scores+= board->ingame_cards[index]->cfu_points;
@@ -282,7 +341,7 @@ void effect_AUMENTA(Player *current, Player *head, Board *board)
     }
 }
 
-void effect_DIMINUISCI(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board)
+void effect_DIMINUISCI(Player *current, Player *head, Board *board)
 {
     printf("Diminuisci di 2 CFU il punteggio del turno di un giocatore a scelta\n");
     printf("Quale giocatore vuoi scegliere?\n");
@@ -299,6 +358,124 @@ void effect_DIMINUISCI(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **
     {
         board->temporay_scores[choice-1]-=2;
     }
+}
+//inverti il punteggio minimo e massimo del turno
+void effect_INVERTI(Board *board)
+{
+    int max=0;
+    int min=0;
+    int max_index=0;
+    int min_index=0;
+    for (int i = 0; i < board->numplayers; ++i) {
+        if(board->temporay_scores[i]>max)
+        {
+            max=board->temporay_scores[i];
+            max_index=i;
+        }
+        if(board->temporay_scores[i]<min)
+        {
+            min=board->temporay_scores[i];
+            min_index=i;
+        }
+    }
+    int temp=board->temporay_scores[max_index];
+    board->temporay_scores[max_index]=board->temporay_scores[min_index];
+    board->temporay_scores[min_index]=temp;
+
+    printf("I punteggi sono stati scambiati\n");
+
+}
+
+//mette la carta draftedDmg in fondo al mazzo, solo se il player è quello con il punteggio più basso
+void effect_SALVA(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board)
+{
+    int min=board->temporay_scores[0];
+    int index_min=0;
+    for (int i = 0; i < board->numplayers; ++i) {
+        if(board->temporay_scores[i]<min)
+        {
+            min=board->temporay_scores[i];
+            index_min=i;
+        }
+    }
+    if(board->temporay_scores[index_min]==current->cfu_score)
+    {
+        board->salva=true;
+    }
+    else
+    {
+        printf("Non sei il giocatore con il punteggio più basso, l'effetto non viene attivato\n");
+    }
+}
+
+//dai la carta che stai per prendere a un altro giocatore a tua scelta
+void effect_DIROTTA(Player *current, Player *head, Board *board) {
+    int choice;
+    printf("A quale giocatore vuoi dare la carta che stai per prendere?\n");
+    peek_players(current, head);
+    scanf("%d", &choice);
+
+    int min = board->temporay_scores[0];
+    int index_min = 0;
+    for (int i = 0; i < board->numplayers; ++i) {
+        if (board->temporay_scores[i] < min) {
+            min = board->temporay_scores[i];
+            index_min = i;
+        }
+    }
+    if (board->temporay_scores[index_min] == current->cfu_score) {
+        while (choice < 1 || choice > board->numplayers - 1) {
+            if (choice == current->cfu_score) {
+                printf("Non puoi dare la carta a te stesso\n");
+            }
+            printf("Scelta non valida, riprova\n");
+            scanf("%d", &choice);
+        }
+        //aggiungo la carta drafted dmg al gicatore scelto
+    Player *selected_player = head;
+    for (int i = 0; i < choice - 1; ++i) {
+        selected_player= selected_player->next;
+    }
+    add_dmg(selected_player, board->draftedDMG);
+
+    } else {
+        printf("Non sei il giocatore con il punteggio più basso, l'effetto non viene attivato\n");
+    }
+
+
+}
+
+//Scambia la carta punto giocata nel turno da un giocatore G1 con quella di un giocatore G2, con G1 e G2
+//scelti dal giocatore che ha giocato la carta SCAMBIAC
+void effect_SCAMBIAC(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board,int index)
+{
+    int choiceG1;
+    int choiceG2;
+    printf("Scegli due giocatori, scambieranno la carta punto giocata\n");
+    peek_players(current,head);
+    printf("Scelta giocatore 1\n");
+    scanf("%d",&choiceG1);
+    while(choiceG1<1 || choiceG1>board->numplayers-1)
+    {
+        printf("Scelta non valida, riprova\n");
+        scanf("%d",&choiceG1);
+    }
+    printf("Hai scelto %s come G1\n",head->username);
+    printf("Scegli il secondo giocatore\n");
+    scanf("%d",&choiceG2);
+    //controllo che il giocatore scelto non sia lo stesso e che sia nel range
+    while(choiceG2<1 || choiceG2>board->numplayers-1 || choiceG2==choiceG1)
+    {
+        printf("Scelta non valida, riprova\n");
+        scanf("%d",&choiceG2);
+    }
+    printf("Hai scelto %s come G2\n",head->username);
+    //scambio le carte
+    CFU_Cards *temp=board->ingame_cards[choiceG1-1];
+    board->ingame_cards[choiceG1-1]=board->ingame_cards[choiceG2-1];
+    board->ingame_cards[choiceG2-1]=temp;
+    printf("Le carte sono state scambiate\n");
+
 }
 /*
  * typedef enum effects{NESSUNO,SCARTAP,RUBA,SCAMBIADS,SCARTAE,SCARTAC,

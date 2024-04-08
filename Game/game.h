@@ -20,6 +20,7 @@ int game_over();
 
 void fillCFUCards(Player *player, CFU_Cards ** deck_head_ref) ;
 
+void conteggi(Board *board,Player *head,DMG_cards *dmgCards);
 
 
 #endif //HAPPYLITTLESTUDENTS_GAME_H

@@ -269,3 +269,33 @@ void player_has_instant(Player*head,CFU_Cards **scarti,Board*board){
         current=current->next;
     }
 }
+
+
+void print_board(Player *head,Board *board){
+    int max=board->temporay_scores[0];
+    int min=board->temporay_scores[0];
+    int index_max=0;
+    int index_min=0;
+    printf("Punteggi temporanei: \n");
+    Player *current=head;
+    for (int i = 0; i < board->numplayers; ++i) {
+        if(board->temporay_scores[i]>max)
+        {
+            max=board->temporay_scores[i];
+            index_max=i;
+        }
+        if(board->temporay_scores[i]<min)
+        {
+            min=board->temporay_scores[i];
+            index_min=i;
+        }
+
+        current->cfu_score=board->temporay_scores[i];
+        printf("%s ha ottenuto %d punti questo turno \n",current->username,board->temporay_scores[i]);
+        current=current->next;
+    }
+    printf("\n");
+    printf("Il giocatore con il punteggio più alto è %s con %d punti\n",head->username,max);
+    printf("Il giocatore con il punteggio più basso è %s con %d punti\n",head->username,min);
+
+}

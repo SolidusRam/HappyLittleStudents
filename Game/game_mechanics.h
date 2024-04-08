@@ -29,5 +29,8 @@ void effects(Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board*,int numplaye
 
 void player_has_instant(Player*head,CFU_Cards **scarti,Board*board);
 
+void print_board(Player *head,Board *board);
+
+void salva_dmg(DMG_cards *dmgCards);
 
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

@@ -116,9 +116,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
     //carte
 
-
-
-
     printf("\n");
 
 
@@ -129,9 +126,15 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     effects(head_player,&cfuCards,&scarti,&board,numplayers);
 
 
+    //stampa del punteggio temporaneo
+    print_board(head_player,&board);
+
     //fase di attivazione delle carte istantanee
     player_has_instant(head_player,&scarti,&board);
 
+
+    //stabilisco il vincitore del turno e il perdente
+    conteggi(&board,head_player,dmgCards);
 
     /*
     if(temp_player==NULL)
@@ -145,7 +148,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori
     // (occhio alle stampe di debung)
-    //draw(head_player,cfuCards);
+    draw(head_player,cfuCards);
 
 
 
@@ -216,3 +219,58 @@ int game_over(){
     return 0;
 }
 
+void conteggi(Board*board,Player*head,DMG_cards *dmgCards)
+{
+    //trovo il giocatore con il punteggio più alto e piu basso
+    int max=board->temporay_scores[0];
+    int min=board->temporay_scores[0];
+    int index_max=0;
+    int index_min=0;
+    //trasformo la lista in array
+    Player *current=head;
+    Player *players[board->numplayers];
+
+    for (int i = 0; i < board->numplayers; ++i) {
+        players[i]=current;
+        current=current->next;
+    }
+
+
+    for (int i = 0; i < board->numplayers; ++i) {
+        if(board->temporay_scores[i]>max)
+        {
+            max=board->temporay_scores[i];
+            index_max=i;
+        }
+        if(board->temporay_scores[i]<min)
+        {
+            min=board->temporay_scores[i];
+            index_min=i;
+        }
+
+        current->cfu_score=board->temporay_scores[i];
+        current=current->next;
+    }
+
+    //al giocatore con il punteggio più alto assegno il punteggio
+    players[index_max]->cfu_score=board->temporay_scores[index_max];
+
+    if(board->salva!=true)
+    {
+        //al giocatore con il punteggio più basso assegno la carta danno
+        //devo allocare la memoria per la carta danno
+        DMG_cards *new_card = (DMG_cards *) malloc(sizeof(DMG_cards));
+        players[index_min]->dmg=new_card;
+    } else{
+        //se il giocatore ha giocato la carta salva non prende la carta danno
+        //aggiungo la carta danno alla fine della lista DMGcards
+        DMG_cards *temp=dmgCards;
+        while (temp->next!=NULL)
+        {
+            temp=temp->next;
+        }
+        temp->next=board->draftedDMG;
+
+    }
+
+}

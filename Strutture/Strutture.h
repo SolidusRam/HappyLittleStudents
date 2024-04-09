@@ -128,4 +128,6 @@ void remove_card_from_hand(Player *player, int index);
 void print_card_info(CFU_Cards *card);
 void add_dmg(Player*player, DMG_cards *new_card);
 
+void delete_player(Player *head, Player *player);
+
 #endif //_PR1_PROGETTO_STRUTTURE_H

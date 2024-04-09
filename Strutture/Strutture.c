@@ -165,7 +165,7 @@ void print_dmg_cards(DMG_cards* head) {
         printf("Description: %s\n", temp->desc);
         printf("Type: %d\n", temp->type);
         printf("\n");
-        temp = temp->next;
+        temp = (DMG_cards *)temp->next;
     }
 }
 
@@ -375,4 +375,32 @@ void add_dmg(Player*player,DMG_cards*new_card)
     // Add the new node to the beginning of the linked list
     new_node->next = (struct DMG_cards *) player->dmg;
     player->dmg = new_node;
+}
+
+void delete_player(Player *head, Player *player) {
+    if (head == NULL || player == NULL) {
+        printf("Error: Null pointer passed to delete_player\n");
+        return;
+    }
+
+    Player *current = head;
+    Player *prev = NULL;
+
+    while (current != NULL) {
+        if (current == player) {
+            if (prev == NULL) {
+                head = current->next;
+            } else {
+                prev->next = current->next;
+            }
+
+            free_cards(current->hand);
+            free_dmg_cards(current->dmg);
+            free(current);
+            return;
+        }
+
+        prev = current;
+        current = current->next;
+    }
 }

@@ -58,7 +58,7 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
 
 int main() {
 
-
+/*
     Character characters[4];
     int num_players = 2;
 
@@ -67,9 +67,11 @@ int main() {
 
     DMG_cards *dmgCards= malloc(sizeof(DMG_cards)*TOTALDMG);
 
-    Player *players =malloc(sizeof(Player)*TOTALDMG);
+    Player *players =malloc(sizeof(Player)*TOTALDMG);*/
 
 
+    game();
+/*
     setup_game_test(&cfuCards,& dmgCards, &players, characters, num_players);
     print_cards(cfuCards);
     turn(&cfuCards,dmgCards, players, 1, num_players,scarti);
@@ -82,6 +84,7 @@ int main() {
 
 
     free_players(players);
+*/
 
     return 0;
 }

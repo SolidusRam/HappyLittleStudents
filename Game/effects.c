@@ -33,7 +33,7 @@ void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo,
             effect_SBIRCIA(current_player, mazzo, scarti);
             break;
         case SCAMBIAC:
-            effect_SCAMBIAC(current_player, head, mazzo, scarti, board, card_index);
+            effect_SCAMBIAC(current_player, head, board);
             break;
         case ANNULLA:
             effect_ANNULLA(board);
@@ -447,7 +447,7 @@ void effect_DIROTTA(Player *current, Player *head, Board *board) {
 
 //Scambia la carta punto giocata nel turno da un giocatore G1 con quella di un giocatore G2, con G1 e G2
 //scelti dal giocatore che ha giocato la carta SCAMBIAC
-void effect_SCAMBIAC(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board,int index)
+void effect_SCAMBIAC(Player *current, Player *head, Board *board)
 {
     int choiceG1;
     int choiceG2;

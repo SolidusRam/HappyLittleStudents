@@ -20,11 +20,13 @@ void game()
     //chiedo se si vuole leggere e caricare il file di salvataggio
     game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
-    int load=choose2();
+    //todel
+    //int load=choose2();
+    int load=1;
 
     if (load==1)
     {
-        lettura_salvataggio(num_players,&players,&cfuCards,&dmgCards,&scarti);
+        lettura_salvataggio(&num_players,&players,&cfuCards,&dmgCards,&scarti);
 
     }
     if(load==2)
@@ -38,13 +40,20 @@ void game()
         //pesco le carte dal mazzo direttamente nel setup
     }
 
+    Player *temp=players;
+    for (int i = 0; i < num_players; ++i) {
+        print_player(temp);
+        temp=temp->next;
+    }
 
-    print_player(players);
-    //print_cards(cfuCards);
-    printf("inizio della partita");
+
+    printf("inizio della partita\n");
     int turn_number=0;
 
-    turn(&cfuCards,dmgCards,players,turn_number,num_players ,scarti);
+    while (1){
+        turn(&cfuCards,dmgCards,players,turn_number,num_players ,scarti);
+        turn_number++;
+    }
     /*
     int check=0;
     //turno da reiterare per variabile di ritorno
@@ -135,6 +144,10 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
     //stabilisco il vincitore del turno e il perdente
     conteggi(&board,head_player,dmgCards);
+
+
+    //controllo se un player deve essere eliminato
+    win_check(head_player);
 
     /*
     if(temp_player==NULL)
@@ -259,8 +272,8 @@ void conteggi(Board*board,Player*head,DMG_cards *dmgCards)
     {
         //al giocatore con il punteggio più basso assegno la carta danno
         //devo allocare la memoria per la carta danno
-        DMG_cards *new_card = (DMG_cards *) malloc(sizeof(DMG_cards));
-        players[index_min]->dmg=new_card;
+
+        add_dmg(players[index_min],dmgCards);
     } else{
         //se il giocatore ha giocato la carta salva non prende la carta danno
         //aggiungo la carta danno alla fine della lista DMGcards
@@ -273,4 +286,79 @@ void conteggi(Board*board,Player*head,DMG_cards *dmgCards)
 
     }
 
+}
+
+void win_check(Player*head_player){
+    /*
+    Vince la partita il primo studente che arriva a 60 CFU o l’ultimo che non ha fatto rinuncia agli studi.
+    Quando si ha almeno un vincitore della partita il gioco (ed il programma) finisce.
+    Se più giocatori arrivano a 60 CFU nello stesso turno ci sono più vincitori.
+    Per morire un giocatore deve soddisfare una delle seguenti condizioni:
+    - 3 carte ostacolo dello stesso tipo
+    - una carta ostacolo di ogni tipo
+    Quando un giocatore muore le sue carte vanno scartate e il giocatore viene deallocato. Le carte ostacolo in suo
+    possesso vengono rimesse in fondo al mazzo.*/
+
+    //controllo se un player ha vinto
+    Player *current=head_player;
+    while(current!=NULL)
+    {
+        if(current->cfu_score>=60)
+        {
+            printf("Il giocatore %s ha vinto la partita",current->username);
+            game_over();
+        }
+        current=current->next;
+    }
+
+    //controllo se un player deve essere eliminato
+    current=head_player;
+    while (current!=NULL)
+    {
+        DMG_cards *temp=current->dmg;
+        int count[4]={0,0,0,0};
+
+        while (temp!=NULL)
+        {
+            count[temp->type]++;
+            temp=temp->next;
+        }
+        if(dmg_count(count))
+        {
+            printf("Il giocatore %s è stato eliminato",current->username);
+            //elimino il giocatore
+            delete_player(head_player,current);
+        }
+
+        current=current->next;
+    }
+
+    //controllo se un player è rimasto solo
+    current=head_player;
+    if(current->next==NULL)
+    {
+        printf("Il giocatore %s ha vinto la partita rimanendo l'unico in gioco",current->username);
+        game_over();
+    }
+}
+
+int dmg_count( int *count)
+{
+    // Controlla se il giocatore ha 3 carte ostacolo dello stesso tipo
+    for (int i = 0; i < 4; i++) {
+        if (count[i] >= 3) {
+            return 1;
+        }
+    }
+
+    // Controlla se il giocatore ha una carta ostacolo di ogni tipo
+    // Le carte ESAME sono jolly e contano come tutti i tipi di ostacolo
+    if ((count[STUDIO] > 0 || count[ESAME] > 0) &&
+        (count[SOPRAVVIVENZA] > 0 || count[ESAME] > 0) &&
+        (count[SOCIALE] > 0 || count[ESAME] > 0)) {
+        return 1;
+    }
+
+    // Se nessuna delle condizioni è soddisfatta, il giocatore non è "morto"
+    return 0;
 }

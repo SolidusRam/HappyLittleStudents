@@ -1,20 +1,21 @@
 #include "salvataggi.h"
 
-void lettura_salvataggio(int numPlayers,Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
+void lettura_salvataggio(int *numPlayers,Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
     FILE *file = fopen(FILENAME, "rb");
     if (file == NULL) {
         printf("Cannot open file %s\n", FILENAME);
         return;
     }
 
-    fread(&numPlayers, sizeof(int), 1, file);
+    fread( numPlayers, sizeof(int), 1, file);
 
-    printf("Number of players: %d\n", numPlayers);
+
+    printf("Number of players: %d\n", *numPlayers);
 
     *head_player= create_player();
     Player *current = *head_player;
     //inizio lettura player
-    for (int i = 0; i < numPlayers; i++) {
+    for (int i = 0;  i < *numPlayers; i++) {
 
         int numCarteDanno;
 
@@ -41,14 +42,27 @@ void lettura_salvataggio(int numPlayers,Player **head_player,CFU_Cards**mazzo,DM
 
         fread(&numCarteDanno, sizeof(int), 1, file);
 
+
         for (int j = 0; j < numCarteDanno; ++j) {
-            fread(current_dmg, sizeof(DMG_cards), 1, file);
-            if (j < numCarteDanno) { // if not the last card
-                current_dmg->next = malloc(sizeof(DMG_cards));
-                current_dmg = current_dmg->next;
-            } else {
-                current_dmg->next = NULL; // end of the list
+            DMG_cards *new_card = malloc(sizeof(DMG_cards));
+            if (new_card == NULL) {
+                printf("Impossibile allocare memoria.\n");
+                return;
             }
+
+            fread(new_card, sizeof(DMG_cards), 1, file);
+            new_card->next = NULL;
+
+            if (j == 0) {
+                current->dmg = new_card; // First card
+            } else {
+                current_dmg->next = new_card; // Subsequent cards
+            }
+
+            current_dmg = new_card;
+        }
+        if (numCarteDanno == 0) {
+            current->dmg = NULL;
         }
 
         if (i < numPlayers - 1) { // if not the last player
@@ -133,7 +147,6 @@ void lettura_salvataggio(int numPlayers,Player **head_player,CFU_Cards**mazzo,DM
     }
     //fine lettura danno
     fclose(file);
-    int pazzodicazzo=1000;
 }
 
 void scrittura_salvataggio(Player **head_player, CFU_Cards **mazzo, DMG_cards **danno, CFU_Cards **scarti) {

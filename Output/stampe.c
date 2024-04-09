@@ -7,6 +7,8 @@ void print_player( Player *player) {
     printf("Personaggio: %s\n", temp->character.name);
     printf("CFU Cards:\n");
     print_cards(temp->hand);
+    printf("Obstacle Cards:\n");
+    print_dmg_cards(temp->dmg);
 }
 
 void game_start()

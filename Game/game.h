@@ -22,5 +22,8 @@ void fillCFUCards(Player *player, CFU_Cards ** deck_head_ref) ;
 
 void conteggi(Board *board,Player *head,DMG_cards *dmgCards);
 
+void win_check(Player* head);
+
+int dmg_count( int *dmg);
 
 #endif //HAPPYLITTLESTUDENTS_GAME_H

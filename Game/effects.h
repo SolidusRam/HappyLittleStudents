@@ -9,7 +9,7 @@ void effect_NESSUNO(Board*board,int card_index);
 
 //Scambia la carta punto giocata nel turno da un giocatore G1 con quella di un giocatore G2, con G1 e G2
 //scelti dal giocatore che ha giocato la carta SCAMBIAC
-void effect_SCAMBIAC(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board,int card_index);
+void effect_SCAMBIAC(Player *current, Player *head, Board *board);
 
 //Guarda due carte in cima al mazzo, prendine una e scarta l’altra
 void effect_SBIRCIA(Player *current, CFU_Cards *mazzo, CFU_Cards **scarti);

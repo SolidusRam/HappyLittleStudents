@@ -87,10 +87,11 @@ void peek_players(Player *current,Player *head_player){
         if(current->character.name!=temp->character.name)
         {
             printf("%s ha %d punti dallo scorso turno, e tot danni\n",temp->username,temp->cfu_score);
-            while (current->dmg!=NULL)
+            DMG_cards *tmpdmg=temp->dmg;
+            while (tmpdmg!=NULL)
             {
                 printf("Carta danno: %s\n",current->dmg->name);
-                current->dmg=current->dmg->next;
+                tmpdmg=tmpdmg->next;
             }
         }
         temp=temp->next;

@@ -51,7 +51,7 @@ void game()
     int turn_number=0;
 
     while (1){
-        turn(&cfuCards,dmgCards,players,turn_number,num_players ,scarti);
+        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
         turn_number++;
     }
     /*
@@ -74,7 +74,7 @@ void game()
 }
 
 
-int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards *scarti)
+int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti)
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
     Board board;
@@ -115,12 +115,13 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         //if(action==1)
         //{
         //gioco la carta CFU
-        playCFU(temp_player,scarti,&board,i);
+        playCFU(temp_player,&scarti,&board,i);
         //}
         temp_player=temp_player->next;
     }
 
-
+    printf("Stampa delle carte scartate\n");
+    print_cards(&scarti);
 
     //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
     //carte
@@ -132,7 +133,8 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     // di giocare l'effetto
 
     //effetti giocatore
-    effects(head_player,&cfuCards,&scarti,&board,numplayers);
+    temp_player=head_player;
+    effects(temp_player,&cfuCards,&scarti,&board,numplayers);
 
 
     //stampa del punteggio temporaneo
@@ -142,12 +144,35 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     player_has_instant(head_player,&scarti,&board);
 
 
+    //controllo se c'è un pareggio in caso positivo si ripete il turno con i player che avevano pareggiato
+
+
     //stabilisco il vincitore del turno e il perdente
-    conteggi(&board,head_player,dmgCards);
+    int tie=conteggi(&board,&head_player,dmgCards);
 
+    //controllo se c'è un pareggio fra i perdenti
+    if(tie>=1)
+    {
+        //si avvia il turno di spareggio
+        Player *tie_players=head_player;
+        temp_player=head_player;
+        while (temp_player!=NULL)
+        {
+            if(temp_player->cfu_score==tie)
+            {
+                printf("Turno di spareggio per il giocatore %s\n",temp_player->username);
+                //salvo il giocatore in una lista di giocatori in pareggio
+                tie_players=temp_player;
+                tie_players->next=NULL;
+            }
+            temp_player=temp_player->next;
+        }
 
-    //controllo se un player deve essere eliminato
-    win_check(head_player);
+        tie_turn(cfuCards, dmgCards, tie_players, scarti);
+    }
+
+    //controllo se un player deve essere eliminato oppure ha vinto
+    win_check(head_player,numplayers);
 
     /*
     if(temp_player==NULL)
@@ -232,7 +257,7 @@ int game_over(){
     return 0;
 }
 
-void conteggi(Board*board,Player*head,DMG_cards *dmgCards)
+int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
 {
     //trovo il giocatore con il punteggio più alto e piu basso
     int max=board->temporay_scores[0];
@@ -265,14 +290,24 @@ void conteggi(Board*board,Player*head,DMG_cards *dmgCards)
         current=current->next;
     }
 
-    //al giocatore con il punteggio più alto assegno il punteggio
-    players[index_max]->cfu_score=board->temporay_scores[index_max];
+    //in caso di pareggio per il punteggio più alto assengo il punteggio a tutti i giocatori pareggianti
+    for (int i = 0; i < board->numplayers; ++i) {
+        if(board->temporay_scores[i]==max)
+        {
+            players[i]->cfu_score=board->temporay_scores[i];
+        }
+    }
+
+    //controllo un pareggio per il punteggio più basso
+    if (check_tie(head, min)) {
+        // Se c'è un pareggio per il punteggio più basso, nessun giocatore prende la carta danno
+        //si ripete il turno
+        return min;
+    }
 
     if(board->salva!=true)
     {
         //al giocatore con il punteggio più basso assegno la carta danno
-        //devo allocare la memoria per la carta danno
-
         add_dmg(players[index_min],dmgCards);
     } else{
         //se il giocatore ha giocato la carta salva non prende la carta danno
@@ -283,12 +318,12 @@ void conteggi(Board*board,Player*head,DMG_cards *dmgCards)
             temp=temp->next;
         }
         temp->next=board->draftedDMG;
-
     }
 
+    return 0;
 }
 
-void win_check(Player*head_player){
+void win_check(Player*head_player,int numplayers){
     /*
     Vince la partita il primo studente che arriva a 60 CFU o l’ultimo che non ha fatto rinuncia agli studi.
     Quando si ha almeno un vincitore della partita il gioco (ed il programma) finisce.
@@ -328,6 +363,8 @@ void win_check(Player*head_player){
             printf("Il giocatore %s è stato eliminato",current->username);
             //elimino il giocatore
             delete_player(head_player,current);
+            //decremento il numero di giocatori
+            numplayers--;
         }
 
         current=current->next;
@@ -361,4 +398,60 @@ int dmg_count( int *count)
 
     // Se nessuna delle condizioni è soddisfatta, il giocatore non è "morto"
     return 0;
+}
+
+int check_tie(Player *head, int val) {
+    Player *current = head;
+    int tie_count = 0;
+
+    // Compare each player's score with the known value
+    while (current != NULL) {
+        if (current->cfu_score == val) {
+            tie_count++;
+        }
+        current = current->next;
+    }
+
+    // If more than one player has the known score, there is a tie
+    if (tie_count > 1) {
+        return 1; // Return 1 if a tie is found
+    }
+
+    return 0; // Return 0 if no tie is found
+}
+
+
+/*
+- si possono utilizzare solo carte CFU punto
+- qualsiasi effetto e/o modificatore, compresa personalità, vengono ignorati
+- si continua ad oltranza finché non c’è un vincitore
+- se un giocatore non ha carte CFU punto perde il turno
+- se entrambi i giocatori non hanno carte CFU punto non ci sono perdenti */
+void tie_turn(CFU_Cards **cfuCards, DMG_cards *dmgCards, Player *head_player, CFU_Cards *scarti) {
+
+    Player *temp_player = head_player;
+    int numplayers = count_players(temp_player);
+
+    //inizializzo la board i player vengono aggiornati per eliminazione
+    Board board;
+    initializeBoard(&board,numplayers);
+
+    temp_player=head_player;
+    for (int i = 0; i < numplayers; ++i) {
+        //mostra le informazioni sul giocatore attuale
+        printf("Turno del Giocatore: %s \n",temp_player->username);
+        //selettore dell'azione contestuale
+        //int action=ask_for_action();
+        //controllo lazione ed eseguo le prime 2
+        //check_action(action,temp_player,head_player);
+        //if(action==1)
+        //{
+        //gioco la carta CFU
+        playCFU(temp_player,scarti,&board,i);
+        //}
+        temp_player=temp_player->next;
+    }
+
+    conteggi(&board,&head_player,dmgCards);
+
 }

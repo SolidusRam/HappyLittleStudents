@@ -98,7 +98,7 @@ void peek_players(Player *current,Player *head_player){
     }
 }
 
-void playCFU(Player *player,CFU_Cards *scarti,Board *board,int nplayer){
+void playCFU(Player *player,CFU_Cards **scarti,Board *board,int nplayer){
 
     CFU_Cards *temp=player->hand;
 
@@ -140,9 +140,13 @@ void playCFU(Player *player,CFU_Cards *scarti,Board *board,int nplayer){
     board->temporay_scores[nplayer]=score+bonus_char;
     board->base_scores[nplayer]=score;
 
+    printf("\n");
+    printf("%s ha giocato la carta %s e ha ottenuto %d punti\n",player->username,board->ingame_cards[nplayer]->name,board->base_scores[nplayer]);
+    printf("\n");
     //aggiungo la carta agli scarti e la rimuovo dalla mano
     add_card_to_scarti(scarti,board->ingame_cards[nplayer]);
     remove_card_from_hand(player,nplayer);
+
 }
 
 int check_card(int choice,CFU_Cards*hand){

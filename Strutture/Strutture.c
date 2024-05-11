@@ -293,7 +293,6 @@ void remove_card_from_hand(Player *player, int index) {
     }
 
     // Free the memory allocated for the card
-    free(current);
 }
 
 void print_card_info(CFU_Cards *card) {
@@ -403,4 +402,26 @@ void delete_player(Player *head, Player *player) {
         prev = current;
         current = current->next;
     }
+}
+
+void add_player(Player **head, Player *new_player) {
+    if (head == NULL || new_player == NULL) {
+        printf("Error: Null pointer passed to add_player\n");
+        return;
+    }
+
+    new_player->next = *head;
+    *head = new_player;
+}
+
+int count_players(Player *head) {
+    int count = 0;
+    Player *current = head;
+
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+
+    return count;
 }

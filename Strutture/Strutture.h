@@ -130,4 +130,9 @@ void add_dmg(Player*player, DMG_cards *new_card);
 
 void delete_player(Player *head, Player *player);
 
+void add_player(Player **head, Player *new_player);
+
+int count_players(Player *head);
+
+
 #endif //_PR1_PROGETTO_STRUTTURE_H

@@ -9,7 +9,7 @@ void game()
     //definire meglio il numero delle carte per allocare bene la memoria
 
     CFU_Cards *cfuCards;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
-    CFU_Cards *scarti;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
+    CFU_Cards *scarti=NULL;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
 
     DMG_cards *dmgCards;//= malloc(sizeof(DMG_cards)*TOTALDMG);
 
@@ -121,7 +121,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     }
 
     printf("Stampa delle carte scartate\n");
-    print_cards(&scarti);
+    print_cards(*scarti);
 
     //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
     //carte

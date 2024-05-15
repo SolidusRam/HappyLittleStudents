@@ -13,7 +13,7 @@ void check_action(int action,Player *current,Player *head_player);
 
 void peek_players(Player *current,Player *head_player);
 
-void playCFU(Player *,CFU_Cards **scarti,Board*,int nplayer);
+void playCFU(Player *,CFU_Cards ***scarti,Board*,int nplayer);
 
 int check_card(int choice,CFU_Cards*hand);
 

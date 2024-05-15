@@ -265,8 +265,9 @@ void add_card_to_scarti(CFU_Cards **scarti,CFU_Cards *card) {
     *scarti = card;
 }
 
-void remove_card_from_hand(Player *player, int index) {
-    if (player == NULL) {
+//rimuove la carta dalla lista mano del giocatore
+void remove_card_from_hand(Player *player, CFU_Cards *card_to_remove) {
+    if (player == NULL || card_to_remove == NULL) {
         printf("Error: Null pointer passed to remove_card_from_hand\n");
         return;
     }
@@ -274,10 +275,16 @@ void remove_card_from_hand(Player *player, int index) {
     CFU_Cards *current = player->hand;
     CFU_Cards *prev = NULL;
 
-    // Find the card at the specified index
-    for (int i = 0; i < index; i++) {
-        if (current == NULL) {
-            printf("Error: Index out of bounds in remove_card_from_hand\n");
+    // Find the card in the player's hand
+    while (current != NULL) {
+        if (current->name == card_to_remove->name && current->cfu_points == card_to_remove->cfu_points && current->effect == card_to_remove->effect) {
+            // Remove the card from the linked list
+            if (prev == NULL) {
+                player->hand = (CFU_Cards *) current->next;
+            } else {
+                prev->next = current->next;
+            }
+
             return;
         }
 
@@ -285,16 +292,8 @@ void remove_card_from_hand(Player *player, int index) {
         current = (CFU_Cards *) current->next;
     }
 
-    // Remove the card from the linked list
-    if (prev == NULL) {
-        player->hand = (CFU_Cards *) current->next;
-    } else {
-        prev->next = current->next;
-    }
-
-    // Free the memory allocated for the card
+    printf("Error: Card not found in player's hand\n");
 }
-
 void print_card_info(CFU_Cards *card) {
     if (card == NULL) {
         printf("Error: Null pointer passed to print_card_info\n");

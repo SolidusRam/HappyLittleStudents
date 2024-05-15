@@ -123,7 +123,7 @@ void add_card_to_hand(Player *player, CFU_Cards *new_card);
 
 void add_card_to_scarti(CFU_Cards **scarti, CFU_Cards *card);
 
-void remove_card_from_hand(Player *player, int index);
+void remove_card_from_hand(Player *player, CFU_Cards *card);
 
 void print_card_info(CFU_Cards *card);
 void add_dmg(Player*player, DMG_cards *new_card);

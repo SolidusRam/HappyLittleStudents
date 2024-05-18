@@ -1,0 +1,3 @@
+C:/Users/lemai/Desktop/Pr1_progetto/HappyLittleStudents/cmake-build-debug/CMakeFiles/HappyLittleStudents.dir
+C:/Users/lemai/Desktop/Pr1_progetto/HappyLittleStudents/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/lemai/Desktop/Pr1_progetto/HappyLittleStudents/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -70,7 +70,6 @@ int main() {
     Player *players =malloc(sizeof(Player)*TOTALDMG);*/
 
 
-//prova
     game();
 /*
     setup_game_test(&cfuCards,& dmgCards, &players, characters, num_players);

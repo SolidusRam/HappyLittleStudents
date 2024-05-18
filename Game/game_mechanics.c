@@ -225,21 +225,22 @@ void desc_order(int n, int base_score[n], int effect[n], Player* players[n]){
  * base score è il punteggio della carta giocata e ne determina l'ordine
  *
  */
-void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int numplayers){
-    int base_score[numplayers];
-    int effect[numplayers];
-    Player* players[numplayers];
+void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int numplayer){
+    int base_score[numplayer];
+    int effect[numplayer];
+    Player* players[numplayer];
+    int i=0;
     Player *current=head;
-
-    for (int i = 0; i < numplayers; i++) {
+    while(current!=NULL)
+    {
         base_score[i]=board->base_scores[i];
         effect[i]=board->ingame_cards[i]->effect;
         players[i]=current;
+        i++;
         current=current->next;
     }
-
-    desc_order(numplayers, base_score, effect, players);
-    for (int j = 0; j < numplayers; ++j) {
+    desc_order(numplayer, base_score, effect, players);
+    for (int j = 0; j < numplayer; ++j) {
 
         printf("Giocatore: %s, gioca la carta con effetto %d\n",players[j]->character.name,effect[j]);
         printf("Nome carta %s",board->ingame_cards[j]->name);

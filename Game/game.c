@@ -134,31 +134,31 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
     //effetti giocatore
     temp_player=head_player;
-    effects(temp_player,&cfuCards,&scarti,&board,numplayers);
+    //effects(temp_player,&cfuCards,&scarti,&board,numplayers);
 
 
     //stampa del punteggio temporaneo
     print_board(head_player,&board);
 
     //fase di attivazione delle carte istantanee
-    player_has_instant(head_player,&scarti,&board);
+    //player_has_instant(head_player,&scarti,&board);
 
 
     //controllo se c'è un pareggio in caso positivo si ripete il turno con i player che avevano pareggiato
 
 
     //stabilisco il vincitore del turno e il perdente
-    int tie=conteggi(&board,&head_player,dmgCards);
+    int tie_points=conteggi(&board,&head_player,dmgCards);
 
     //controllo se c'è un pareggio fra i perdenti
-    if(tie>=1)
+    if(tie_points>=1)
     {
         //si avvia il turno di spareggio
         Player *tie_players=head_player;
         temp_player=head_player;
         while (temp_player!=NULL)
         {
-            if(temp_player->cfu_score==tie)
+            if(temp_player->cfu_score==tie_points)
             {
                 printf("Turno di spareggio per il giocatore %s\n",temp_player->username);
                 //salvo il giocatore in una lista di giocatori in pareggio
@@ -257,23 +257,33 @@ int game_over(){
     return 0;
 }
 
+/**
+ * La funzione trova il giocatore con il punteggio più alto e più basso e assegna la carta danno al giocatore con il punteggio più basso.
+ * In caso di pareggio per il punteggio più basso nessun giocatore prende la carta danno e si ripete il turno fra i giocatori in pareggio.
+ * In caso di pareggio per il punteggio più alto entrambi vincono il turno.ù
+ *
+ */
+
 int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
 {
-    //trovo il giocatore con il punteggio più alto e piu basso
+
+    /* controllo se la carta salva è stata giocata
+    if (board->salva) {
+        printf("La carta SALVA è stata giocata, nessun giocatore prende la carta danno\n");
+        return 0;
+    }
+    */
+
     int max=board->temporay_scores[0];
     int min=board->temporay_scores[0];
+    int mincount=1;
     int index_max=0;
     int index_min=0;
-    //trasformo la lista in array
-    Player *current=head;
-    Player *players[board->numplayers];
+    int tiemin=0;
+    int check=0;
+    Player *current=*head;
 
-    for (int i = 0; i < board->numplayers; ++i) {
-        players[i]=current;
-        current=current->next;
-    }
-
-
+    //ciclo per trovare il punteggio massimo e minimo controllo anche in caso di pareggio
     for (int i = 0; i < board->numplayers; ++i) {
         if(board->temporay_scores[i]>max)
         {
@@ -283,41 +293,49 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
         if(board->temporay_scores[i]<min)
         {
             min=board->temporay_scores[i];
+            mincount=1;
             index_min=i;
+        }else if(board->temporay_scores[i]==min)
+        {
+            mincount++;
         }
-
         current->cfu_score=board->temporay_scores[i];
         current=current->next;
     }
 
-    //in caso di pareggio per il punteggio più alto assengo il punteggio a tutti i giocatori pareggianti
-    for (int i = 0; i < board->numplayers; ++i) {
+    //assegno i punti ai giocatori vincitori
+    current=*head;
+    for (int i = 0; i < board->numplayers-1; ++i) {
         if(board->temporay_scores[i]==max)
         {
-            players[i]->cfu_score=board->temporay_scores[i];
+            current->cfu_score+=board->temporay_scores[i];
         }
+        current=current->next;
     }
 
-    //controllo un pareggio per il punteggio più basso
-    if (check_tie(head, min)) {
-        // Se c'è un pareggio per il punteggio più basso, nessun giocatore prende la carta danno
-        //si ripete il turno
-        return min;
-    }
-
-    if(board->salva!=true)
+    //controllo se c'è un pareggio per il punteggio minore
+    //aggiungo il caso in cui minore e maggiore sono uguali
+    if(min==max)
     {
-        //al giocatore con il punteggio più basso assegno la carta danno
-        add_dmg(players[index_min],dmgCards);
-    } else{
-        //se il giocatore ha giocato la carta salva non prende la carta danno
-        //aggiungo la carta danno alla fine della lista DMGcards
-        DMG_cards *temp=dmgCards;
-        while (temp->next!=NULL)
-        {
-            temp=temp->next;
+        return 0;
+    }
+
+
+    //nessun pareggio per il punteggio minore
+    if(mincount==1)
+    {
+        //assegno la carta danno al giocatore con il punteggio minore
+        current=*head;
+        for (int i = 0; i < index_min; ++i) {
+            current=current->next;
         }
-        temp->next=board->draftedDMG;
+        add_dmg(current,board->draftedDMG);
+    }else
+    {
+        //pareggio per il punteggio minore
+        //turno di spareggio fra i giocatori in pareggio
+        //tie_turn(cfuCards, dmgCards, tie_players, scarti);
+        return min;
     }
 
     return 0;
@@ -326,7 +344,7 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
 void win_check(Player*head_player,int numplayers){
     /*
     Vince la partita il primo studente che arriva a 60 CFU o l’ultimo che non ha fatto rinuncia agli studi.
-    Quando si ha almeno un vincitore della partita il gioco (ed il programma) finisce.
+    Quando si ha almeno un vincitore della partita il gioco (e il programma) finisce.
     Se più giocatori arrivano a 60 CFU nello stesso turno ci sono più vincitori.
     Per morire un giocatore deve soddisfare una delle seguenti condizioni:
     - 3 carte ostacolo dello stesso tipo
@@ -400,25 +418,6 @@ int dmg_count( int *count)
     return 0;
 }
 
-int check_tie(Player *head, int val) {
-    Player *current = head;
-    int tie_count = 0;
-
-    // Compare each player's score with the known value
-    while (current != NULL) {
-        if (current->cfu_score == val) {
-            tie_count++;
-        }
-        current = current->next;
-    }
-
-    // If more than one player has the known score, there is a tie
-    if (tie_count > 1) {
-        return 1; // Return 1 if a tie is found
-    }
-
-    return 0; // Return 0 if no tie is found
-}
 
 
 /*
@@ -427,6 +426,7 @@ int check_tie(Player *head, int val) {
 - si continua ad oltranza finché non c’è un vincitore
 - se un giocatore non ha carte CFU punto perde il turno
 - se entrambi i giocatori non hanno carte CFU punto non ci sono perdenti */
+
 void tie_turn(CFU_Cards **cfuCards, DMG_cards *dmgCards, Player *head_player, CFU_Cards *scarti) {
 
     Player *temp_player = head_player;

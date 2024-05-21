@@ -26,8 +26,6 @@ void win_check(Player* head,int numplayers);
 
 int dmg_count( int *dmg);
 
-int check_tie(Player *head, int val);
-
 void tie_turn(CFU_Cards **deck_head_ref,DMG_cards *drafted,Player *head, CFU_Cards*scarti);
 
 #endif //HAPPYLITTLESTUDENTS_GAME_H

@@ -310,3 +310,18 @@ void print_board(Player *head,Board *board){
     printf("Il giocatore con il punteggio più basso è %s con %d punti\n",head->username,min);
 
 }
+
+
+//sposta la carta danno in fondo al mazzo
+void salva_dmg(DMG_cards *dmgCards){
+    DMG_cards *current=dmgCards;
+    DMG_cards *prev=NULL;
+    while(current->next!=NULL)
+    {
+        prev=current;
+        current=current->next;
+    }
+    prev->next=NULL;
+    current->next=dmgCards;
+    dmgCards=current;
+}

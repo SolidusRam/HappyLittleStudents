@@ -65,7 +65,7 @@ void lettura_salvataggio(int *numPlayers,Player **head_player,CFU_Cards**mazzo,D
             current->dmg = NULL;
         }
 
-        if (i < numPlayers - 1) { // if not the last player
+        if (i < *numPlayers - 1) { // if not the last player
             current->next = create_player();
             current = current->next;
         } else {

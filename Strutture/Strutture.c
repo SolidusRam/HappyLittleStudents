@@ -361,18 +361,14 @@ void print_card_info(CFU_Cards *card) {
 
 void add_dmg(Player*player,DMG_cards*new_card)
 {
-    DMG_cards *new_node = malloc(sizeof(DMG_cards));
-    if (new_node == NULL) {
-        printf("Error: could not allocate memory for new card\n");
+    if (player == NULL || new_card == NULL) {
+        printf("Error: Null pointer passed to add_dmg\n");
         return;
     }
 
-    // Copy the card data
-    new_node = new_card;
-
-    // Add the new node to the beginning of the linked list
-    new_node->next = (struct DMG_cards *) player->dmg;
-    player->dmg = new_node;
+    // Add the new card to the beginning of the linked list
+    new_card->next = player->dmg;
+    player->dmg = new_card;
 }
 
 void delete_player(Player *head, Player *player) {

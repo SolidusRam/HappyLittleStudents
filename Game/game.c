@@ -151,7 +151,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     int tie_points=conteggi(&board,&head_player,dmgCards);
 
     //controllo se c'è un pareggio fra i perdenti
-    if(tie_points>=1)
+    if(tie_points>=-2)
     {
         //si avvia il turno di spareggio
         Player *tie_players=head_player;
@@ -168,8 +168,12 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
             temp_player=temp_player->next;
         }
 
-        tie_turn(cfuCards, dmgCards, tie_players, scarti);
+        tie_turn(cfuCards, dmgCards, tie_players, *scarti);
     }
+
+
+    printf("Stampa dopo il conteggio\n");
+    print_board(head_player,&board);
 
     //controllo se un player deve essere eliminato oppure ha vinto
     win_check(head_player,numplayers);
@@ -260,7 +264,7 @@ int game_over(){
 /**
  * La funzione trova il giocatore con il punteggio più alto e più basso e assegna la carta danno al giocatore con il punteggio più basso.
  * In caso di pareggio per il punteggio più basso nessun giocatore prende la carta danno e si ripete il turno fra i giocatori in pareggio.
- * In caso di pareggio per il punteggio più alto entrambi vincono il turno.ù
+ * In caso di pareggio per il punteggio più alto entrambi vincono il turno.
  *
  */
 
@@ -299,7 +303,6 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
         {
             mincount++;
         }
-        current->cfu_score=board->temporay_scores[i];
         current=current->next;
     }
 
@@ -317,16 +320,16 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
     //aggiungo il caso in cui minore e maggiore sono uguali
     if(min==max)
     {
-        return 0;
+        return -3;
     }
 
-
+    current=*head;
     //nessun pareggio per il punteggio minore
     if(mincount==1)
     {
         //assegno la carta danno al giocatore con il punteggio minore
-        current=*head;
-        for (int i = 0; i < index_min; ++i) {
+
+        for (int i = 0; i < index_min-1; ++i) {
             current=current->next;
         }
         add_dmg(current,board->draftedDMG);
@@ -338,10 +341,11 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
         return min;
     }
 
-    return 0;
+    return -3;
 }
 
 void win_check(Player*head_player,int numplayers){
+
     /*
     Vince la partita il primo studente che arriva a 60 CFU o l’ultimo che non ha fatto rinuncia agli studi.
     Quando si ha almeno un vincitore della partita il gioco (e il programma) finisce.
@@ -366,26 +370,23 @@ void win_check(Player*head_player,int numplayers){
 
     //controllo se un player deve essere eliminato
     current=head_player;
-    while (current!=NULL)
-    {
-        DMG_cards *temp=current->dmg;
-        int count[4]={0,0,0,0};
-
-        while (temp!=NULL)
-        {
-            count[temp->type]++;
-            temp=temp->next;
+    while (current!=NULL) {
+        int count[4] = {0, 0, 0, 0};
+        DMG_cards *temp_dmg = current->dmg;
+        //scorro le carte ostacolo per vedere la combinazione
+        while (temp_dmg != NULL) {
+            count[temp_dmg->type]++;
+            temp_dmg = temp_dmg->next;
         }
-        if(dmg_count(count))
-        {
-            printf("Il giocatore %s è stato eliminato",current->username);
+
+        //controllo se il giocatore è morto
+        if (dmg_count(count)) {
+            printf("Il giocatore %s è stato eliminato", current->username);
             //elimino il giocatore
-            delete_player(head_player,current);
-            //decremento il numero di giocatori
-            numplayers--;
+            Player *temp = current;
+            current = current->next;
+            free(temp);
         }
-
-        current=current->next;
     }
 
     //controllo se un player è rimasto solo
@@ -397,12 +398,16 @@ void win_check(Player*head_player,int numplayers){
     }
 }
 
-int dmg_count( int *count)
-{
+
+/** La funzione controlla se il giocatore ha la combinazione
+ * di carte ostacolo che lo fa eliminare dal gioco
+ * */
+
+int dmg_count( int  *count){
     // Controlla se il giocatore ha 3 carte ostacolo dello stesso tipo
     for (int i = 0; i < 4; i++) {
         if (count[i] >= 3) {
-            return 1;
+            return 1; // Il giocatore ha perso
         }
     }
 

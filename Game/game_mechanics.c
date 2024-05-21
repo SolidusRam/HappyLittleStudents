@@ -301,13 +301,31 @@ void print_board(Player *head,Board *board){
             index_min=i;
         }
 
-        current->cfu_score=board->temporay_scores[i];
         printf("%s ha ottenuto %d punti questo turno \n",current->username,board->temporay_scores[i]);
         current=current->next;
     }
     printf("\n");
-    printf("Il giocatore con il punteggio più alto è %s con %d punti\n",head->username,max);
-    printf("Il giocatore con il punteggio più basso è %s con %d punti\n",head->username,min);
+
+    printf("Punteggi totali: \n");
+    current=head;
+    for (int i = 0; i < board->numplayers; ++i) {
+        printf("%s ha ottenuto %d punti totali\n",current->username,current->cfu_score);
+        current=current->next;
+    }
+    printf("\n");
+    current=head;
+    for (int i = 0; i < board->numplayers; ++i) {
+        if(i==index_max)
+        {
+            printf("Il giocatore con il punteggio piu' alto e' %s con %d punti\n",current->username,max);
+        }
+        if(i==index_min)
+        {
+            printf("Il giocatore con il punteggio piu' basso e' %s con %d punti\n",current->username,min);
+        }
+        current=current->next;
+    }
+
 
 }
 

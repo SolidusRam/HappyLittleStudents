@@ -1,46 +1,34 @@
 #include "game_mechanics.h"
 
+
+/**
+ * Pesco le carte un difetto a fine round per ogni giocatore
+ *
+ * @param head lista dei giocatori
+ * @param deck_head_ref mazzo delle carte
+ *
+ * */
 void draw(Player *head, CFU_Cards **deck_head_ref)
 {
-    Player *current_player =head;
-
-    while(current_player!=NULL)
+    Player *current=head;
+    while(current!=NULL)
     {
-        printf("Current player: %p\n", current_player);
-        // Count the number of cards in the player's hand
-        int hand_size = 0;
-        CFU_Cards *current = current_player->hand;
-
-
-        while (current != NULL) {
-            printf("Current card: %p, Next card: %p\n", current, current->next);
-            hand_size++;
-            current =  current->next;
+        int counter=0;
+        CFU_Cards *temp= head->hand;
+        while (temp!=NULL)
+        {
+            counter++;
+            temp= (CFU_Cards *) temp->next;
         }
+        for (int i = counter; i < HAND; ++i) {
+            //pesco una carta dal mazzo
+            CFU_Cards *new_card= *deck_head_ref;
+            *deck_head_ref= (CFU_Cards *) (*deck_head_ref)->next;
+            new_card->next=NULL;
+            add_card_to_hand(current,new_card);
 
-        // Draw cards from the deck until the player has 5 cards
-        while (hand_size < HAND) {
-            if (*deck_head_ref == NULL) {
-                //aggiungere la funzione di mescolamento quando le carte sono finite
-                printf("finite le carte inizio un nuovo mescolamento\n");
-                return;
-            }
-
-            // Remove the card from the top of the deck
-            CFU_Cards *card = *deck_head_ref;
-            *deck_head_ref = (CFU_Cards *) card->next;
-
-            printf("Drawn card: %p, Next card in deck: %p\n", card, *deck_head_ref);
-
-            // Add the card to the player's hand
-            card->next = (struct CFU_Cards *) current_player->hand;
-            current_player->hand = card;
-
-            printf("Card added to player's hand. Current hand: %p\n", current_player->hand);
-
-            hand_size++;
         }
-        current_player=current_player->next;
+        current=current->next;
     }
 }
 

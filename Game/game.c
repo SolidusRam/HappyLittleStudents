@@ -88,6 +88,10 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //salvataggio stato in file.save
     //stampa del numero turno
     printf("Inizia il turno numero %d\n",turn_number);
+    printf("Premi un tasto per iniziare\n");
+    printf("---------------------------\n");
+    printf("---------------------------\n");
+    //getchar();
 
 
 
@@ -185,7 +189,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         return 1;
     }
     */
-
 
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori
@@ -387,6 +390,7 @@ void win_check(Player*head_player,int numplayers){
             current = current->next;
             free(temp);
         }
+        current = current->next;
     }
 
     //controllo se un player è rimasto solo
@@ -404,22 +408,32 @@ void win_check(Player*head_player,int numplayers){
  * */
 
 int dmg_count( int  *count){
-    // Controlla se il giocatore ha 3 carte ostacolo dello stesso tipo
-    for (int i = 0; i < 4; i++) {
-        if (count[i] >= 3) {
-            return 1; // Il giocatore ha perso
-        }
-    }
 
-    // Controlla se il giocatore ha una carta ostacolo di ogni tipo
-    // Le carte ESAME sono jolly e contano come tutti i tipi di ostacolo
-    if ((count[STUDIO] > 0 || count[ESAME] > 0) &&
-        (count[SOPRAVVIVENZA] > 0 || count[ESAME] > 0) &&
-        (count[SOCIALE] > 0 || count[ESAME] > 0)) {
+    //il giocatore è morto se ha una carta di ogni tipo oppure 3 carte dello stesso tipo
+    //ci sono 4 tipi di carte ostacolo, il 4 tipo vale come jolly
+
+    int counter=0;
+
+    //tripletta base
+    if(count[0]>0&&count[1]>0&&count[2]>0)
         return 1;
+
+    for (int i = 0; i < 4; ++i) {
+
+        if(count[i]>0)  counter++;
+
+        //tripletta di carte singole
+        if(count[i]>=3) return 1;
+
+        //doppio e jolly
+        if(count[i]+count[3]>=3)    return 1;
     }
 
-    // Se nessuna delle condizioni è soddisfatta, il giocatore non è "morto"
+    //tripletta con jolly il giocatore ha almeno 2 tipi di carte e una carta jolly
+    if(counter>=3)  return 1;
+
+
+    // Se nessuna delle condizioni è soddisfatta, il giocatore non è eliminato
     return 0;
 }
 

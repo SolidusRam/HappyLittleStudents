@@ -10,26 +10,25 @@
  * */
 void draw(Player *head, CFU_Cards **deck_head_ref)
 {
-    Player *current=head;
-    while(current!=NULL)
-    {
-        int counter=0;
-        CFU_Cards *temp= head->hand;
-        while (temp!=NULL)
-        {
-            counter++;
-            temp = temp->next;
-        }
-        for (int i = counter; i < HAND; ++i) {
-            //pesco una carta dal mazzo
-            CFU_Cards *new_card= *deck_head_ref;
-            *deck_head_ref= (CFU_Cards *) (*deck_head_ref)->next;
-            new_card->next=NULL;
-            add_card_to_hand(current,new_card);
 
-        }
-        current=current->next;
+    int counter=0;
+    CFU_Cards *temp= head->hand;
+
+
+    while (temp!=NULL)
+    {
+        counter++;
+        temp = (CFU_Cards *) temp->next;
     }
+    for (int i = counter; i < HAND; i++) {
+        //pesco una carta dal mazzo
+        CFU_Cards *new_card= *deck_head_ref;
+        *deck_head_ref= (CFU_Cards *) (*deck_head_ref)->next;
+        new_card->next=NULL;
+        add_card_to_hand(head,new_card);
+
+    }
+
 }
 
 void draw_DMG(DMG_cards *head){

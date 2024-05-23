@@ -140,7 +140,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     }
 
 
-    //todo
+    //Warning
     //le carte scarti perdono il nome
     printf("Stampa delle carte scartate\n");
     print_cards(*scarti);
@@ -202,7 +202,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
     //controllo se un player deve essere eliminato oppure ha vinto
-    win_check(head_player,numplayers);
+    win_check(head_player, numplayers, dmgCards);
 
     /*
     if(temp_player==NULL)
@@ -215,10 +215,22 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori
     // (occhio alle stampe di debung)
-    //draw(head_player,cfuCards);
+
+    temp_player=head_player;
+    while (temp_player!=NULL)
+    {
+        draw(temp_player,cfuCards);
+        temp_player=temp_player->next;
+    }
 
 
-    int dieci=0;
+
+    temp_player=head_player;
+    while (temp_player!=NULL)
+    {
+        print_player(temp_player);
+        temp_player=temp_player->next;
+    }
 
     //codice di uscita !=0
 //    free(board.ingame_cards);
@@ -355,7 +367,7 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
     {
         //assegno la carta danno al giocatore con il punteggio minore
 
-        for (int i = 0; i < index_min-1; ++i) {
+        for (int i = 0; i < index_min; ++i) {
             current=current->next;
         }
         add_dmg(current,board->draftedDMG);
@@ -370,8 +382,8 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
     return -3;
 }
 
-void win_check(Player*head_player,int numplayers){
-
+void win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
+{
     /*
     Vince la partita il primo studente che arriva a 60 CFU o l’ultimo che non ha fatto rinuncia agli studi.
     Quando si ha almeno un vincitore della partita il gioco (e il programma) finisce.
@@ -412,6 +424,12 @@ void win_check(Player*head_player,int numplayers){
             Player *temp = current;
             current = current->next;
             free(temp);
+            //rimetto le carte ostacolo in fondo al mazzo
+            DMG_cards *tmpMazzo = dmgMazzo;
+            while (tmpMazzo->next != NULL) {
+                tmpMazzo = tmpMazzo->next;
+            }
+            tmpMazzo->next = current->dmg;
         }
         current = current->next;
     }

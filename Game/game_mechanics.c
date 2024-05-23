@@ -18,7 +18,7 @@ void draw(Player *head, CFU_Cards **deck_head_ref)
         while (temp!=NULL)
         {
             counter++;
-            temp= (CFU_Cards *) temp->next;
+            temp = temp->next;
         }
         for (int i = counter; i < HAND; ++i) {
             //pesco una carta dal mazzo
@@ -89,13 +89,15 @@ void peek_players(Player *current,Player *head_player){
 
 void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
 
-    CFU_Cards *temp=player->hand;
+    CFU_Cards *temp_cards=player->hand;
+    Player *current=player;
 
     printf("Hai in mano queste carte:\n");
-    print_cards(temp);
+    print_cards(temp_cards);
 
     //Suggerimento sulla carta da giocare
-    suggerimento(temp,*board);
+    suggerimento(temp_cards,*board);
+    temp_cards=player->hand;
 
     //chiedo il numero della carta da giocare
     //stampa
@@ -115,7 +117,7 @@ void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
 
 
     //aggiungo la carta in gioco
-    board->ingame_cards[nplayer]=temp;
+    board->ingame_cards[nplayer]=temp_cards;
 
 
     //aggiungo punteggio in base alla carta giocata
@@ -135,12 +137,25 @@ void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
 
 
 
+
     //aggiungo la carta agli scarti e la rimuovo dalla mano
-    temp->next= (struct CFU_Cards *) **scarti;
-    **scarti=temp;
+
 
     //rimuovo la carta dalla mano
-    remove_card_from_hand(player,temp);
+    remove_card_from_hand(current,temp_cards);
+
+
+    add_card_to_scarti(*scarti,temp_cards);
+
+
+//
+//    printf("-----------------------\n");
+//    printf("-----------------------\n");
+//    printf("%s \n",player->username);
+//    print_cards(player->hand);
+//    printf("-----------------------\n");
+
+
 }
 
 int check_card(int choice,CFU_Cards*hand){

@@ -50,10 +50,13 @@ void game()
     printf("inizio della partita\n");
     int turn_number=0;
 
-    while (1){
-        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
-        turn_number++;
-    }
+//    while (1){
+//        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+//        turn_number++;
+//    }
+
+    turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+
     /*
     int check=0;
     //turno da reiterare per variabile di ritorno
@@ -65,9 +68,9 @@ void game()
 
 
     //memory free
-    free_cards(scarti);
-    free_cards(cfuCards);
-    free_players(players);
+//    free_cards(scarti);
+//    free_cards(cfuCards);
+//    free_players(players);
     //questo non funziona
     //free_dmg_cards(dmgCards);
     game_over();
@@ -79,11 +82,16 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //inizializzo la board i player vengono aggiornati per eliminazione
     Board board;
     initializeBoard(&board,numplayers);
+    Player *temp_player=head_player;
 
 
     for (int i = 0; i < numplayers; ++i) {
         board.temporay_scores[i]=0;
     }
+
+    printf("Stampa delle carte scartate\n");
+    print_cards(*scarti);
+
 
     //salvataggio stato in file.save
     //stampa del numero turno
@@ -106,7 +114,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     }
 
     //azioni giocatore fase di gioco CFU
-    Player *temp_player=head_player;
 
     for (int i = 0; i < numplayers; ++i) {
         //mostra le informazioni sul giocatore attuale
@@ -124,6 +131,17 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         temp_player=temp_player->next;
     }
 
+    //stampa dei player e carte
+    temp_player=head_player;
+    while (temp_player!=NULL)
+    {
+        print_player(temp_player);
+        temp_player=temp_player->next;
+    }
+
+
+    //todo
+    //le carte scarti perdono il nome
     printf("Stampa delle carte scartate\n");
     print_cards(*scarti);
 
@@ -154,6 +172,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //stabilisco il vincitore del turno e il perdente
     int tie_points=conteggi(&board,&head_player,dmgCards);
 
+
     //controllo se c'è un pareggio fra i perdenti
     if(tie_points>=-2)
     {
@@ -179,6 +198,9 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     printf("Stampa dopo il conteggio\n");
     print_board(head_player,&board);
 
+
+
+
     //controllo se un player deve essere eliminato oppure ha vinto
     win_check(head_player,numplayers);
 
@@ -193,14 +215,15 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori
     // (occhio alle stampe di debung)
-    draw(head_player,cfuCards);
+    //draw(head_player,cfuCards);
 
 
+    int dieci=0;
 
     //codice di uscita !=0
-    free(board.ingame_cards);
-    free(board.temporay_scores);
-    free(board.flags);
+//    free(board.ingame_cards);
+//    free(board.temporay_scores);
+//    free(board.flags);
     return 1;
 }
 

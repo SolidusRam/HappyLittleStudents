@@ -261,8 +261,20 @@ void add_card_to_scarti(CFU_Cards **scarti,CFU_Cards *card) {
         return;
     }
 
-    card->next = (struct CFU_Cards *) *scarti;
-    *scarti = card;
+    // Create a new CFU_Cards object to hold the discarded card
+    CFU_Cards *discarded_card = malloc(sizeof(CFU_Cards));
+    if (discarded_card == NULL) {
+        printf("Error: could not allocate memory for new card\n");
+        return;
+    }
+
+    // Copy the data from the original card to the new card
+    *discarded_card = *card;
+
+    // Add the new card to the discard pile
+    discarded_card->next = (struct CFU_Cards *) *scarti;
+    *scarti = discarded_card;
+
 }
 
 //rimuove la carta dalla lista mano del giocatore
@@ -272,27 +284,24 @@ void remove_card_from_hand(Player *player, CFU_Cards *card_to_remove) {
         return;
     }
 
-    CFU_Cards *current = player->hand;
-    CFU_Cards *prev = NULL;
+    CFU_Cards *current_card = player->hand;
+    CFU_Cards *prev_card = NULL;
 
-    // Find the card in the player's hand
-    while (current != NULL) {
-        if (current->name == card_to_remove->name && current->cfu_points == card_to_remove->cfu_points && current->effect == card_to_remove->effect) {
-            // Remove the card from the linked list
-            if (prev == NULL) {
-                player->hand = (CFU_Cards *) current->next;
+    while (current_card != NULL) {
+        if (current_card == card_to_remove) {
+            if (prev_card == NULL) {
+                player->hand = current_card->next;
             } else {
-                prev->next = current->next;
+                prev_card->next = current_card->next;
             }
 
+            free(card_to_remove);
             return;
         }
 
-        prev = current;
-        current = (CFU_Cards *) current->next;
+        prev_card = current_card;
+        current_card = current_card->next;
     }
-
-    printf("Error: Card not found in player's hand\n");
 }
 void print_card_info(CFU_Cards *card) {
     if (card == NULL) {

@@ -1,9 +1,16 @@
 #include "user_input.h"
 
 
+void
+clear (void)
+{
+    while ( getchar() != '\n' );
+}
+
+
 int players_number()
 {
-    int ngiocatori;
+    int ngiocatori=0;
     int is_valid=0;
 
     while(is_valid==0) {
@@ -33,6 +40,7 @@ void player_username(char username[MAX_CHAR])
     do {
         // Input dall'utente 32 caratteri
         scanf("%32s", username);
+        //pulisco il buffer
 
         // Valida la lunghezza dell'input
         size_t lunghezzaInput = strlen(username);

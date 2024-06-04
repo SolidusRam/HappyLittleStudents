@@ -1,17 +1,67 @@
 #include "game.h"
+void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[4],int num_players)
+{
+    //operazioni di lettura
+    *cfuCards=card_reading();
+    *dmgCards=dmg_reading();
+    printf("lettura finita \n");
+    //mix
+    shuffleCFU(cfuCards);
+    shuffleDmg(dmgCards);
+    printf("shuffle finito \n");
+
+    //lettura personaggi
+    character_reading(character);
+
+    shuffle_characters(character,num_players);
+
+    //creazione personaggio
+    //sto chiedendo anche l'username
+
+    //creo il primo player
+    *head_player = create_player();
+    Player *current = *head_player;
+    current->character=character[0];
+    //player_username(current->username);
+    fillCFUCards(current,cfuCards);
+
+    //forzatura sull'effetto
+    current->hand->effect=SBIRCIA;
+
+    for (int i = 1; i < num_players; i++) {
+        current->next = create_player();
+        current=current->next;
+        current->character=character[i];
+        fillCFUCards(current,cfuCards);
+    }
+    current->next=NULL;
+    /*
+     *
+       for (int i = 0; i < num_players-1; ++i) {
+       current->next = create_player();
+       current=current->next;
+       current->character=character[i];
+       player_username(current->username);
+       fillCFUCards(current,cfuCards);
+       }
+       current->next=NULL;
+     *
+     * */
+
+}
 
 void game()
 {
-    Character characters[4];
+    Character characters[4]={0};
     int num_players=0;
 
     //inzializzo le varibili
     //definire meglio il numero delle carte per allocare bene la memoria
 
-    CFU_Cards *cfuCards;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
+    CFU_Cards *cfuCards=NULL;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
     CFU_Cards *scarti=NULL;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
 
-    DMG_cards *dmgCards;//= malloc(sizeof(DMG_cards)*TOTALDMG);
+    DMG_cards *dmgCards=NULL;//= malloc(sizeof(DMG_cards)*TOTALDMG);
 
     Player *players;
 
@@ -20,7 +70,6 @@ void game()
     //chiedo se si vuole leggere e caricare il file di salvataggio
     game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
-    //todel
     //int load=choose2();
     int load=1;
 
@@ -33,6 +82,7 @@ void game()
     {
         //chiedo il numero di giocatori della partita
         num_players=players_number();
+        //num_players=3;
 
         //se il gioco non è stato caricato dal salvataggio preparo il setup
         setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
@@ -40,6 +90,8 @@ void game()
         //pesco le carte dal mazzo direttamente nel setup
     }
 
+
+    //stampa dei giocatori
     Player *temp=players;
     for (int i = 0; i < num_players; ++i) {
         print_player(temp);
@@ -50,12 +102,14 @@ void game()
     printf("inizio della partita\n");
     int turn_number=0;
 
-//    while (1){
-//        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
-//        turn_number++;
-//    }
+    while (1){
+        printf("Premi un tasto per continuare\n");
+       // clear();
+        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
 
-    turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+        turn_number++;
+    }
+
 
     /*
     int check=0;
@@ -80,7 +134,7 @@ void game()
 int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti)
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
-    Board board;
+    Board board={0};
     initializeBoard(&board,numplayers);
     Player *temp_player=head_player;
 
@@ -89,29 +143,24 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         board.temporay_scores[i]=0;
     }
 
-    printf("Stampa delle carte scartate\n");
-    print_cards(*scarti);
+//    printf("Stampa delle carte scartate\n");
+//    print_cards(*scarti);
 
 
     //salvataggio stato in file.save
     //stampa del numero turno
     printf("Inizia il turno numero %d\n",turn_number);
-    printf("Premi un tasto per iniziare\n");
     printf("---------------------------\n");
     printf("---------------------------\n");
-    //getchar();
+
 
 
 
     //estrazione carta danno
-    if(dmgCards!=NULL){
-        draw_DMG(dmgCards);
-        //to debug
-        board.draftedDMG=dmgCards;
-    } else{
-        printf("Errore la carta DMG non esiste bisogna rimescolare");
-        //funzione di rimescolamento
-    }
+    DMG_cards *draftedDMG=draw_DMG(dmgCards);
+
+    //aggiungo la carta danno alla board
+    board.draftedDMG=draftedDMG;
 
     //azioni giocatore fase di gioco CFU
 
@@ -170,29 +219,32 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
     //stabilisco il vincitore del turno e il perdente
-    int tie_points=conteggi(&board,&head_player,dmgCards);
+    bool tie_points=false;
+
+    tie_points = conteggi(&board,&head_player,dmgCards);
 
 
     //controllo se c'è un pareggio fra i perdenti
-    if(tie_points>=-2)
-    {
-        //si avvia il turno di spareggio
-        Player *tie_players=head_player;
-        temp_player=head_player;
-        while (temp_player!=NULL)
-        {
-            if(temp_player->cfu_score==tie_points)
-            {
-                printf("Turno di spareggio per il giocatore %s\n",temp_player->username);
-                //salvo il giocatore in una lista di giocatori in pareggio
-                tie_players=temp_player;
-                tie_players->next=NULL;
-            }
-            temp_player=temp_player->next;
-        }
-
-        tie_turn(cfuCards, dmgCards, tie_players, *scarti);
-    }
+//    if(tie_points==true)
+//    {
+//        //si avvia il turno di spareggio
+//        Player *tie_players=head_player;
+//        temp_player=head_player;
+//        while (temp_player!=NULL)
+//        {
+//            if(temp_player->cfu_score==tie_points)
+//            {
+//                printf("Turno di spareggio per il giocatore %s\n",temp_player->username);
+//                //salvo il giocatore in una lista di giocatori in pareggio
+//                tie_players=temp_player;
+//                tie_players->next=NULL;
+//                tie_players=tie_players->next;
+//            }
+//            temp_player=temp_player->next;
+//        }
+//
+//        tie_turn(cfuCards, dmgCards, tie_players, *scarti);
+//    }
 
 
     printf("Stampa dopo il conteggio\n");
@@ -240,7 +292,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 }
 
 
-void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[],int num_players)
+void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character* character,int num_players)
 {
     //operazioni di lettura
     *cfuCards=card_reading();
@@ -262,7 +314,10 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     //creo il primo player
     *head_player = create_player();
     Player *current = *head_player;
-    player_username(current->username);
+    char *username=malloc(sizeof(char)*MAX_CHAR);
+    player_username(username);
+    strcpy(current->username,username);
+
     fillCFUCards(current,cfuCards);
 
     for (int i = 0; i < num_players-1; ++i) {
@@ -306,7 +361,7 @@ int game_over(){
  *
  */
 
-int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
+bool conteggi(Board*board,Player**head,DMG_cards *dmgCards)
 {
 
     /* controllo se la carta salva è stata giocata
@@ -356,9 +411,10 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
 
     //controllo se c'è un pareggio per il punteggio minore
     //aggiungo il caso in cui minore e maggiore sono uguali
+    //in questo caso nessun giocatore prende la carta danno
     if(min==max)
     {
-        return -3;
+        return false;
     }
 
     current=*head;
@@ -370,16 +426,17 @@ int conteggi(Board*board,Player**head,DMG_cards *dmgCards)
         for (int i = 0; i < index_min; ++i) {
             current=current->next;
         }
+        printf("Il giocatore %s ha preso la carta danno\n",current->username);
         add_dmg(current,board->draftedDMG);
     }else
     {
         //pareggio per il punteggio minore
         //turno di spareggio fra i giocatori in pareggio
         //tie_turn(cfuCards, dmgCards, tie_players, scarti);
-        return min;
+        return true;
     }
 
-    return -3;
+    return false;
 }
 
 void win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
@@ -406,6 +463,8 @@ void win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
         current=current->next;
     }
 
+    printf("fine controllo vincitore\n");
+
     //controllo se un player deve essere eliminato
     current=head_player;
     while (current!=NULL) {
@@ -417,8 +476,9 @@ void win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
             temp_dmg = temp_dmg->next;
         }
 
+        int check=dmg_count(count);
         //controllo se il giocatore è morto
-        if (dmg_count(count)) {
+        if (check==1) {
             printf("Il giocatore %s è stato eliminato", current->username);
             //elimino il giocatore
             Player *temp = current;
@@ -468,6 +528,7 @@ int dmg_count( int  *count){
 
         //doppio e jolly
         if(count[i]+count[3]>=3)    return 1;
+
     }
 
     //tripletta con jolly il giocatore ha almeno 2 tipi di carte e una carta jolly
@@ -507,7 +568,7 @@ void tie_turn(CFU_Cards **cfuCards, DMG_cards *dmgCards, Player *head_player, CF
         //if(action==1)
         //{
         //gioco la carta CFU
-        playCFU(temp_player,scarti,&board,i);
+        playCFU(temp_player, (CFU_Cards ***) scarti, &board, i);
         //}
         temp_player=temp_player->next;
     }

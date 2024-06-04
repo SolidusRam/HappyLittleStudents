@@ -20,7 +20,7 @@ int game_over();
 
 void fillCFUCards(Player *player, CFU_Cards ** deck_head_ref) ;
 
-int conteggi(Board *board,Player **head,DMG_cards *dmgCards);
+bool conteggi(Board *board,Player **head,DMG_cards *dmgCards);
 
 void win_check(Player* head,int numplayers,DMG_cards *scarti);
 

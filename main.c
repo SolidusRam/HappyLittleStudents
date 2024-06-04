@@ -4,59 +4,113 @@
 #include "Game/game.h"
 #include "Input/salvataggi.h"
 
-//funzione di setup del gioco modidicata per il test
-void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[4],int num_players)
-{
-    //operazioni di lettura
-    *cfuCards=card_reading();
-    *dmgCards=dmg_reading();
-    printf("lettura finita \n");
-    //mix
-    shuffleCFU(cfuCards);
-    shuffleDmg(dmgCards);
-    printf("shuffle finito \n");
+Player* caricaPlayerTest(){
 
-    //lettura personaggi
-    character_reading(character);
+    Player *headplayer=malloc(sizeof(Player));
 
-    shuffle_characters(character,num_players);
+    strcpy(headplayer->username,"test");
 
-    //creazione personaggio
-    //sto chiedendo anche l'username
 
-    //creo il primo player
-    *head_player = create_player();
-    Player *current = *head_player;
-    current->character=character[0];
-    //player_username(current->username);
-    fillCFUCards(current,cfuCards);
+    DMG_cards *head=malloc(sizeof(DMG_cards));
+    DMG_cards *seconda;
+    strcpy(head->name,"testSTUDIO");
+    strcpy(head->desc,"test");
+    head->type=STUDIO;
 
-    //forzatura sull'effetto
-    current->hand->effect=SBIRCIA;
+    strcpy(seconda->name,"testSOPRAVVIVENZA");
+    strcpy(seconda->desc,"test");
+    seconda->type=SOPRAVVIVENZA;
 
-    for (int i = 1; i < num_players; i++) {
-        current->next = create_player();
-        current=current->next;
-        current->character=character[i];
-        fillCFUCards(current,cfuCards);
-    }
-    current->next=NULL;
-     /*
-      *
-        for (int i = 0; i < num_players-1; ++i) {
-        current->next = create_player();
-        current=current->next;
-        current->character=character[i];
-        player_username(current->username);
-        fillCFUCards(current,cfuCards);
-        }
-        current->next=NULL;
-      *
-      * */
+    head->next=seconda;
 
+
+    headplayer->dmg;
+
+
+    return headplayer;
 }
 
+
 int main() {
+
+    Character characters[4]={0};
+    int num_players=0;
+
+    //inzializzo le varibili
+    //definire meglio il numero delle carte per allocare bene la memoria
+
+    CFU_Cards *cfuCards=NULL;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
+    CFU_Cards *scarti=NULL;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
+
+    DMG_cards *dmgCards=NULL;//= malloc(sizeof(DMG_cards)*TOTALDMG);
+
+    Player *players=NULL;
+
+
+
+    //chiedo se si vuole leggere e caricare il file di salvataggio
+    game_start();
+    //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
+    //int load=choose2();
+    int load=1;
+
+    if (load==1)
+    {
+        lettura_salvataggio(&num_players,&players,&cfuCards,&dmgCards,&scarti);
+
+    }
+    if(load==2)
+    {
+        //chiedo il numero di giocatori della partita
+        num_players=players_number();
+        //num_players=3;
+
+        //se il gioco non è stato caricato dal salvataggio preparo il setup
+        setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
+
+        //pesco le carte dal mazzo direttamente nel setup
+    }
+
+
+    //stampa dei giocatori
+    Player *temp=players;
+    for (int i = 0; i < num_players; ++i) {
+        print_player(temp);
+        temp=temp->next;
+    }
+
+
+    printf("inizio della partita\n");
+    int turn_number=0;
+
+    while (turn_number<8){
+        printf("Premi un tasto per continuare\n");
+        // clear();
+        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+
+        turn_number++;
+    }
+
+
+    print_cards(cfuCards);
+
+    /*
+    int check=0;
+    //turno da reiterare per variabile di ritorno
+    for(int turn_number=0;check==0;turn_number++)
+    {
+        check=turn(&cfuCards,dmgCards,players,turn_number,numplyers );
+    }
+    */
+
+
+    //memory free
+//    free_cards(scarti);
+//    free_cards(cfuCards);
+//    free_players(players);
+    //questo non funziona
+    //free_dmg_cards(dmgCards);
+    game_over();
 
 /*
     Character characters[4];
@@ -69,7 +123,6 @@ int main() {
 
     Player *players =malloc(sizeof(Player)*TOTALDMG);*/
 
-    game();
 /*
     setup_game_test(&cfuCards,& dmgCards, &players, characters, num_players);
     print_cards(cfuCards);

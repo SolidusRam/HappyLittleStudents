@@ -31,7 +31,7 @@ void draw(Player *head, CFU_Cards **deck_head_ref)
 
 }
 
-void draw_DMG(DMG_cards *head){
+DMG_cards *draw_DMG(DMG_cards *head){
     //per ora solo stampa
     if(head!=NULL) {
         printf("Name: %s\n", head->name);
@@ -39,6 +39,8 @@ void draw_DMG(DMG_cards *head){
         printf("Type: %d\n", head->type);
         printf("\n");
     }
+
+    return head;
 }
 
 void check_action(int action,Player *current,Player *head_player)
@@ -95,7 +97,7 @@ void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
     print_cards(temp_cards);
 
     //Suggerimento sulla carta da giocare
-    suggerimento(temp_cards,*board);
+    //suggerimento(temp_cards,*board);
     temp_cards=player->hand;
 
     //chiedo il numero della carta da giocare

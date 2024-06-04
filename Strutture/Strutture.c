@@ -373,11 +373,19 @@ void add_dmg(Player*player,DMG_cards*new_card)
     if (player == NULL || new_card == NULL) {
         printf("Error: Null pointer passed to add_dmg\n");
         return;
-    }
+    } else{
 
-    // Add the new card to the beginning of the linked list
-    new_card->next = player->dmg;
-    player->dmg = new_card;
+        //se il giocatore non ha carte danni
+        if(player->dmg == NULL){
+            player->dmg = new_card;
+            return;
+        } else{
+
+            // Aggiungo la carta alla fine della lista
+            new_card->next = player->dmg;
+            player->dmg = new_card;
+        }
+    }
 }
 
 void delete_player(Player *head, Player *player) {

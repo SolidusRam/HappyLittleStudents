@@ -7,7 +7,7 @@
 
 void draw(Player*,CFU_Cards**);
 
-void draw_DMG(DMG_cards*);
+DMG_cards *draw_DMG(DMG_cards*);
 
 void check_action(int action,Player *current,Player *head_player);
 

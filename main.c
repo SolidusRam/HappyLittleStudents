@@ -49,7 +49,7 @@ int main() {
 
 
     //chiedo se si vuole leggere e caricare il file di salvataggio
-    game_start();
+    //game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
     //int load=choose2();
     int load=1;
@@ -62,37 +62,36 @@ int main() {
     if(load==2)
     {
         //chiedo il numero di giocatori della partita
-        num_players=players_number();
-        //num_players=3;
+        //num_players=players_number();
+        num_players=4;
 
-        //se il gioco non è stato caricato dal salvataggio preparo il setup
         setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
         //pesco le carte dal mazzo direttamente nel setup
     }
 
 
+
+
     //stampa dei giocatori
-    Player *temp=players;
-    for (int i = 0; i < num_players; ++i) {
-        print_player(temp);
-        temp=temp->next;
-    }
+//    Player *temp=players;
+//    for (int i = 0; i < num_players; ++i) {
+//        print_player(temp);
+//        temp=temp->next;
+//    }
 
 
     printf("inizio della partita\n");
     int turn_number=0;
 
-    while (turn_number<8){
-        printf("Premi un tasto per continuare\n");
-        // clear();
-        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+//    while (turn_number<8){
+//        printf("Premi un tasto per continuare\n");
+//        // clear();
+//        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+//
+//        turn_number++;
+//    }
 
-        turn_number++;
-    }
-
-
-    print_cards(cfuCards);
 
     /*
     int check=0;

@@ -33,12 +33,16 @@ void lettura_salvataggio(int *numPlayers,Player **head_player,CFU_Cards**mazzo,D
             fread(current_card, sizeof(CFU_Cards), 1, file);
             if (j < 4) { // if not the last card
                 current_card->next = malloc(sizeof(CFU_Cards));
-                current_card = current_card->next;
+                current_card = (CFU_Cards *) current_card->next;
             } else {
                 current_card->next = NULL; // end of the list
             }
 
         }
+
+        //debug
+        print_player(*head_player);
+
 
         fread(&numCarteDanno, sizeof(int), 1, file);
 

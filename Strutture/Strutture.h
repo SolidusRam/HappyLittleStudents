@@ -28,8 +28,8 @@ typedef enum dmg_type{STUDIO,SOPRAVVIVENZA,SOCIALE,ESAME};
  * • Puntatore alla prossima carta
  */
 typedef struct Cfu_cards {
-    char name[MAX_CHAR];
     int cfu_points;
+    char name[MAX_CHAR];
     enum effects effect;
     struct CFU_Cards *next;
 }CFU_Cards;

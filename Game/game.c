@@ -313,9 +313,11 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
 
     //creo il primo player
     *head_player = create_player();
+    head_player[0]->character=character[0];
     Player *current = *head_player;
     char *username=malloc(sizeof(char)*MAX_CHAR);
     player_username(username);
+    clear();
     strcpy(current->username,username);
 
     fillCFUCards(current,cfuCards);
@@ -323,8 +325,9 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     for (int i = 0; i < num_players-1; ++i) {
         current->next = create_player();
         current=current->next;
-        current->character=character[i];
+        current->character=character[i+1];
         player_username(current->username);
+        clear();
         fillCFUCards(current,cfuCards);
     }
     current->next=NULL;

@@ -133,13 +133,13 @@ Player *create_player()
     }
 
     newPlayer->hand=NULL;
-    //fillCFUCards(newPlayer,cards);
     newPlayer->dmg=NULL;
     newPlayer->cfu_score = 0;
 
     newPlayer->next=NULL;
     return newPlayer;
 }
+
 
 void swap(CFU_Cards *a, CFU_Cards *b) {
     CFU_Cards temp = *a;

@@ -1,32 +1,60 @@
 #include "salvataggi.h"
 
-void lettura_salvataggio(int *numPlayers,Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
+
+/**\brief Legge il file binario di salvaggio
+ * @param numPlayers intero che conterra' il numero dei giocatori
+ * @param head_player cima della lista players
+ * @param mazzo cima del mazzo
+ * @param scarti lista scarti*/
+
+
+/*Il file di salvataggio è un file binario "savegame.sav", che contiene:
+• un intero N indicante il numero di giocatori partecipanti alla partita (da 2 a 4).
+• Per ognuno degli N giocatori:
+• Un blocco rappresentante il giocatore.
+• Una lista rappresentante le carte in mano al giocatore
+• Un numero rappresentante il numero di carte ostacolo accumulate
+• Una lista rappresentante le carte ostacolo del giocatore
+• Per ogni mazzo (in questo ordine CFU, CFU scarti, Ostacoli):
+• Un numero rappresentate il numero di carte nel mazzo
+• Una lista rappresentante le carte nel mazzo
+*/
+
+
+
+void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
+
     FILE *file = fopen(FILENAME, "rb");
     if (file == NULL) {
         printf("Cannot open file %s\n", FILENAME);
         return;
     }
+    int numPlayers=0;
 
-    fread( numPlayers, sizeof(int), 1, file);
+    fread( &numPlayers, sizeof(int), 1, file);
 
 
-    printf("Number of players: %d\n", *numPlayers);
+    printf("Number of players: %d\n", numPlayers);
 
     *head_player= create_player();
     Player *current = *head_player;
     //inizio lettura player
-    for (int i = 0;  i < *numPlayers; i++) {
+    for (int i = 0;  i < numPlayers; i++) {
 
-        int numCarteDanno;
+        int numCarteDanno=0;
 
 
         fread(current, sizeof(Player), 1, file);
 
         CFU_Cards *current_card = malloc(sizeof(CFU_Cards));
-        current->hand=current_card;
+        if (current_card == NULL) {
+            printf("Cannot allocate memory for card during reading save\n");
+            exit(1);
+        }
+        current_card->next = NULL;
+        current->hand = current_card;
 
-        DMG_cards *current_dmg= malloc(sizeof(DMG_cards));
-        current->dmg=current_dmg;
+
 
         for (int j=0;j<HAND;j++) {
 
@@ -40,12 +68,15 @@ void lettura_salvataggio(int *numPlayers,Player **head_player,CFU_Cards**mazzo,D
 
         }
 
-        //debug
-        print_player(*head_player);
-
-
         fread(&numCarteDanno, sizeof(int), 1, file);
 
+        DMG_cards *current_dmg = malloc(sizeof(DMG_cards));
+        if (current_dmg == NULL) {
+            printf("Cannot allocate memory for damage card\n");
+            return;
+        }
+        current_dmg->next = NULL;
+        current->dmg = current_dmg;
 
         for (int j = 0; j < numCarteDanno; ++j) {
             DMG_cards *new_card = malloc(sizeof(DMG_cards));
@@ -69,7 +100,7 @@ void lettura_salvataggio(int *numPlayers,Player **head_player,CFU_Cards**mazzo,D
             current->dmg = NULL;
         }
 
-        if (i < *numPlayers - 1) { // if not the last player
+        if (i < numPlayers - 1) { // if not the last player
             current->next = create_player();
             current = current->next;
         } else {

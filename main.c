@@ -52,18 +52,20 @@ int main() {
     //game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
     //int load=choose2();
-    int load=1;
+    int load=2;
 
+
+    //lettura salvataggio buggata
     if (load==1)
     {
-        lettura_salvataggio(&num_players,&players,&cfuCards,&dmgCards,&scarti);
+        lettura_salvataggio(&players,&cfuCards,&dmgCards,&scarti);
 
     }
     if(load==2)
     {
         //chiedo il numero di giocatori della partita
         //num_players=players_number();
-        num_players=4;
+        num_players=3;
 
         setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
@@ -74,11 +76,11 @@ int main() {
 
 
     //stampa dei giocatori
-//    Player *temp=players;
-//    for (int i = 0; i < num_players; ++i) {
-//        print_player(temp);
-//        temp=temp->next;
-//    }
+    Player *temp=players;
+    for (int i = 0; i < 4; ++i) {
+        print_player(temp);
+        temp=temp->next;
+    }
 
 
     printf("inizio della partita\n");

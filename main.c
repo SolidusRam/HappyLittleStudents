@@ -4,6 +4,8 @@
 #include "Game/game.h"
 #include "Input/salvataggi.h"
 
+
+
 Player* caricaPlayerTest(){
 
     Player *headplayer=malloc(sizeof(Player));
@@ -65,9 +67,11 @@ int main() {
     {
         //chiedo il numero di giocatori della partita
         //num_players=players_number();
-        num_players=3;
 
-        setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
+        //setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
+
+        num_players=2;
+        setup_game_test(&cfuCards,&dmgCards,&players,characters,num_players);
 
         //pesco le carte dal mazzo direttamente nel setup
     }
@@ -75,24 +79,23 @@ int main() {
 
 
 
-    //stampa dei giocatori
-    Player *temp=players;
-    for (int i = 0; i < 4; ++i) {
-        print_player(temp);
-        temp=temp->next;
-    }
-
+//    //stampa dei giocatori
+//    Player *temp=players;
+//    for (int i = 0; i < num_players; ++i) {
+//        print_player(temp);
+//        temp=temp->next;
+//    }
 
     printf("inizio della partita\n");
     int turn_number=0;
 
-//    while (turn_number<8){
-//        printf("Premi un tasto per continuare\n");
-//        // clear();
-//        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
-//
-//        turn_number++;
-//    }
+    while (turn_number<10){
+        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+
+        dmgCards=dmgCards->next;
+
+        turn_number++;
+    }
 
 
     /*

@@ -33,4 +33,6 @@ void print_board(Player *head,Board *board);
 
 void salva_dmg(DMG_cards *dmgCards);
 
+bool conteggi(Board *board,Player **head,DMG_cards *dmgCards);
+
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

@@ -82,7 +82,7 @@ void effect_SCARTAP(Player *current,CFU_Cards **scarti,Board *board,int index)
     score=current->hand[choice-1].cfu_points;
     board->temporay_scores[index]+=score;
     add_card_to_scarti(scarti,&current->hand[choice-1]);
-    remove_card_from_hand(current,choice-1);
+    remove_card_from_hand(current, (CFU_Cards *) (choice - 1));
     if(board->molt==true)
     {
         printf("Effetto DOPPIOE attivo, il punteggio viene raddoppiato\n");

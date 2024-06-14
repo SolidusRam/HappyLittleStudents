@@ -1,4 +1,6 @@
 #include "game.h"
+
+
 void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[4],int num_players)
 {
     //operazioni di lettura
@@ -18,23 +20,33 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
     //creazione personaggio
     //sto chiedendo anche l'username
 
+
+    char *testone="testOne";
+    char *testtwo="testTwo";
+
     //creo il primo player
     *head_player = create_player();
     Player *current = *head_player;
     current->character=character[0];
+    strcpy(current->username,testone);
+
     //player_username(current->username);
     fillCFUCards(current,cfuCards);
 
     //forzatura sull'effetto
-    current->hand->effect=SBIRCIA;
 
     for (int i = 1; i < num_players; i++) {
         current->next = create_player();
-        current=current->next;
-        current->character=character[i];
-        fillCFUCards(current,cfuCards);
+        current = current->next;
+        current->character = character[i];
+        fillCFUCards(current, cfuCards);
+
     }
+
+    strcpy(current->username,testtwo);
     current->next=NULL;
+
+
     /*
      *
        for (int i = 0; i < num_players-1; ++i) {
@@ -73,14 +85,17 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     printf("---------------------------\n");
     printf("---------------------------\n");
 
+    printf("Premi un tasto per continuare\n");
+    clear();
 
 
 
     //estrazione carta danno
-    DMG_cards *draftedDMG=draw_DMG(dmgCards);
+    DMG_cards draftedDMG=*draw_DMG(dmgCards);
 
     //aggiungo la carta danno alla board
-    board.draftedDMG=draftedDMG;
+    board.draftedDMG=&draftedDMG;
+    board.draftedDMG->next=NULL;
 
     //azioni giocatore fase di gioco CFU
 
@@ -100,13 +115,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         temp_player=temp_player->next;
     }
 
-    //stampa dei player e carte
-    temp_player=head_player;
-    while (temp_player!=NULL)
-    {
-        print_player(temp_player);
-        temp_player=temp_player->next;
-    }
 
 
     //Warning
@@ -117,8 +125,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
     //carte
 
-    printf("\n");
-
 
     // in questa fase i giocatori con carte con effetti hanno la possibilità
     // di giocare l'effetto
@@ -127,9 +133,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     temp_player=head_player;
     //effects(temp_player,&cfuCards,&scarti,&board,numplayers);
 
-
-    //stampa del punteggio temporaneo
-    print_board(head_player,&board);
 
     //fase di attivazione delle carte istantanee
     //player_has_instant(head_player,&scarti,&board);
@@ -142,6 +145,9 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     bool tie_points=false;
 
     tie_points = conteggi(&board,&head_player,dmgCards);
+
+
+    //preparo la prossima carta danno
 
 
     //controllo se c'è un pareggio fra i perdenti
@@ -174,7 +180,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
     //controllo se un player deve essere eliminato oppure ha vinto
-    win_check(head_player, numplayers, dmgCards);
+    //win_check(head_player, numplayers, dmgCards);
 
     /*
     if(temp_player==NULL)
@@ -275,91 +281,6 @@ void fillCFUCards(Player *player, CFU_Cards **deck_head_ref) {
 int game_over(){
     printf("\nGame over\n");
     return 0;
-}
-
-/**
- * La funzione trova il giocatore con il punteggio più alto e più basso e assegna la carta danno al giocatore con il punteggio più basso.
- * In caso di pareggio per il punteggio più basso nessun giocatore prende la carta danno e si ripete il turno fra i giocatori in pareggio.
- * In caso di pareggio per il punteggio più alto entrambi vincono il turno.
- *
- */
-
-bool conteggi(Board*board,Player**head,DMG_cards *dmgCards)
-{
-
-    /* controllo se la carta salva è stata giocata
-    if (board->salva) {
-        printf("La carta SALVA è stata giocata, nessun giocatore prende la carta danno\n");
-        return 0;
-    }
-    */
-
-    int max=board->temporay_scores[0];
-    int min=board->temporay_scores[0];
-    int mincount=1;
-    int index_max=0;
-    int index_min=0;
-    int tiemin=0;
-    int check=0;
-    Player *current=*head;
-
-    //ciclo per trovare il punteggio massimo e minimo controllo anche in caso di pareggio
-    for (int i = 0; i < board->numplayers; ++i) {
-        if(board->temporay_scores[i]>max)
-        {
-            max=board->temporay_scores[i];
-            index_max=i;
-        }
-        if(board->temporay_scores[i]<min)
-        {
-            min=board->temporay_scores[i];
-            mincount=1;
-            index_min=i;
-        }else if(board->temporay_scores[i]==min)
-        {
-            mincount++;
-        }
-        current=current->next;
-    }
-
-    //assegno i punti ai giocatori vincitori
-    current=*head;
-    for (int i = 0; i < board->numplayers-1; ++i) {
-        if(board->temporay_scores[i]==max)
-        {
-            current->cfu_score+=board->temporay_scores[i];
-        }
-        current=current->next;
-    }
-
-    //controllo se c'è un pareggio per il punteggio minore
-    //aggiungo il caso in cui minore e maggiore sono uguali
-    //in questo caso nessun giocatore prende la carta danno
-    if(min==max)
-    {
-        return false;
-    }
-
-    current=*head;
-    //nessun pareggio per il punteggio minore
-    if(mincount==1)
-    {
-        //assegno la carta danno al giocatore con il punteggio minore
-
-        for (int i = 0; i < index_min; ++i) {
-            current=current->next;
-        }
-        printf("Il giocatore %s ha preso la carta danno\n",current->username);
-        add_dmg(current,board->draftedDMG);
-    }else
-    {
-        //pareggio per il punteggio minore
-        //turno di spareggio fra i giocatori in pareggio
-        //tie_turn(cfuCards, dmgCards, tie_players, scarti);
-        return true;
-    }
-
-    return false;
 }
 
 void win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)

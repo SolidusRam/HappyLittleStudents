@@ -370,22 +370,43 @@ void print_card_info(CFU_Cards *card) {
 
 void add_dmg(Player*player,DMG_cards*new_card)
 {
+
+
+
     if (player == NULL || new_card == NULL) {
         printf("Error: Null pointer passed to add_dmg\n");
         return;
     } else{
 
+        //creo una nuova copia della carta danno
+        DMG_cards *copy_card = malloc(sizeof(DMG_cards));
+        if (copy_card == NULL) {
+            printf("Error: could not allocate memory for new card\n");
+            return;
+        }
+
+        //copio i dati della carta
+        memccpy(copy_card, new_card, sizeof(DMG_cards), sizeof(DMG_cards));
+
         //se il giocatore non ha carte danni
         if(player->dmg == NULL){
-            player->dmg = new_card;
+            player->dmg = copy_card;
+            player->dmg->next = NULL;
             return;
-        } else{
 
+        } else{
             // Aggiungo la carta alla fine della lista
-            new_card->next = player->dmg;
-            player->dmg = new_card;
+            DMG_cards *current = player->dmg;
+            while (current->next != NULL) {
+                current = current->next;
+            }
+            current->next = copy_card;
+            copy_card->next = NULL;
         }
+
     }
+
+
 }
 
 void delete_player(Player *head, Player *player) {

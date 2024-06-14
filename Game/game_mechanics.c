@@ -39,6 +39,11 @@ DMG_cards *draw_DMG(DMG_cards *head){
         printf("Type: %d\n", head->type);
         printf("\n");
     }
+    else
+    {
+        printf("Il mazzo delle carte danno e vuoto\n");
+        exit(3);
+    }
 
     return head;
 }
@@ -346,4 +351,97 @@ void salva_dmg(DMG_cards *dmgCards){
     prev->next=NULL;
     current->next=dmgCards;
     dmgCards=current;
+}
+
+
+/**
+ * La funzione trova il giocatore con il punteggio più alto e più basso e assegna la carta danno al giocatore con il punteggio più basso.
+ * In caso di pareggio per il punteggio più basso nessun giocatore prende la carta danno e si ripete il turno fra i giocatori in pareggio.
+ * In caso di pareggio per il punteggio più alto entrambi vincono il turno.
+ *
+ */
+
+bool conteggi(Board*board,Player**head,DMG_cards *dmgCards)
+{
+
+    /* controllo se la carta salva è stata giocata
+    if (board->salva) {printf("La carta SALVA è stata giocata, nessun giocatore prende la carta danno\n");
+        return 0;
+    }
+    */
+
+    int max=board->temporay_scores[0];
+    int min=board->temporay_scores[0];
+    int mincount=0;
+    int index_max=0;
+    int index_min=0;
+    int tiemin=0;
+    int check=0;
+
+    Player *current=*head;
+
+    //ciclo per trovare il punteggio massimo e minimo controllo anche in caso di pareggio
+    for (int i = 0; i < board->numplayers; i++) {
+        if(board->temporay_scores[i]>max)
+        {
+            max=board->temporay_scores[i];
+            index_max=i;
+        }
+        if(board->temporay_scores[i]<min)
+        {
+            min=board->temporay_scores[i];
+            mincount=1;
+            index_min=i;
+        }else if(board->temporay_scores[i]==min)
+        {
+            mincount++;
+        }
+        current=current->next;
+    }
+
+
+    //assegno i punti ai giocatori vincitori
+    current=*head;
+    for (int i = 0; i < board->numplayers; ++i) {
+        if(board->temporay_scores[i]==max)
+        {
+            printf("Il giocatore %s ha vinto il turno con %d punti\n",current->username,board->temporay_scores[i]);
+            current->cfu_score+=board->temporay_scores[i];
+        }
+        current=current->next;
+    }
+
+    //controllo se c'è un pareggio per il punteggio minore
+    //aggiungo il caso in cui minore e maggiore sono uguali
+    //in questo caso nessun giocatore prende la carta danno
+    if(min==max)
+    {
+        return false;
+    }
+
+    current=*head;
+    //nessun pareggio per il punteggio minore
+    if(mincount==1)
+    {
+        //assegno la carta danno al giocatore con il punteggio minore
+
+        for (int i = 0; i < index_min; ++i) {
+            current=current->next;
+        }
+        printf("\n");
+        printf("```````````````````````````````\n");
+        printf("Il giocatore %s ha preso la carta danno\n",current->username);
+        printf("```````````````````````````````\n");
+        printf("\n");
+        add_dmg(current,board->draftedDMG);
+
+    }else
+    {
+        //pareggio per il punteggio minore
+        //turno di spareggio fra i giocatori in pareggio
+        //tie_turn(cfuCards, dmgCards, tie_players, scarti);
+        return true;
+    }
+
+    return false;
 }

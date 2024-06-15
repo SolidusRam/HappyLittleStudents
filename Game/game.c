@@ -180,7 +180,20 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
     //controllo se un player deve essere eliminato oppure ha vinto
-    //win_check(head_player, numplayers, dmgCards);
+    Player * player_to_delete;
+    player_to_delete=win_check(head_player, numplayers, dmgCards);
+
+
+    //eliminazione player
+    delete_player(&head_player,player_to_delete,scarti,&dmgCards);
+
+
+    //controllo se rimane un solo player
+    if(count_players(head_player)==1)
+    {
+        printf("Il giocatore %s ha vinto la partita",head_player->username);
+        game_over();
+    }
 
     /*
     if(temp_player==NULL)
@@ -283,7 +296,7 @@ int game_over(){
     return 0;
 }
 
-void win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
+Player * win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
 {
     /*
     Vince la partita il primo studente che arriva a 60 CFU o l’ultimo che non ha fatto rinuncia agli studi.
@@ -307,7 +320,10 @@ void win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
         current=current->next;
     }
 
+    printf("\n");
     printf("fine controllo vincitore\n");
+    printf("\n");
+
 
     //controllo se un player deve essere eliminato
     current=head_player;
@@ -323,28 +339,14 @@ void win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
         int check=dmg_count(count);
         //controllo se il giocatore è morto
         if (check==1) {
-            printf("Il giocatore %s è stato eliminato", current->username);
+            printf("Il giocatore %s e' stato eliminato", current->username);
             //elimino il giocatore
-            Player *temp = current;
-            current = current->next;
-            free(temp);
-            //rimetto le carte ostacolo in fondo al mazzo
-            DMG_cards *tmpMazzo = dmgMazzo;
-            while (tmpMazzo->next != NULL) {
-                tmpMazzo = tmpMazzo->next;
-            }
-            tmpMazzo->next = current->dmg;
+            return current;
+
         }
         current = current->next;
     }
 
-    //controllo se un player è rimasto solo
-    current=head_player;
-    if(current->next==NULL)
-    {
-        printf("Il giocatore %s ha vinto la partita rimanendo l'unico in gioco",current->username);
-        game_over();
-    }
 }
 
 

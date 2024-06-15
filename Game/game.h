@@ -23,7 +23,7 @@ void fillCFUCards(Player *player, CFU_Cards ** deck_head_ref) ;
 
 bool conteggi(Board *board,Player **head,DMG_cards *dmgCards);
 
-void win_check(Player* head,int numplayers,DMG_cards *scarti);
+Player * win_check(Player* head,int numplayers,DMG_cards *scarti);
 
 int dmg_count( int *dmg);
 

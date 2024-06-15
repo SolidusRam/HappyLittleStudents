@@ -368,10 +368,15 @@ void print_card_info(CFU_Cards *card) {
     }
 }
 
+
+/**
+ * \brief add_dmg aggiunge una carta danno alla lista carte danno del giocatore
+ * @param player puntatore al giocatore
+ * @param new_card puntatore alla carta danno da aggiungere
+ */
+
 void add_dmg(Player*player,DMG_cards*new_card)
 {
-
-
 
     if (player == NULL || new_card == NULL) {
         printf("Error: Null pointer passed to add_dmg\n");
@@ -405,29 +410,53 @@ void add_dmg(Player*player,DMG_cards*new_card)
         }
 
     }
-
-
 }
 
-void delete_player(Player *head, Player *player) {
+
+/**
+ *  \brief delete_player rimuove un giocatore dalla lista dei giocatori
+ *  Le carte del giocatore vengono scartate e aggiunte agli scarti
+ *  Le carte danno vengono rimesse in fondo al mazzo degli scarti
+ *  @param head puntatore al primo giocatore della lista
+ *  @param player giocatore da rimuovere
+ *  @param scarti puntatore alla lista degli scarti
+ *  @param dmg puntatore alla lista delle carte danno
+ *  @return void
+ */
+
+void delete_player(Player **head, Player *player, CFU_Cards **scarti, DMG_cards **dmg) {
     if (head == NULL || player == NULL) {
         printf("Error: Null pointer passed to delete_player\n");
         return;
     }
 
-    Player *current = head;
+    Player *current = *head;
     Player *prev = NULL;
 
     while (current != NULL) {
         if (current == player) {
+            // Remove the player from the list
             if (prev == NULL) {
-                head = current->next;
+                *head = current->next;
             } else {
                 prev->next = current->next;
             }
 
-            free_cards(current->hand);
-            free_dmg_cards(current->dmg);
+            // Add the player's CFU cards to the discard pile
+            CFU_Cards *current_card = current->hand;
+            while (current_card != NULL) {
+                CFU_Cards *next_card = current_card->next;
+                add_card_to_scarti(scarti, current_card);
+                current_card = next_card;
+            }
+
+            // Add the player's obstacle cards to the discard pile
+            DMG_cards *current_dmg = current->dmg;
+            while (current_dmg != NULL) {
+
+            }
+
+            // Free the player
             free(current);
             return;
         }
@@ -436,6 +465,7 @@ void delete_player(Player *head, Player *player) {
         current = current->next;
     }
 }
+
 
 void add_player(Player **head, Player *new_player) {
     if (head == NULL || new_player == NULL) {

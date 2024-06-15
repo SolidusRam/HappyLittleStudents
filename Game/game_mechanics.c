@@ -42,6 +42,7 @@ DMG_cards *draw_DMG(DMG_cards *head){
     else
     {
         printf("Il mazzo delle carte danno e vuoto\n");
+        //funzione di rimescolamento
         exit(3);
     }
 

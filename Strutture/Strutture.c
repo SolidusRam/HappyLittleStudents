@@ -445,16 +445,23 @@ void delete_player(Player **head, Player *player, CFU_Cards **scarti, DMG_cards 
             // Add the player's CFU cards to the discard pile
             CFU_Cards *current_card = current->hand;
             while (current_card != NULL) {
-                CFU_Cards *next_card = current_card->next;
+                CFU_Cards *next_card = (CFU_Cards *) current_card->next;
                 add_card_to_scarti(scarti, current_card);
                 current_card = next_card;
             }
 
-            // Add the player's obstacle cards to the discard pile
-            DMG_cards *current_dmg = current->dmg;
-            while (current_dmg != NULL) {
+            // Aggiungo le carte danno alla fine del mazzo delle carte danno
 
+            DMG_cards *last_dmg = *dmg;
+            if (last_dmg == NULL) {
+                *dmg = current->dmg;
+            } else {
+                while (last_dmg->next != NULL) {
+                    last_dmg = last_dmg->next;
+                }
+                last_dmg->next = current->dmg;
             }
+
 
             // Free the player
             free(current);

@@ -293,7 +293,7 @@ void fillCFUCards(Player *player, CFU_Cards **deck_head_ref) {
 
 int game_over(){
     printf("\nGame over\n");
-    return 0;
+    exit(0) ;
 }
 
 Player * win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)

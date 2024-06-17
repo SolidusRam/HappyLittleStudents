@@ -79,13 +79,6 @@ int main() {
 
 
 
-//    //stampa dei giocatori
-//    Player *temp=players;
-//    for (int i = 0; i < num_players; ++i) {
-//        print_player(temp);
-//        temp=temp->next;
-//    }
-
     printf("inizio della partita\n");
     int turn_number=0;
 

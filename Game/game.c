@@ -70,13 +70,13 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     initializeBoard(&board,numplayers);
     Player *temp_player=head_player;
 
-
     for (int i = 0; i < numplayers; ++i) {
         board.temporay_scores[i]=0;
     }
 
 //    printf("Stampa delle carte scartate\n");
 //    print_cards(*scarti);
+
 
 
     //salvataggio stato in file.save
@@ -103,17 +103,25 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
         //mostra le informazioni sul giocatore attuale
         printf("Turno del Giocatore: %s \n",temp_player->username);
         printf("Il tuo personaggio: %s \n",temp_player->character.name);
+
+
         //selettore dell'azione contestuale
-        //int action=ask_for_action();
-        //controllo lazione ed eseguo le prime 2
-        //check_action(action,temp_player,head_player);
-        //if(action==1)
-        //{
-        //gioco la carta CFU
+//        int action=ask_for_action();
+//
+////        controllo lazione ed eseguo le prime 2
+//        check_action(action,temp_player,head_player);
+//        if(action==1)
+//        {
+////        gioco la carta CFU
+//        playCFU(temp_player,&scarti,&board,i);
+//        //}
+//        temp_player=temp_player->next;
+//        }
+
+
         playCFU(temp_player,&scarti,&board,i);
-        //}
-        temp_player=temp_player->next;
     }
+
 
 
 
@@ -256,7 +264,6 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
     Player *current = *head_player;
     char *username=malloc(sizeof(char)*MAX_CHAR);
     player_username(username);
-    clear();
     strcpy(current->username,username);
 
     fillCFUCards(current,cfuCards);
@@ -266,7 +273,6 @@ void setup_game(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,C
         current=current->next;
         current->character=character[i+1];
         player_username(current->username);
-        clear();
         fillCFUCards(current,cfuCards);
     }
     current->next=NULL;

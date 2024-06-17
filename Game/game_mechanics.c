@@ -32,6 +32,19 @@ void draw(Player *head, CFU_Cards **deck_head_ref)
 }
 
 DMG_cards *draw_DMG(DMG_cards *head){
+
+
+
+    //se nel mazzo non ci sono piu' carte, le carte vengono mescolate
+    if(head==NULL)
+    {
+        printf("Mazzo carte ostacolo vuoto, le carte vengono mescolate\n");
+        head=dmg_reading();
+//        shuffleDmg(&head);
+
+    }
+
+
     //per ora solo stampa
     if(head!=NULL) {
         printf("Name: %s\n", head->name);
@@ -82,12 +95,7 @@ void peek_players(Player *current,Player *head_player){
         if(current->character.name!=temp->character.name)
         {
             printf("%s ha %d punti dallo scorso turno, e tot danni\n",temp->username,temp->cfu_score);
-            DMG_cards *tmpdmg=temp->dmg;
-            while (tmpdmg!=NULL)
-            {
-                printf("Carta danno: %s\n",current->dmg->name);
-                tmpdmg=tmpdmg->next;
-            }
+            print_dmg_cards(temp->dmg);
         }
         temp=temp->next;
     }
@@ -111,16 +119,15 @@ void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
 
     int scelta=1;
 
-    /*
+
     do {
         scelta=ask_for_card();
-
+        clear();
     } while (check_card(scelta,player->hand));
 
      for (int i = 1; i < scelta; ++i) {
-        temp = temp->next;
+        temp_cards = (CFU_Cards *) temp_cards->next;
     }
-    */
 
 
     //aggiungo la carta in gioco

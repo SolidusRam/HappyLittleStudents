@@ -85,6 +85,7 @@ int ask_for_action(){
         printf("scegli un opzione con un numero da 1 a 3");
         printf("->");
         scanf("%d",&num);
+        clear();
         if (!(num >= 1 && num <= 3))
             printf("Scegli un opzione con un numero da 1 a 3");
     } while (!(num >= 1 && num <= 3));

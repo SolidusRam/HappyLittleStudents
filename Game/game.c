@@ -23,6 +23,7 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
 
     char *testone="testOne";
     char *testtwo="testTwo";
+    char *testthree="testThree";
 
     //creo il primo player
     *head_player = create_player();
@@ -37,13 +38,21 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
 
     for (int i = 1; i < num_players; i++) {
         current->next = create_player();
+        if(i==1)
+        {
+            current->next->character=character[i];
+            strcpy(current->next->username,testtwo);
+        }
+        else
+        {
+            current->next->character=character[i];
+            strcpy(current->next->username,testthree);
+        }
         current = current->next;
         current->character = character[i];
         fillCFUCards(current, cfuCards);
-
     }
 
-    strcpy(current->username,testtwo);
     current->next=NULL;
 
 
@@ -63,7 +72,7 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
 }
 
 
-int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti)
+void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti)
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
     Board board={0};
@@ -73,9 +82,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     for (int i = 0; i < numplayers; ++i) {
         board.temporay_scores[i]=0;
     }
-
-//    printf("Stampa delle carte scartate\n");
-//    print_cards(*scarti);
 
 
 
@@ -88,6 +94,15 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     printf("Premi un tasto per continuare\n");
     clear();
 
+
+    //stampo tutti i player DEBUG
+    temp_player=head_player;
+    while (temp_player!=NULL)
+    {
+        print_player(temp_player);
+        temp_player=temp_player->next;
+    }
+    temp_player=head_player;
 
 
     //estrazione carta danno
@@ -120,6 +135,7 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
         playCFU(temp_player,&scarti,&board,i);
+        temp_player=temp_player->next;
     }
 
 
@@ -158,27 +174,28 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     //preparo la prossima carta danno
 
 
-    //controllo se c'è un pareggio fra i perdenti
-//    if(tie_points==true)
-//    {
-//        //si avvia il turno di spareggio
-//        Player *tie_players=head_player;
-//        temp_player=head_player;
-//        while (temp_player!=NULL)
-//        {
-//            if(temp_player->cfu_score==tie_points)
-//            {
-//                printf("Turno di spareggio per il giocatore %s\n",temp_player->username);
-//                //salvo il giocatore in una lista di giocatori in pareggio
-//                tie_players=temp_player;
-//                tie_players->next=NULL;
-//                tie_players=tie_players->next;
-//            }
-//            temp_player=temp_player->next;
-//        }
-//
-//        tie_turn(cfuCards, dmgCards, tie_players, *scarti);
-//    }
+    //spareggio
+    //tiepoints vale true'
+    //nessun controllo sul numero della carta giocata 5=crash
+    temp_player=head_player;
+    int count_tie=0;
+    while (tie_points==true)
+    {
+        memset(board.temporay_scores,0,numplayers*sizeof(int));
+        printf("Spareggio\n");
+        for (int i = 0; i < numplayers; i++) {
+
+            if(board.temporay_scores[i]==board.lowest_score)
+            {
+                playCFU(temp_player,&scarti,&board,i);
+
+            } else{
+                board.temporay_scores[i]=NONTIE;
+            }
+            temp_player=temp_player->next;
+        }
+        conteggi(&board,&head_player,dmgCards);
+    }
 
 
     printf("Stampa dopo il conteggio\n");
@@ -213,7 +230,6 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
 
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori
-    // (occhio alle stampe di debung)
 
     temp_player=head_player;
     while (temp_player!=NULL)
@@ -223,19 +239,11 @@ int turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_n
     }
 
 
-
-    temp_player=head_player;
-    while (temp_player!=NULL)
-    {
-        print_player(temp_player);
-        temp_player=temp_player->next;
-    }
-
     //codice di uscita !=0
-//    free(board.ingame_cards);
-//    free(board.temporay_scores);
-//    free(board.flags);
-    return 1;
+    free(board.ingame_cards);
+    free(board.temporay_scores);
+    free(board.flags);
+    free(board.base_scores);
 }
 
 
@@ -412,7 +420,7 @@ void tie_turn(CFU_Cards **cfuCards, DMG_cards *dmgCards, Player *head_player, CF
     temp_player=head_player;
     for (int i = 0; i < numplayers; ++i) {
         //mostra le informazioni sul giocatore attuale
-        printf("Turno del Giocatore: %s \n",temp_player->username);
+        printf("Turno di spareggio per il Giocatore: %s \n",temp_player->username);
         //selettore dell'azione contestuale
         //int action=ask_for_action();
         //controllo lazione ed eseguo le prime 2

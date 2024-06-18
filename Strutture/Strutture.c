@@ -425,10 +425,6 @@ void add_dmg(Player*player,DMG_cards*new_card)
  */
 
 void delete_player(Player **head, Player *player, CFU_Cards **scarti, DMG_cards **dmg) {
-    if (head == NULL || player == NULL) {
-        printf("Error: Null pointer passed to delete_player\n");
-        return;
-    }
 
     Player *current = *head;
     Player *prev = NULL;

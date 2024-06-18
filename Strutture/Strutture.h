@@ -11,6 +11,7 @@
 #define MAX_CHAR 32
 #define DESC_MAX_CHAR 128
 #define HAND 5
+#define NONTIE 999
 #define TOTALCFU 74
 #define TOTALDMG 28
 
@@ -92,6 +93,7 @@ typedef struct Board{
     CFU_Cards **ingame_cards;
     DMG_cards *draftedDMG;
     int *flags;
+    int lowest_score;
     bool molt;                   //molt è un flag che indica se il giocatore ha giocato una carta DOPPIOE o AUMENTA o DIMINUISCI
     bool annulla;               //flag che indica se il giocatore ha giocato una carta ANNULLA
     bool salva;                 //flag che indica se il giocatore ha giocato una carta SALVA

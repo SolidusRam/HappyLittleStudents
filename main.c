@@ -70,7 +70,7 @@ int main() {
 
         //setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
-        num_players=2;
+        num_players=3;
         setup_game_test(&cfuCards,&dmgCards,&players,characters,num_players);
 
         //pesco le carte dal mazzo direttamente nel setup

@@ -47,6 +47,7 @@ DMG_cards *draw_DMG(DMG_cards *head){
 
     //per ora solo stampa
     if(head!=NULL) {
+        printf("Carta ostacolo pescata:\n");
         printf("Name: %s\n", head->name);
         printf("Description: %s\n", head->desc);
         printf("Type: %d\n", head->type);
@@ -142,7 +143,8 @@ void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
     int tipo=board->draftedDMG->type;
     int bonus_char = player->character.bonus[tipo];
 
-    board->temporay_scores[nplayer]=score+bonus_char;
+    //board->temporay_scores[nplayer]=score+bonus_char;
+    board->temporay_scores[nplayer]=score;
     board->base_scores[nplayer]=score;
 
     printf("\n");
@@ -177,7 +179,7 @@ int check_card(int choice,CFU_Cards*hand){
     int isvalid=0;
 
     for (int i = 1; i < choice; ++i) {
-        tmp=tmp->next;
+        tmp= (CFU_Cards *) tmp->next;
     }
     isvalid = validate(tmp);
 
@@ -414,7 +416,10 @@ bool conteggi(Board*board,Player**head,DMG_cards *dmgCards)
         if(board->temporay_scores[i]==max)
         {
             printf("Il giocatore %s ha vinto il turno con %d punti\n",current->username,board->temporay_scores[i]);
-            current->cfu_score+=board->temporay_scores[i];
+            if(max!=NONTIE)
+            {
+                current->cfu_score+=board->temporay_scores[i];
+            }
         }
         current=current->next;
     }
@@ -445,9 +450,9 @@ bool conteggi(Board*board,Player**head,DMG_cards *dmgCards)
 
     }else
     {
-        //pareggio per il punteggio minore
-        //turno di spareggio fra i giocatori in pareggio
-        //tie_turn(cfuCards, dmgCards, tie_players, scarti);
+        //aggiungo i giocatori in pareggio in una lista all'interno della struttura board
+        //il turno verrà ripetuto fra i giocatori in pareggio
+        board->lowest_score=min;
         return true;
     }
 

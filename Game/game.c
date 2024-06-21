@@ -34,8 +34,6 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
     //player_username(current->username);
     fillCFUCards(current,cfuCards);
 
-    //forzatura sull'effetto
-
     for (int i = 1; i < num_players; i++) {
         current->next = create_player();
         if(i==1)
@@ -113,38 +111,39 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     board.draftedDMG->next=NULL;
 
     //azioni giocatore fase di gioco CFU
-
-    for (int i = 0; i < numplayers; ++i) {
-        //mostra le informazioni sul giocatore attuale
-        printf("Turno del Giocatore: %s \n",temp_player->username);
-        printf("Il tuo personaggio: %s \n",temp_player->character.name);
-
-
-        //selettore dell'azione contestuale
-//        int action=ask_for_action();
+    //disattivato per controllo effetti
+//    for (int i = 0; i < numplayers; ++i) {
+//        //mostra le informazioni sul giocatore attuale
+//        printf("Turno del Giocatore: %s \n",temp_player->username);
+//        printf("Il tuo personaggio: %s \n",temp_player->character.name);
 //
-////        controllo lazione ed eseguo le prime 2
-//        check_action(action,temp_player,head_player);
-//        if(action==1)
-//        {
-////        gioco la carta CFU
+//
+//        //selettore dell'azione contestuale
+////        int action=ask_for_action();
+////
+//////        controllo lazione ed eseguo le prime 2
+////        check_action(action,temp_player,head_player);
+////        if(action==1)
+////        {
+//////        gioco la carta CFU
+////        playCFU(temp_player,&scarti,&board,i);
+////        //}
+////        temp_player=temp_player->next;
+////        }
+//
+//
 //        playCFU(temp_player,&scarti,&board,i);
-//        //}
 //        temp_player=temp_player->next;
-//        }
+//    }
 
-
-        playCFU(temp_player,&scarti,&board,i);
-        temp_player=temp_player->next;
-    }
 
 
 
 
     //Warning
     //le carte scarti perdono il nome
-    printf("Stampa delle carte scartate\n");
-    print_cards(*scarti);
+//    printf("Stampa delle carte scartate\n");
+//    print_cards(*scarti);
 
     //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
     //carte
@@ -153,9 +152,18 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     // in questa fase i giocatori con carte con effetti hanno la possibilità
     // di giocare l'effetto
 
+    //carte di prova
+    CFU_Cards cartaDebugNESSUNO={"cartaDebugNESSUNO",10,SCARTAP,NULL};
+
+    CFU_Cards cartaDebug={"cartaDebug",10,ANNULLA,NULL};
+
+    board.ingame_cards[0]=&cartaDebug;
+    board.ingame_cards[1]=&cartaDebugNESSUNO;
+    //fine carte di prova
+
     //effetti giocatore
     temp_player=head_player;
-    //effects(temp_player,&cfuCards,&scarti,&board,numplayers);
+    effects(temp_player,*cfuCards,scarti,&board,numplayers);
 
 
     //fase di attivazione delle carte istantanee
@@ -237,6 +245,18 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
         draw(temp_player,cfuCards);
         temp_player=temp_player->next;
     }
+
+
+    //stampo tutti i player DEBUG
+    temp_player=head_player;
+    while (temp_player!=NULL)
+    {
+        print_player(temp_player);
+        temp_player=temp_player->next;
+    }
+    //stampo le carte scartate
+    printf("Stampa delle carte scartate\n");
+    print_cards(*scarti);
 
 
     //codice di uscita !=0

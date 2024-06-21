@@ -5,7 +5,7 @@
 #include "Game/game_mechanics.h"
 #include "Game/game.h"
 
-void effect_NESSUNO(Board*board,int card_index);
+void effect_NESSUNO();
 
 //Scambia la carta punto giocata nel turno da un giocatore G1 con quella di un giocatore G2, con G1 e G2
 //scelti dal giocatore che ha giocato la carta SCAMBIAC
@@ -17,8 +17,8 @@ void effect_SBIRCIA(Player *current, CFU_Cards *mazzo, CFU_Cards **scarti);
 //Scambia il punteggio del turno maggiore e minore dopo il calcolo del punteggio di base
 void effect_SCAMBIAP(Board *board);
 
-//Scarta da uno a tre carte dalla tua mano
-void effect_SCAMBIADS(Board *board,int index);
+//Scambia la carta con un altro giocatore a scelta
+void effect_SCAMBIADS(Player *current,Player *head,Board *board,int index);
 
 //Scarta da uno a tre carte dalla tua mano
 void effect_SCARTAC(Player *current, CFU_Cards **scarti);

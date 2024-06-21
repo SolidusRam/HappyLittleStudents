@@ -50,6 +50,7 @@ int main() {
 
 
 
+
     //chiedo se si vuole leggere e caricare il file di salvataggio
     //game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
@@ -70,7 +71,7 @@ int main() {
 
         //setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
-        num_players=3;
+        num_players=2;
         setup_game_test(&cfuCards,&dmgCards,&players,characters,num_players);
 
         //pesco le carte dal mazzo direttamente nel setup
@@ -80,15 +81,20 @@ int main() {
 
 
     printf("inizio della partita\n");
-    int turn_number=0;
 
-    while (turn_number<10){
-        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+    turn(&cfuCards,dmgCards,players,0,num_players ,&scarti);
 
-        dmgCards=dmgCards->next;
 
-        turn_number++;
-    }
+//    int turn_number=0;
+//
+//    while (turn_number<10){
+//        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+//
+//        dmgCards=dmgCards->next;
+//
+//        turn_number++;
+//    }
+
 
 
 

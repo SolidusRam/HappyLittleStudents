@@ -3,54 +3,79 @@
 #include "effects.h"
 
 void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int effect, int card_index) {
+    //stampe doi controllo
+
+    printf("--------debug dentro effects application---------\n");
+    printf("Nome player: %s\n", current_player->username);
+    printf("Prima carta del mazzo: %s\n", mazzo->name);
+    printf("Prima carta degli scarti: %s\n", (*scarti)->name);
+    printf("Indice carta: %d\n", card_index);
+    printf("Carta in gioco: %s\n", board->ingame_cards[card_index]->name);
+
     // Switch on the effect code
     switch (effect) {
         case NESSUNO:
-            effect_NESSUNO(board,card_index);
+            printf("Effetto NESSUNO\n");
+            effect_NESSUNO();
             break;
         case SCARTAP:
+            printf("Effetto SCARTAP\n");
             effect_SCARTAP(current_player, scarti, board,card_index);
             break;
         case RUBA:
+            printf("Effetto RUBA\n");
             effect_RUBA(current_player, head, board);
             break;
         case SCAMBIADS:
-            effect_SCAMBIADS(board,card_index);
+            printf("Effetto SCAMBIADS\n");
+            effect_SCAMBIADS(current_player,head,board,card_index);
             break;
         case SCARTAE:
+            printf("Effetto SCARTAE\n");
             effect_SCARTAE(current_player, head, mazzo, scarti, board,card_index);
             break;
         case SCARTAC:
+            printf("Effetto SCARTAC\n");
             effect_SCARTAC(current_player, scarti);
             break;
         case SCAMBIAP:
+            printf("Effetto SCAMBIAP\n");
             effect_SCAMBIAP(board);
             break;
         case DOPPIOE:
+            printf("Effetto DOPPIOE\n");
             effect_DOPPIOE(board);
             break;
         case SBIRCIA:
+            printf("Effetto SBIRCIA\n");
             effect_SBIRCIA(current_player, mazzo, scarti);
             break;
         case SCAMBIAC:
+            printf("Effetto SCAMBIAC\n");
             effect_SCAMBIAC(current_player, head, board);
             break;
         case ANNULLA:
+            printf("Effetto ANNULLA\n");
             effect_ANNULLA(board);
             break;
         case AUMENTA:
+            printf("Effetto AUMENTA\n");
             effect_AUMENTA(current_player, head, board);
             break;
         case DIMINUISCI:
+            printf("Effetto DIMINUISCI\n");
             effect_DIMINUISCI(current_player, head, board);
             break;
         case INVERTI:
+            printf("Effetto INVERTI\n");
             effect_INVERTI(board);
             break;
         case SALVA:
+            printf("Effetto SALVA\n");
             effect_SALVA(current_player, head, mazzo, scarti, board);
             break;
         case DIROTTA:
+            printf("Effetto DIROTTA\n");
             effect_DIROTTA(current_player, head, board);
             break;
 
@@ -58,17 +83,19 @@ void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo,
             printf("Errore nell'applicazione dell'effetto, codice effetto non consentito\n");
             exit(333);
     }
+
+    printf("Effetto applicato\n");
 }
 
 
-void effect_NESSUNO(Board *board, int index)
+void effect_NESSUNO()
 {
-    board->temporay_scores+= board->ingame_cards[index]->cfu_points;
-}
-
+    }
+//done
 //funzione che permette di scartare una carta e aggiungere il suo valore al punteggio temporaneo
 void effect_SCARTAP(Player *current,CFU_Cards **scarti,Board *board,int index)
 {
+    CFU_Cards *mano=current->hand;
     int score=0;
     printf("Scarta una carta\n");
     print_cards(current->hand);
@@ -79,21 +106,27 @@ void effect_SCARTAP(Player *current,CFU_Cards **scarti,Board *board,int index)
         printf("Scelta non valida, riprova\n");
         scanf("%d",&choice);
     }
-    score=current->hand[choice-1].cfu_points;
+    for (int i = 1; i < choice; ++i) {
+        mano= (CFU_Cards *) mano->next;
+    }
+    score=mano->cfu_points;
     board->temporay_scores[index]+=score;
-    add_card_to_scarti(scarti,&current->hand[choice-1]);
-    remove_card_from_hand(current, (CFU_Cards *) (choice - 1));
     if(board->molt==true)
     {
-        printf("Effetto DOPPIOE attivo, il punteggio viene raddoppiato\n");
         board->temporay_scores[index]+=score;
     }
-}
+    add_card_to_scarti(scarti,mano);
 
+
+}
+//done
 //guarda la mano di un altro giocatore e ruba una carta a scelta
 void effect_RUBA(Player *current, Player *head, Board *board)
 {
     int choice;
+    CFU_Cards *carta_rubata=NULL;
+
+    //chiedo a quale giocatore si vuole rubare la carta
     printf("Da quale giocatore vuoi rubare una carta?\n");
     peek_players(current,head);
     scanf("%d",&choice);
@@ -102,12 +135,15 @@ void effect_RUBA(Player *current, Player *head, Board *board)
         printf("Scelta non valida, riprova\n");
         scanf("%d",&choice);
     }
+    //scorro la lista fino al giocatore scelto
     Player *player_to_steal=head;
-    for (int i = 0; i < choice-1; ++i) {
+    for (int i = 0; i < choice; ++i) {
         player_to_steal=player_to_steal->next;
     }
+    carta_rubata=player_to_steal->hand;
     printf("Carte di %s\n",player_to_steal->username);
     print_cards(player_to_steal->hand);
+    //chiedo quale carta si vuole rubare
     printf("Quale carta vuoi rubare?\n");
     int card_choice;
     scanf("%d",&card_choice);
@@ -116,90 +152,137 @@ void effect_RUBA(Player *current, Player *head, Board *board)
         printf("Numero non valido\n");
         scanf("%d",&card_choice);
     }
-
+    //scorro la lista fino alla carta scelta
     for (int i = 0; i < card_choice-1; ++i) {
-        player_to_steal->hand= (CFU_Cards *) player_to_steal->hand->next;
+        carta_rubata= (CFU_Cards *) carta_rubata->next;
     }
-    add_card_to_hand(current,player_to_steal->hand);
-    remove_card_from_hand(player_to_steal,card_choice-1);
+    printf("Hai rubato la carta %s a %s\n",carta_rubata->name,player_to_steal->username);
+
+
+    //rimuovo la carta dalla mano del giocatore scelto e la aggiungo alla mano del giocatore corrente
+    remove_card_from_hand(player_to_steal,carta_rubata);
+    print_cards(player_to_steal->hand);
+    add_card_to_hand(current,carta_rubata);
+
+
+    printf("Hai rubato la carta %s a %s\n",carta_rubata->name,player_to_steal->username);
+
 }
 
-//scambia la carta giocata con quella di un altro giocatore a scelta
-//la carta da scambiare e fra quelle in gioco
-void effect_SCAMBIADS(Board *board,int index)
+//scambia la carta giocata con quella di un altro giocatore a scelta purche senza effetto
+void effect_SCAMBIADS(Player *current,Player *head,Board *board,int index)
 {
     int choice;
-    printf("Con quale carta vuoi scambiare la tua?"
-           "(Devi scegliere una carta senza effetto\n");
-    for (int i = 0; i < board->numplayers; ++i) {
-        print_card_info(board->ingame_cards[i]);
-    }
-    scanf("%d",&choice);
-    while (choice<1 || choice>board->numplayers-1)
-    {
-        if(choice==index)
-        {
-            printf("Non puoi scambiare con te stesso\n");
+    int scelta_effetto=0;
+
+    CFU_Cards *carta_scambio;
+    Player *player_to_steal = head;
+
+
+    do {
+        scelta_effetto = 0;
+        printf("Scegli un giocatore con cui scambiare la carta\n");
+        peek_players(current, head);
+        scanf("%d", &choice);
+        while (choice < 1 || choice > board->numplayers - 1) {
+            printf("Scelta non valida, riprova\n");
+            scanf("%d", &choice);
         }
-        printf("Scelta non valida, riprova\n");
-        scanf("%d",&choice);
-    }
-    //scambio
-    swap(board->ingame_cards[index],board->ingame_cards[choice-1]);
+
+        //scorro la lista fino al giocatore scelto
+        for (int i = 0; i < choice; ++i) {
+            player_to_steal = player_to_steal->next;
+        }
+        do {
+            carta_scambio = player_to_steal->hand;
+            printf("Carte di %s\n", player_to_steal->username);
+            print_cards(player_to_steal->hand);
+
+            //chiedo quale carta si vuole rubare
+            printf("Quale carta vuoi scambiare?\n");
+            int card_choice;
+            scanf("%d", &card_choice);
+            while (card_choice < 1 || card_choice > HAND) {
+                printf("Numero non valido\n");
+                scanf("%d", &card_choice);
+            }
+            //raggiungo la carta scelta
+            for (int i = 0; i < card_choice - 1; ++i) {
+                carta_scambio = (CFU_Cards *) carta_scambio->next;
+            }
+            //controllo che la carta scelta non abbia effetti
+            if (carta_scambio->effect != NESSUNO) {
+                printf("La carta scelta ha un effetto, non puoi scambiarla\n");
+                printf("Vorresti scegliere un'altra carta?[1]\n"
+                       "Oppure scegliere un altro giocatore?[2]\n"
+                       "Premi 3 per uscire\n");
+                scanf("%d", &scelta_effetto);
+                while (scelta_effetto < 1 || scelta_effetto > 3) {
+                    printf("Scelta non valida, riprova\n");
+                    scanf("%d", &scelta_effetto);
+                }
+                if (scelta_effetto == 3) {
+                    return;
+                }
+            }
+        } while (scelta_effetto == 1);
+    }while(scelta_effetto==2);
+
+
+    //scambio le carte
+    CFU_Cards *temp = board->ingame_cards[index];
+    board->ingame_cards[index]=carta_scambio;
+    remove_card_from_hand(player_to_steal,carta_scambio);
+    board->temporay_scores[index]=carta_scambio->cfu_points;
+    add_card_to_hand(player_to_steal,temp);
+
 }
 
 //Scarta una carta CFU punto con effetto e aggiungi il suo punteggio a quello del turno
 void effect_SCARTAE(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board,int index)
 {
+
+    CFU_Cards *mano=current->hand;
     int score=0;
     printf("Scarta una carta\n");
     print_cards(current->hand);
-    CFU_Cards *mano=current->hand;
     int choice;
     scanf("%d",&choice);
-    //scorro la lista mano per vedere se il giocatore può scartare la carta
-    //quindi controllo se ha in mano almeno una carta con effetto
-    int count=0;
-    for (int i = 0; i < HAND-1; ++i) {
-        if(mano->effect!=NESSUNO)
-        {
-           count++;
-        }
-        mano= (CFU_Cards *) mano->next;
-    }
-
-    if(count==0)
-    {
-        printf("Non hai in mano carte con effetto, l'effetto non viene attivato\n");
-        return;
-    }
     while(choice<1 || choice>HAND)
     {
-        printf("Numero non valido, riprova\n");
+        printf("Scelta non valida, riprova\n");
         scanf("%d",&choice);
     }
-    //controllo che la carta scelta abbia un effetto
-    //scorro la lista mano fino alla carta scelta
-    mano=current->hand;
-    for (int i = 0; i < HAND-1; ++i) {
-        if(mano->effect==NESSUNO)
-        {
-            printf("Devi scartare una carta con effetto\n");
-            scanf("%d",&choice);
-            mano=current->hand;
-        }
+    for (int i = 1; i < choice; ++i) {
         mano= (CFU_Cards *) mano->next;
     }
+    //controllo che la carta abbia un effetto
+    if(mano->effect==NESSUNO)
+    {
+        printf("La carta scelta non ha effetti, scegli un'altra carta\n");
+        printf("Scegli un altra carta[1]\n"
+               "Oppure esci[2]\n");
+        int scelta;
+        scanf("%d",&scelta);
+        while(scelta<1 || scelta>2)
+        {
+            printf("Scelta non valida, riprova\n");
+            scanf("%d",&scelta);
+        }
+        if(scelta==2)
+        {
+            return;
+        }
+        effect_SCARTAE(current,head,mazzo,scarti,board,index);
+    }
 
-    score=current->hand[choice-1].cfu_points;
+    score=mano->cfu_points;
     board->temporay_scores[index]+=score;
-    add_card_to_scarti(scarti,&current->hand[choice-1]);
-    remove_card_from_hand(current,choice-1);
-
     if(board->molt==true)
     {
         board->temporay_scores[index]+=score;
     }
+    add_card_to_scarti(scarti,mano);
 }
 
 
@@ -208,6 +291,8 @@ void effect_SCARTAC(Player *current, CFU_Cards **scarti)
 {
     //chiedo quante carte si vogliono scartare
     int choice = 0;
+    printf("la tua mano\n");
+    print_cards(current->hand);
     printf("Quante carte vuoi scartare?\n");
     scanf("%d",&choice);
     while (choice<1 || choice>3)
@@ -226,40 +311,47 @@ void effect_SCARTAC(Player *current, CFU_Cards **scarti)
             scanf("%d",&card_choice);
         }
         add_card_to_scarti(scarti,&current->hand[card_choice-1]);
-        remove_card_from_hand(current,card_choice-1);
+        remove_card_from_hand(current,&current->hand[card_choice-1]);
     }
 }
 
+//done
 //effetto SCAMBIAP
 //scambia il punteggio maggiore e minore dopo il calcolo del punteggio di base
 void effect_SCAMBIAP(Board *board)
 {
-    int max=0;
-    int min=0;
+    //debug
+    board->temporay_scores[0]=5;
+    board->temporay_scores[1]=0;
+
+    int max=board->temporay_scores[0];
+    int min=board->temporay_scores[0];
     int max_index=0;
     int min_index=0;
+
+    //trovo il massimo e il minimo
     for (int i = 0; i < board->numplayers; ++i) {
-        if(board->base_scores[i]>max)
+        if(board->temporay_scores[i]>max)
         {
-            max=board->base_scores[i];
+            max=board->temporay_scores[i];
             max_index=i;
         }
-        if(board->base_scores[i]<min)
+        if(board->temporay_scores[i]<min)
         {
-            min=board->base_scores[i];
+            min=board->temporay_scores[i];
             min_index=i;
         }
     }
-    int temp=board->base_scores[max_index];
-    board->base_scores[max_index]=board->base_scores[min_index];
-    board->base_scores[min_index]=temp;
+
+    int temp=board->temporay_scores[max_index];
+    board->temporay_scores[max_index]=board->temporay_scores[min_index];
+    board->temporay_scores[min_index]=temp;
 
     printf("I punteggi sono stati scambiati\n");
 }
 
 //effetto DOPPIOE
 //raddoppia gli effetti delle carte che aumentano o diminuiscono il punteggio (per tutti)
-
 void effect_DOPPIOE(Board *board)
 {
     board->molt=true;
@@ -270,12 +362,13 @@ void effect_DOPPIOE(Board *board)
 
 void effect_SBIRCIA(Player *current, CFU_Cards *mazzo, CFU_Cards **scarti)
 {
-    CFU_Cards *temp=mazzo;
+    CFU_Cards *carta1=mazzo;
+    CFU_Cards *carta2= (CFU_Cards *) mazzo->next;
     printf("Guarda le due carte in cima al mazzo\n");
     printf("Carta 1\n");
-    print_card_info(temp);
+    print_card_info(carta1);
     printf("Carta 2\n");
-    print_card_info((CFU_Cards *) temp->next);
+    print_card_info((CFU_Cards *) carta2);
     printf("Quale carta vuoi prendere?\n");
     int choice;
     scanf("%d",&choice);
@@ -287,40 +380,32 @@ void effect_SBIRCIA(Player *current, CFU_Cards *mazzo, CFU_Cards **scarti)
     if(choice==1)
     {
         //aggiungo la carta 1 alla mano
-        add_card_to_hand(current,temp);
-        mazzo=temp->next;
+        add_card_to_hand(current, carta1);
         //scarto l'altra carta
-        add_card_to_scarti(scarti,temp->next);
-        //rimuovo la carta 2 dal mazzo facedo si che la carta 3 diventi la prima
-        CFU_Cards *temp2= (CFU_Cards *) temp->next;
-        mazzo= (CFU_Cards *) temp2->next;
+        add_card_to_scarti(scarti,carta2);
+
+        mazzo= (CFU_Cards *) carta2->next;
     }
     else
     {
         //aggiungo la carta 2 alla mano
-        add_card_to_hand(current, (CFU_Cards *) temp->next);
-        mazzo=temp;
+        add_card_to_hand(current, (CFU_Cards *) carta2);
         //scarto l'altra carta
-        add_card_to_scarti(scarti,temp);
-        //rimuovo la carta 1 dal mazzo facedo si che la carta 3 diventi la prima
-        CFU_Cards *temp2= (CFU_Cards *) temp->next;
-        mazzo= (CFU_Cards *) temp2->next;
+        add_card_to_scarti(scarti,carta1);
+
+        mazzo= (CFU_Cards *) carta2->next;
 
     }
 }
 
 void effect_ANNULLA(Board *board)
 {
-    for (int i = 0; i < board->numplayers; ++i) {
-        if(board->ingame_cards[i]->effect>=AUMENTA)
-        {
-            printf("Effetti annullati questo turno\n");
-            board->ingame_cards[i]->effect=NESSUNO;
-        }
-    }
     board->annulla=true;
 }
 
+
+//effetti per le carte instantanee
+//Aumenta di 2 CFU il punteggio del turno di un giocatore a scelta
 void effect_AUMENTA(Player *current, Player *head, Board *board)
 {
     printf("Aumenta di 2 CFU il punteggio del turno di un giocatore a scelta\n");
@@ -341,6 +426,7 @@ void effect_AUMENTA(Player *current, Player *head, Board *board)
     }
 }
 
+//Diminuisci di 2 CFU il punteggio del turno di un giocatore a scelta
 void effect_DIMINUISCI(Player *current, Player *head, Board *board)
 {
     printf("Diminuisci di 2 CFU il punteggio del turno di un giocatore a scelta\n");
@@ -359,6 +445,7 @@ void effect_DIMINUISCI(Player *current, Player *head, Board *board)
         board->temporay_scores[choice-1]-=2;
     }
 }
+
 //inverti il punteggio minimo e massimo del turno
 void effect_INVERTI(Board *board)
 {

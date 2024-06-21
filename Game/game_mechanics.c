@@ -245,6 +245,9 @@ void desc_order(int n, int base_score[n], int effect[n], Player* players[n]){
  *
  */
 void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int numplayer){
+    printf("--------------sei in effects-------------------\n");
+
+    printf("prima carta del mazzo: %s\n",mazzo->name);
     int base_score[numplayer];
     int effect[numplayer];
     Player* players[numplayer];
@@ -261,10 +264,15 @@ void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, in
     desc_order(numplayer, base_score, effect, players);
     for (int j = 0; j < numplayer; ++j) {
 
-        printf("Giocatore: %s, gioca la carta con effetto %d\n",players[j]->character.name,effect[j]);
-        printf("Nome carta %s",board->ingame_cards[j]->name);
+        printf("Giocatore: %s, si attiva l'effetto la carta %d\n",players[j]->character.name,effect[j]);
+        printf("Nome carta %s\n",board->ingame_cards[j]->name);
         effects_application(players[j], head, mazzo, scarti, board, effect[j],j);
-
+        if(board->annulla)
+        {
+            printf("L'effetto ANNULLA e' stato giocato, nessun effetto si attiva\n");
+            board->annulla=false;
+            break;
+        }
     }
 }
 

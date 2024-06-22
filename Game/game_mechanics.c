@@ -91,13 +91,29 @@ void peek_players(Player *current,Player *head_player){
 
     printf("Stampo le informazioni riguardanti i giocatori:\n");
     Player *temp=head_player;
+    int count=1;
     while(temp!=NULL)
     {
         if(current->character.name!=temp->character.name)
         {
-            printf("%s ha %d punti dallo scorso turno, e tot danni\n",temp->username,temp->cfu_score);
+            printf("[%d] %s ha %d punti dallo scorso turno, e tot danni\n",count,temp->username,temp->cfu_score);
             print_dmg_cards(temp->dmg);
+            count++;
         }
+        temp=temp->next;
+    }
+}
+
+void peek_all_players(Player *current,Player *head_player){
+
+    printf("Stampo le informazioni riguardanti i giocatori:\n");
+    Player *temp=head_player;
+    int count=1;
+    while(temp!=NULL)
+    {
+        printf("[%d] %s ha %d punti dallo scorso turno, e tot danni\n",count,temp->username,temp->cfu_score);
+        print_dmg_cards(temp->dmg);
+        count++;
         temp=temp->next;
     }
 }
@@ -162,14 +178,6 @@ void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
 
 
     add_card_to_scarti(*scarti,temp_cards);
-
-
-//
-//    printf("-----------------------\n");
-//    printf("-----------------------\n");
-//    printf("%s \n",player->username);
-//    print_cards(player->hand);
-//    printf("-----------------------\n");
 
 
 }
@@ -245,9 +253,6 @@ void desc_order(int n, int base_score[n], int effect[n], Player* players[n]){
  *
  */
 void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int numplayer){
-    printf("--------------sei in effects-------------------\n");
-
-    printf("prima carta del mazzo: %s\n",mazzo->name);
     int base_score[numplayer];
     int effect[numplayer];
     Player* players[numplayer];
@@ -278,33 +283,41 @@ void effects(Player*head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, in
 
 //controlla se il giocatore ha carte instantanee scorrendo la mano del giocatore
 //in caso positivo aggiorna il flag di board
-void player_has_instant(Player*head,CFU_Cards **scarti,Board*board){
+void player_has_instant(Player*head,Board*board,DMG_cards *dmgCards,CFU_Cards **scarti){
 
-    Player *current=head;
-    for (int i = 0; i < board->numplayers; ++i)
+    Player *player=head;
+    CFU_Cards *card=player->hand;
+
+    //se annullla è attivo non si attivano gli effetti
+    if (board->annulla) {
+        return;
+    }
+
+    //controllo per ogni carta in mano se è una carta instantanea
+    while(player!=NULL)
     {
-        CFU_Cards *temp=current->hand;
-        for (int j = 0; j < HAND; ++j) {
-            if(temp->effect>=AUMENTA)
+        card=player->hand;
+        while(card!=NULL)
+        {
+            if(card->effect>=AUMENTA && card->effect<=INVERTI)
             {
-                printf("Il giocatore %s ha una carta instantanea\n",current->username);
-                printf("Vuoi giocarla? 1 per si, 0 per no\n");
-                int choice;
-                scanf("%d",&choice);
-                while (choice!=1 && choice!=0)
-                {
-                    printf("Scelta non valida, riprova\n");
-                    scanf("%d",&choice);
-                }
+                printf("Il giocatore %s ha giocato una carta instantanea\n"
+                       "Vuoi giocare la carta instantanea?\n"
+                       "%s con effetto %d\n"
+                       "Si:[1] No:[2]",player->username,card->name, card->effect);
+                int choice=choose2();
                 if(choice==1)
                 {
-                    add_card_to_scarti(scarti,temp);
-                    effects_application(current,head,NULL,scarti,board,temp->effect,0);
+                    //questa funzione deve poter essere attivata con meno parametri
+                    instant_effects(player,head,&dmgCards,board,card->effect);
+                    add_card_to_scarti(scarti,card);
+                } else {
+                    printf("La carta instantanea non e' stata giocata\n");
                 }
             }
-            temp = temp->next;
+            card=(CFU_Cards *) card->next;
         }
-        current=current->next;
+        player=player->next;
     }
 }
 
@@ -379,14 +392,8 @@ void salva_dmg(DMG_cards *dmgCards){
  *
  */
 
-bool conteggi(Board*board,Player**head,DMG_cards *dmgCards)
+bool conteggi(Board*board,Player**head,CFU_Cards **scarti)
 {
-
-    /* controllo se la carta salva è stata giocata
-    if (board->salva) {printf("La carta SALVA è stata giocata, nessun giocatore prende la carta danno\n");
-        return 0;
-    }
-    */
 
     int max=board->temporay_scores[0];
     int min=board->temporay_scores[0];
@@ -449,6 +456,37 @@ bool conteggi(Board*board,Player**head,DMG_cards *dmgCards)
         for (int i = 0; i < index_min; ++i) {
             current=current->next;
         }
+        //controllo se il giocatore perdente ha la carta salva oppure la carta dirotta
+
+        CFU_Cards *temp=current->hand;
+        while(temp!=NULL)
+        {
+            if(temp->effect==SALVA)
+            {
+                printf("%s hai in mano la carta SALVA vuoi giocarla questo turno? SI[1]NO[2]\n",current->username);
+                int n=choose2();
+                if(n==1)
+                {
+                    effect_SALVA();
+                    add_card_to_scarti(scarti,temp);
+                    return false;
+                }
+            }
+            if(temp->effect==DIROTTA)
+            {
+                printf("%s hai in mano la carta DIROTTA vuoi giocarla questo turno? SI[1]NO[2]\n",current->username);
+                int n=choose2();
+                if(n==1)
+                {
+                    effect_DIROTTA(current,*head,board);
+                    add_card_to_scarti(scarti,temp);
+                    return false;
+                }
+            }
+
+            temp=(CFU_Cards *) temp->next;
+        }
+
         printf("\n");
         printf("```````````````````````````````\n");
         printf("Il giocatore %s ha preso la carta danno\n",current->username);

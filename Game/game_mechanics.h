@@ -27,12 +27,14 @@ void desc_order( int n,int basescore[n],int effects[n],Player *players[n]);
 
 void effects(Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board*,int numplayers);
 
-void player_has_instant(Player*head,CFU_Cards **scarti,Board*board);
+void player_has_instant(Player*head,Board*board,DMG_cards *dmgCards,CFU_Cards **scarti);
 
 void print_board(Player *head,Board *board);
 
 void salva_dmg(DMG_cards *dmgCards);
 
-bool conteggi(Board *board,Player **head,DMG_cards *dmgCards);
+bool conteggi(Board *board,Player **head,CFU_Cards **scarti);
+
+void peek_all_players(Player *current,Player *head_player);
 
 #endif //HAPPYLITTLESTUDENTS_GAME_MECHANICS_H

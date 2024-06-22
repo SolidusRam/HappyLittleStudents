@@ -21,8 +21,6 @@ int game_over();
 
 void fillCFUCards(Player *player, CFU_Cards ** deck_head_ref) ;
 
-bool conteggi(Board *board,Player **head,DMG_cards *dmgCards);
-
 Player * win_check(Player* head,int numplayers,DMG_cards *scarti);
 
 int dmg_count( int *dmg);

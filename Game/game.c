@@ -110,56 +110,54 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     board.draftedDMG=&draftedDMG;
     board.draftedDMG->next=NULL;
 
+
+
     //azioni giocatore fase di gioco CFU
     //disattivato per controllo effetti
-//    for (int i = 0; i < numplayers; ++i) {
-//        //mostra le informazioni sul giocatore attuale
-//        printf("Turno del Giocatore: %s \n",temp_player->username);
-//        printf("Il tuo personaggio: %s \n",temp_player->character.name);
-//
-//
-//        //selettore dell'azione contestuale
-////        int action=ask_for_action();
-////
-//////        controllo lazione ed eseguo le prime 2
-////        check_action(action,temp_player,head_player);
-////        if(action==1)
-////        {
-//////        gioco la carta CFU
-////        playCFU(temp_player,&scarti,&board,i);
-////        //}
-////        temp_player=temp_player->next;
-////        }
-//
-//
-//        playCFU(temp_player,&scarti,&board,i);
-//        temp_player=temp_player->next;
-//    }
+    for (int i = 0; i < numplayers; ++i) {
+        //mostra le informazioni sul giocatore attuale
+        printf("Turno del Giocatore: %s \n",temp_player->username);
+        printf("Il tuo personaggio: %s \n",temp_player->character.name);
+
+
+//        selettore dell'azione contestuale
+        int action=ask_for_action();
+
+//        controllo lazione ed eseguo le prime 2
+        check_action(action,temp_player,head_player);
+        if(action==1)
+        {
+//        gioco la carta CFU
+        playCFU(temp_player,&scarti,&board,i);
+        //}
+        temp_player=temp_player->next;
+        }
+
+
+        playCFU(temp_player,&scarti,&board,i);
+        temp_player=temp_player->next;
+    }
 
 
 
-
-
-    //Warning
-    //le carte scarti perdono il nome
-//    printf("Stampa delle carte scartate\n");
-//    print_cards(*scarti);
 
     //calcolo punteggio in questa fase il punteggio e calcolato con il punteggio
-    //carte
+
+//
+//    //carte di prova
+//    CFU_Cards cartaDebugNESSUNO={"cartaDebugNESSUNO",10,NESSUNO,NULL};
+//
+//    CFU_Cards cartaDebug={"cartaDebug",10,SCAMBIAC,NULL};
+//
+//    board.ingame_cards[0]=&cartaDebug;
+//    board.ingame_cards[1]=&cartaDebugNESSUNO;
+//
+//    //fine carte di prova
 
 
     // in questa fase i giocatori con carte con effetti hanno la possibilità
     // di giocare l'effetto
 
-    //carte di prova
-    CFU_Cards cartaDebugNESSUNO={"cartaDebugNESSUNO",10,SCARTAP,NULL};
-
-    CFU_Cards cartaDebug={"cartaDebug",10,ANNULLA,NULL};
-
-    board.ingame_cards[0]=&cartaDebug;
-    board.ingame_cards[1]=&cartaDebugNESSUNO;
-    //fine carte di prova
 
     //effetti giocatore
     temp_player=head_player;
@@ -167,7 +165,7 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
 
 
     //fase di attivazione delle carte istantanee
-    //player_has_instant(head_player,&scarti,&board);
+    player_has_instant(head_player,&board,dmgCards,scarti);
 
 
     //controllo se c'è un pareggio in caso positivo si ripete il turno con i player che avevano pareggiato
@@ -176,7 +174,7 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     //stabilisco il vincitore del turno e il perdente
     bool tie_points=false;
 
-    tie_points = conteggi(&board,&head_player,dmgCards);
+    tie_points = conteggi(&board,&head_player,scarti);
 
 
     //preparo la prossima carta danno
@@ -202,7 +200,7 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
             }
             temp_player=temp_player->next;
         }
-        conteggi(&board,&head_player,dmgCards);
+        conteggi(&board, &head_player, (CFU_Cards **) scarti);
     }
 
 
@@ -227,15 +225,6 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
         printf("Il giocatore %s ha vinto la partita",head_player->username);
         game_over();
     }
-
-    /*
-    if(temp_player==NULL)
-    {
-        printf("Nessuno gioca Errore");
-        return 1;
-    }
-    */
-
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori
 

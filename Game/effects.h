@@ -45,7 +45,7 @@ void effect_DIMINUISCI(Player *current, Player *head, Board *board);
 void effect_INVERTI(Board *board);
 
 //Mettila carta Ostacolo che stai per prendere in fondo al mazzo
-void effect_SALVA(Player *current,Player*head,CFU_Cards* mazzo,CFU_Cards **scarti,Board *board);
+void effect_SALVA();
 
 //Dai la carta che stai per prendere a un altro giocatore a tua scelta
 void effect_DIROTTA(Player *current, Player *head, Board *board);
@@ -55,4 +55,6 @@ void effect_DOPPIOE(Board *board);
 
 
 void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int effect, int card_index) ;
+
+void instant_effects(Player *current_player, Player* head, DMG_cards **dmgCards, Board *board, int effect) ;
 #endif //HAPPYLITTLESTUDENTS_EFFECTS_H

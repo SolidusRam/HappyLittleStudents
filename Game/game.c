@@ -73,6 +73,8 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
 void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti)
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
+
+//    scrittura_salvataggio(&head_player,cfuCards,&dmgCards,scarti);
     Board board={0};
     initializeBoard(&board,numplayers);
     Player *temp_player=head_player;
@@ -129,12 +131,9 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
         {
 //        gioco la carta CFU
         playCFU(temp_player,&scarti,&board,i);
-        //}
-        temp_player=temp_player->next;
+
         }
 
-
-        playCFU(temp_player,&scarti,&board,i);
         temp_player=temp_player->next;
     }
 

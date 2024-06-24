@@ -22,7 +22,7 @@
 
 
 
-void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti ){
+void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,CFU_Cards **scarti,int *num){
 
     FILE *file = fopen(FILENAME, "rb");
     if (file == NULL) {
@@ -32,7 +32,7 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
     int numPlayers=0;
 
     fread( &numPlayers, sizeof(int), 1, file);
-
+    *num=numPlayers;
 
     printf("Number of players: %d\n", numPlayers);
 
@@ -185,9 +185,9 @@ void lettura_salvataggio(Player **head_player,CFU_Cards**mazzo,DMG_cards**danno,
 }
 
 void scrittura_salvataggio(Player **head_player, CFU_Cards **mazzo, DMG_cards **danno, CFU_Cards **scarti) {
-    FILE *file = fopen(FILENAME, "wb");
+    FILE *file = fopen(FILENAMESAV, "wb");
     if (file == NULL) {
-        printf("Cannot open file %s\n", FILENAME);
+        printf("Cannot open file %s\n", FILENAMESAV);
         return;
     }
 

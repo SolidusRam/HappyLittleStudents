@@ -130,7 +130,7 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
         if(action==1)
         {
 //        gioco la carta CFU
-        playCFU(temp_player,&scarti,&board,i);
+        playCFU(temp_player,&scarti,&board,i,turn_number);
 
         }
 
@@ -192,7 +192,7 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
 
             if(board.temporay_scores[i]==board.lowest_score)
             {
-                playCFU(temp_player,&scarti,&board,i);
+                playCFU(temp_player,&scarti,&board,i,turn_number);
 
             } else{
                 board.temporay_scores[i]=NONTIE;
@@ -222,6 +222,7 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     if(count_players(head_player)==1)
     {
         printf("Il giocatore %s ha vinto la partita",head_player->username);
+
         game_over();
     }
 
@@ -242,6 +243,8 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
         print_player(temp_player);
         temp_player=temp_player->next;
     }
+
+
     //stampo le carte scartate
     printf("Stampa delle carte scartate\n");
     print_cards(*scarti);
@@ -409,38 +412,38 @@ int dmg_count( int  *count){
 
 
 
-/*
-- si possono utilizzare solo carte CFU punto
-- qualsiasi effetto e/o modificatore, compresa personalità, vengono ignorati
-- si continua ad oltranza finché non c’è un vincitore
-- se un giocatore non ha carte CFU punto perde il turno
-- se entrambi i giocatori non hanno carte CFU punto non ci sono perdenti */
-
-void tie_turn(CFU_Cards **cfuCards, DMG_cards *dmgCards, Player *head_player, CFU_Cards *scarti) {
-
-    Player *temp_player = head_player;
-    int numplayers = count_players(temp_player);
-
-    //inizializzo la board i player vengono aggiornati per eliminazione
-    Board board;
-    initializeBoard(&board,numplayers);
-
-    temp_player=head_player;
-    for (int i = 0; i < numplayers; ++i) {
-        //mostra le informazioni sul giocatore attuale
-        printf("Turno di spareggio per il Giocatore: %s \n",temp_player->username);
-        //selettore dell'azione contestuale
-        //int action=ask_for_action();
-        //controllo lazione ed eseguo le prime 2
-        //check_action(action,temp_player,head_player);
-        //if(action==1)
-        //{
-        //gioco la carta CFU
-        playCFU(temp_player, (CFU_Cards ***) scarti, &board, i);
-        //}
-        temp_player=temp_player->next;
-    }
-
-    conteggi(&board,&head_player,dmgCards);
-
-}
+//*
+//- si possono utilizzare solo carte CFU punto
+//- qualsiasi effetto e/o modificatore, compresa personalità, vengono ignorati
+//- si continua ad oltranza finché non c’è un vincitore
+//- se un giocatore non ha carte CFU punto perde il turno
+//- se entrambi i giocatori non hanno carte CFU punto non ci sono perdenti */
+//
+//void tie_turn(CFU_Cards **cfuCards, DMG_cards *dmgCards, Player *head_player, CFU_Cards *scarti) {
+//
+//    Player *temp_player = head_player;
+//    int numplayers = count_players(temp_player);
+//
+//    //inizializzo la board i player vengono aggiornati per eliminazione
+//    Board board;
+//    initializeBoard(&board,numplayers);
+//
+//    temp_player=head_player;
+//    for (int i = 0; i < numplayers; ++i) {
+//        //mostra le informazioni sul giocatore attuale
+//        printf("Turno di spareggio per il Giocatore: %s \n",temp_player->username);
+//        //selettore dell'azione contestuale
+//        //int action=ask_for_action();
+//        //controllo lazione ed eseguo le prime 2
+//        //check_action(action,temp_player,head_player);
+//        //if(action==1)
+//        //{
+//        //gioco la carta CFU
+//        playCFU(temp_player, (CFU_Cards ***) scarti, &board, i);
+//        //}
+//        temp_player=temp_player->next;
+//    }
+//
+//    conteggi(&board,&head_player,dmgCards);
+//
+//}

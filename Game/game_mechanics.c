@@ -119,7 +119,7 @@ void peek_all_players(Player *current,Player *head_player){
 }
 
 
-void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
+void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer,int turn_number){
 
     CFU_Cards *temp_cards=player->hand;
     Player *current=player;
@@ -166,7 +166,7 @@ void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer){
     printf("\n");
     printf("%s ha giocato la carta %s e ha ottenuto %d punti\n",player->username,board->ingame_cards[nplayer]->name,board->base_scores[nplayer]);
     printf("\n");
-
+    write_log(player->username,turn_number,board->ingame_cards[nplayer]->name);
 
 
 
@@ -248,6 +248,7 @@ void desc_order(int n, int base_score[n], int effect[n], Player* players[n]){
         }
     }
 }
+
 /* gli effetti vengono giocati in base al punteggio delle carte in ordine decrecente
  * base score è il punteggio della carta giocata e ne determina l'ordine
  *

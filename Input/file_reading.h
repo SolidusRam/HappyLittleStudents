@@ -27,5 +27,6 @@ CFU_Cards *card_reading();
 
 void character_reading(Character *characters);
 
+void write_log(const char* player_name, int turn, const char* card_played);
 
 #endif //_PR1_PROGETTO_FILE_READING_H

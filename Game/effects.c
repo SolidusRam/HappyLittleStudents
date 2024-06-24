@@ -3,15 +3,6 @@
 #include "effects.h"
 
 void effects_application(Player *current_player, Player* head, CFU_Cards* mazzo, CFU_Cards **scarti, Board *board, int effect, int card_index) {
-    //stampe doi controllo
-
-    printf("--------debug dentro effects application---------\n");
-    printf("Nome player: %s\n", current_player->username);
-    printf("Prima carta del mazzo: %s\n", mazzo->name);
-    printf("Prima carta degli scarti: %s\n", (*scarti)->name);
-    printf("Indice carta: %d\n", card_index);
-    printf("Carta in gioco: %s\n", board->ingame_cards[card_index]->name);
-
     // Switch on the effect code
     switch (effect) {
         case NESSUNO:

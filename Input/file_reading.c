@@ -105,3 +105,15 @@ void character_reading(Character *characters)
 
     fclose(file);
 }
+
+void write_log(const char* player_name, int turn, const char* card_played) {
+    FILE* log_file = fopen("log.txt", "a");  // Apri il file in modalità append
+    if (log_file == NULL) {
+        printf("Errore nell'apertura del file di log\n");
+        return;
+    }
+
+    fprintf(log_file, "TURNO %d: %s gioca %s\n", turn, player_name, card_played);
+
+    fclose(log_file);
+}

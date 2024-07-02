@@ -20,6 +20,8 @@ int main() {
 
     Player *players=NULL;
 
+    char nome_sav[MAX_CHAR];
+
     init_log();
 
 
@@ -27,14 +29,14 @@ int main() {
     //chiedo se si vuole leggere e caricare il file di salvataggio
     game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
-//    int load=choose2();
-    int load=1;
+    int load=choose2();
 
 
-    //lettura salvataggio buggata
     if (load==1)
     {
-        lettura_salvataggio(&players,&cfuCards,&dmgCards,&scarti,&num_players);
+        //chiedo all'utente quale file vuole utilizzare
+        strcpy(nome_sav,list_saves());
+        lettura_salvataggio(&players,&cfuCards,&dmgCards,&scarti,&num_players,nome_sav);
 
     }
     if(load==2)
@@ -44,6 +46,13 @@ int main() {
 
         setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
+        //chiedo all'utente il nuovo nome del salvataggio
+        printf("Inserisci il nome per il nuovo salvataggio\n");
+        player_username(nome_sav);
+        strcat(nome_sav,".sav");
+        printf("Il salvataggio sara' chiamato %s\n",nome_sav);
+
+        newSave(nome_sav);
         //pesco le carte dal mazzo direttamente nel setup
     }
 
@@ -55,7 +64,7 @@ int main() {
     int turn_number=1;
 
     while (turn_number<10){
-        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);
+        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti,nome_sav);
 
         dmgCards=dmgCards->next;
 

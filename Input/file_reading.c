@@ -107,7 +107,7 @@ void character_reading(Character *characters)
 }
 
 void write_log(const char* player_name, int turn, const char* card_played,int flag) {
-    FILE* log_file = fopen("log.txt", "a");  // Apri il file in modalità append
+    FILE* log_file = fopen("Files/log.txt", "a");  // Apri il file in modalità append
     if (log_file == NULL) {
         printf("Errore nell'apertura del file di log\n");
         return;
@@ -138,10 +138,92 @@ void write_log(const char* player_name, int turn, const char* card_played,int fl
 
 
 void init_log(){
-    FILE* log_file = fopen("log.txt", "w");  // Apri il file in modalità scrittura
+    FILE* log_file = fopen("Files/log.txt", "w");  // Apri il file in modalità scrittura
     if (log_file == NULL) {
         printf("Errore nell'apertura del file di log\n");
         return;
     }
 
+}
+
+
+char* list_saves(){
+    FILE* list = fopen("save_list.txt", "r");
+    if(list==NULL){
+        printf("Lista salvataggi non trovata\n");
+        exit(1);
+    }
+    int num;
+
+    fscanf(list,"%d",&num);
+
+    char **sav = malloc(num * sizeof(char*));
+    for (int i = 0; i < num; ++i) {
+        sav[i] = malloc(MAX_CHAR * sizeof(char));
+        fscanf(list,"%s",sav[i]);
+    }
+
+    //scelgo il salvataggio
+
+    int scelta=num+2;
+    while (scelta>num||scelta<1){
+        printf("Scegli il salvataggio da caricare\n");
+        for (int i = 0; i < num; ++i) {
+            printf("%d. %s\n",i+1,sav[i]);
+        }
+        scanf("%d",&scelta);
+    }
+
+    scelta--;
+
+    char* nome_sav=malloc(MAX_CHAR * sizeof(char));
+
+    strcpy(nome_sav,sav[scelta]);
+
+
+    for (int i = 0; i < num; ++i) {
+        free(sav[i]);
+    }
+    free(sav);
+    fclose(list);
+
+    return nome_sav;
+}
+
+
+//la funzione aggiunge il nuovo salvataggio
+void newSave(char*nome){
+    FILE* list = fopen("save_list.txt", "r");
+    if(list==NULL){
+        printf("Lista salvataggi non trovata\n");
+        exit(1);
+    }
+    int num;
+
+    fscanf(list,"%d",&num);
+
+    char **sav = malloc(num * sizeof(char*));
+    for (int i = 0; i < num; ++i) {
+        sav[i] = malloc(MAX_CHAR * sizeof(char));
+        fscanf(list,"%s",sav[i]);
+    }
+    fclose(list);
+
+    //scrivo il nuovo file
+    FILE* new_list = fopen("save_list.txt", "w");
+
+    fprintf(new_list,"%d\n",num+1);
+
+    for (int i = 0; i < num; ++i) {
+        fprintf(new_list,"%s\n",sav[i]);
+    }
+    fprintf(new_list,"%s\n",nome);
+
+
+
+    for (int i = 0; i < num; ++i) {
+        free(sav[i]);
+    }
+    free(sav);
+    fclose(list);
 }

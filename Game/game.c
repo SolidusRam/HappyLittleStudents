@@ -70,7 +70,7 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
 }
 
 
-void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti)
+void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti,char *sav)
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
 

@@ -35,7 +35,7 @@ int players_number()
 
 void player_username(char username[MAX_CHAR])
 {
-    printf("Enter your username (up to %d characters): ", MAX_CHAR - 1);
+    printf("Inserisci il nome (fino a %d characters): ", MAX_CHAR - 1);
 
     do {
         // Input dall'utente 32 caratteri
@@ -45,7 +45,7 @@ void player_username(char username[MAX_CHAR])
         // Valida la lunghezza dell'input
         size_t lunghezzaInput = strlen(username);
         if (lunghezzaInput > 32) {
-            printf("Errore: L'input supera la lunghezza massima di 32 caratteri. Riprova.\n");
+            printf("Errore: L'input supera la lunghezza massima di %d caratteri. Riprova.\n",MAX_CHAR - 1);
         } else {
             // Stampa la stringa inserita
             printf("Hai inserito: %s\n", username);
@@ -61,6 +61,7 @@ int choose2()
     do {
         printf("Inserisci la tua scelta: ");
         scanf("%d", &scelta);
+        clear();
         switch (scelta) {
             case 1:
                 printf("Hai scelto l'opzione 1.\n");
@@ -75,6 +76,7 @@ int choose2()
                 break;
         }
     } while (scelta != 1 && scelta != 2);
+    return 0;
 }
 
 //scelgo un numero da 1 a 3

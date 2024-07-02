@@ -131,7 +131,6 @@ void write_log(const char* player_name, int turn, const char* card_played,int fl
             fprintf(log_file,"%s riceve la carta danno %s\n",player_name,card_played);
             break;
 
-
     }
 
     fclose(log_file);

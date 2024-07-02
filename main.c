@@ -25,7 +25,7 @@ int main() {
 
 
     //chiedo se si vuole leggere e caricare il file di salvataggio
-//    game_start();
+    game_start();
     //1 carica il file di salvataggio. 2 inizia la partita con un nuovo gioco
 //    int load=choose2();
     int load=1;
@@ -40,12 +40,9 @@ int main() {
     if(load==2)
     {
         //chiedo il numero di giocatori della partita
-//        num_players=players_number();
-//
-//        setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
+        num_players=players_number();
 
-        num_players=2;
-        setup_game_test(&cfuCards,&dmgCards,&players,characters,num_players);
+        setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
         //pesco le carte dal mazzo direttamente nel setup
     }

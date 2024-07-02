@@ -222,6 +222,7 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     if(count_players(head_player)==1)
     {
         printf("Il giocatore %s ha vinto la partita",head_player->username);
+        write_log(head_player->username,turn_number,NULL,3);
 
         game_over();
     }
@@ -365,6 +366,7 @@ Player * win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
         //controllo se il giocatore è morto
         if (check==1) {
             printf("Il giocatore %s e' stato eliminato", current->username);
+            write_log(current->username,0,NULL,2);
             //elimino il giocatore
             return current;
 

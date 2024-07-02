@@ -106,14 +106,43 @@ void character_reading(Character *characters)
     fclose(file);
 }
 
-void write_log(const char* player_name, int turn, const char* card_played) {
+void write_log(const char* player_name, int turn, const char* card_played,int flag) {
     FILE* log_file = fopen("log.txt", "a");  // Apri il file in modalità append
     if (log_file == NULL) {
         printf("Errore nell'apertura del file di log\n");
         return;
     }
 
-    fprintf(log_file, "TURNO %d: %s gioca %s\n", turn, player_name, card_played);
+    switch (flag) {
+
+        case 1:
+            fprintf(log_file, "TURNO %d: %s gioca %s\n", turn, player_name, card_played);
+            break;
+        case 2:
+            fprintf(log_file,"Il giocatore %s e'eliminato\n",player_name);
+            break;
+        case 3:
+            fprintf(log_file,"%s vince la partita\n",player_name);
+            break;
+        case 4:
+            fprintf(log_file,"%s ha vinto il turno\n",player_name);
+            break;
+        case 5:
+            fprintf(log_file,"%s riceve la carta danno %s\n",player_name,card_played);
+            break;
+
+
+    }
 
     fclose(log_file);
+}
+
+
+void init_log(){
+    FILE* log_file = fopen("log.txt", "w");  // Apri il file in modalità scrittura
+    if (log_file == NULL) {
+        printf("Errore nell'apertura del file di log\n");
+        return;
+    }
+
 }

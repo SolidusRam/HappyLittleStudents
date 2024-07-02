@@ -166,7 +166,7 @@ void playCFU(Player *player,CFU_Cards ***scarti,Board *board,int nplayer,int tur
     printf("\n");
     printf("%s ha giocato la carta %s e ha ottenuto %d punti\n",player->username,board->ingame_cards[nplayer]->name,board->base_scores[nplayer]);
     printf("\n");
-    write_log(player->username,turn_number,board->ingame_cards[nplayer]->name);
+    write_log(player->username,turn_number,board->ingame_cards[nplayer]->name,1);
 
 
 
@@ -432,6 +432,7 @@ bool conteggi(Board*board,Player**head,CFU_Cards **scarti)
         if(board->temporay_scores[i]==max)
         {
             printf("Il giocatore %s ha vinto il turno con %d punti\n",current->username,board->temporay_scores[i]);
+            write_log(current->username,0,NULL,4);
             if(max!=NONTIE)
             {
                 current->cfu_score+=board->temporay_scores[i];
@@ -493,6 +494,7 @@ bool conteggi(Board*board,Player**head,CFU_Cards **scarti)
         printf("Il giocatore %s ha preso la carta danno\n",current->username);
         printf("```````````````````````````````\n");
         printf("\n");
+        write_log(current->username,0,board->draftedDMG->name,5);
         add_dmg(current,board->draftedDMG);
 
     }else

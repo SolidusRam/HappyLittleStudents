@@ -20,6 +20,7 @@ int main() {
 
     Player *players=NULL;
 
+    init_log();
 
 
 
@@ -54,7 +55,7 @@ int main() {
 
     printf("inizio della partita\n");
 
-    int turn_number=0;
+    int turn_number=1;
 
     while (turn_number<10){
         turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti);

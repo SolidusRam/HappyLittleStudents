@@ -41,6 +41,7 @@ int main() {
     }
     if(load==2)
     {
+        setup_game_test(&cfuCards,&dmgCards,&players,characters,4);
         //chiedo il numero di giocatori della partita
         num_players=players_number();
 
@@ -53,7 +54,7 @@ int main() {
         printf("Il salvataggio sara' chiamato %s\n",nome_sav);
 
         newSave(nome_sav);
-        //pesco le carte dal mazzo direttamente nel setup
+//        pesco le carte dal mazzo direttamente nel setup
     }
 
 
@@ -63,7 +64,7 @@ int main() {
 
     int turn_number=1;
 
-    while (turn_number<10){
+    while (turn_number<2){
         turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti,nome_sav);
 
         dmgCards=dmgCards->next;
@@ -73,23 +74,10 @@ int main() {
 
 
 
-
-    /*
-    int check=0;
-    //turno da reiterare per variabile di ritorno
-    for(int turn_number=0;check==0;turn_number++)
-    {
-        check=turn(&cfuCards,dmgCards,players,turn_number,numplyers );
-    }
-    */
-
-
     //memory free
-//    free_cards(scarti);
-//    free_cards(cfuCards);
-//    free_players(players);
-    //questo non funziona
-    //free_dmg_cards(dmgCards);
+    free_cards(scarti);
+    free_cards(cfuCards);
+    free_players(players);
     game_over();
 
     return 0;

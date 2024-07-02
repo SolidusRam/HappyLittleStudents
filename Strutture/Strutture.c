@@ -470,16 +470,6 @@ void delete_player(Player **head, Player *player, CFU_Cards **scarti, DMG_cards 
 }
 
 
-void add_player(Player **head, Player *new_player) {
-    if (head == NULL || new_player == NULL) {
-        printf("Error: Null pointer passed to add_player\n");
-        return;
-    }
-
-    new_player->next = *head;
-    *head = new_player;
-}
-
 int count_players(Player *head) {
     int count = 0;
     Player *current = head;

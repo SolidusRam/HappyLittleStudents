@@ -74,7 +74,7 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
 
-//    scrittura_salvataggio(&head_player,cfuCards,&dmgCards,scarti);
+    scrittura_salvataggio(&head_player,cfuCards,&dmgCards,scarti,sav);
     Board board={0};
     initializeBoard(&board,numplayers);
     Player *temp_player=head_player;
@@ -93,16 +93,6 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
 
     printf("Premi un tasto per continuare\n");
     clear();
-
-
-    //stampo tutti i player DEBUG
-    temp_player=head_player;
-    while (temp_player!=NULL)
-    {
-        print_player(temp_player);
-        temp_player=temp_player->next;
-    }
-    temp_player=head_player;
 
 
     //estrazione carta danno
@@ -152,7 +142,6 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
 //    board.ingame_cards[1]=&cartaDebugNESSUNO;
 //
 //    //fine carte di prova
-
 
     // in questa fase i giocatori con carte con effetti hanno la possibilità
     // di giocare l'effetto
@@ -245,13 +234,6 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
         temp_player=temp_player->next;
     }
 
-
-    //stampo le carte scartate
-    printf("Stampa delle carte scartate\n");
-    print_cards(*scarti);
-
-
-    //codice di uscita !=0
     free(board.ingame_cards);
     free(board.temporay_scores);
     free(board.flags);
@@ -411,41 +393,3 @@ int dmg_count( int  *count){
     // Se nessuna delle condizioni è soddisfatta, il giocatore non è eliminato
     return 0;
 }
-
-
-
-//*
-//- si possono utilizzare solo carte CFU punto
-//- qualsiasi effetto e/o modificatore, compresa personalità, vengono ignorati
-//- si continua ad oltranza finché non c’è un vincitore
-//- se un giocatore non ha carte CFU punto perde il turno
-//- se entrambi i giocatori non hanno carte CFU punto non ci sono perdenti */
-//
-//void tie_turn(CFU_Cards **cfuCards, DMG_cards *dmgCards, Player *head_player, CFU_Cards *scarti) {
-//
-//    Player *temp_player = head_player;
-//    int numplayers = count_players(temp_player);
-//
-//    //inizializzo la board i player vengono aggiornati per eliminazione
-//    Board board;
-//    initializeBoard(&board,numplayers);
-//
-//    temp_player=head_player;
-//    for (int i = 0; i < numplayers; ++i) {
-//        //mostra le informazioni sul giocatore attuale
-//        printf("Turno di spareggio per il Giocatore: %s \n",temp_player->username);
-//        //selettore dell'azione contestuale
-//        //int action=ask_for_action();
-//        //controllo lazione ed eseguo le prime 2
-//        //check_action(action,temp_player,head_player);
-//        //if(action==1)
-//        //{
-//        //gioco la carta CFU
-//        playCFU(temp_player, (CFU_Cards ***) scarti, &board, i);
-//        //}
-//        temp_player=temp_player->next;
-//    }
-//
-//    conteggi(&board,&head_player,dmgCards);
-//
-//}

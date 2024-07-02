@@ -131,7 +131,6 @@ void print_card_info(CFU_Cards *card);
 void add_dmg(Player*player, DMG_cards *new_card);
 
 void delete_player(Player **head, Player *player, CFU_Cards **scarti, DMG_cards **dmg);
-void add_player(Player **head, Player *new_player);
 
 int count_players(Player *head);
 

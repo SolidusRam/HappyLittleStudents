@@ -20,3 +20,4 @@ Il progetto per l'esame di PR1
      aggiorna il numero di salvataggi.
     - Il file contiene un primo valore con il numero totale di salvataggi
      e successivamente i path.
+    - Il file log viene resettato ad ogni avvio del programma.

@@ -72,7 +72,6 @@ int main() {
     }
 
 
-
     //memory free
     free_cards(scarti);
     free_cards(cfuCards);

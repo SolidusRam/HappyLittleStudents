@@ -220,7 +220,7 @@ void initializeBoard(Board* board,int numplayers) {
     board->numplayers= numplayers;
     board->molt=false;
     board->annulla=false;
-    board->salva=false;
+    board->win=false;
 
     for (int i = 0; i < numplayers; ++i) {
         board->temporay_scores[i] = 0;

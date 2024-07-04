@@ -517,7 +517,7 @@ void effect_SCAMBIAC(Player *current, Player *head, Board *board)
 
     printf("Scegli 2 giocatori, scambieranno carta giocata per questo turno\n");
     printf("Scegli il giocatore G1\n");
-    peek_all_players(current,head);
+    peek_all_players(head);
     scanf("%d",&choiceG1);
     while(choiceG1<1 || choiceG1>board->numplayers)
     {
@@ -525,7 +525,7 @@ void effect_SCAMBIAC(Player *current, Player *head, Board *board)
         scanf("%d",&choiceG1);
     }
     printf("Scegli il giocatore G2\n");
-    peek_all_players(current,head);
+    peek_all_players(head);
     scanf("%d",&choiceG2);
     while(choiceG2<1 || choiceG2>board->numplayers|| choiceG2==choiceG1)
     {

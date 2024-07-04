@@ -1,13 +1,6 @@
 #include "game_mechanics.h"
 
 
-/**
- * Pesco le carte un difetto a fine round per ogni giocatore
- *
- * @param head lista dei giocatori
- * @param deck_head_ref mazzo delle carte
- *
- * */
 void draw(Player *head, CFU_Cards **deck_head_ref)
 {
 
@@ -32,8 +25,6 @@ void draw(Player *head, CFU_Cards **deck_head_ref)
 }
 
 DMG_cards *draw_DMG(DMG_cards *head){
-
-
 
     //se nel mazzo non ci sono piu' carte, le carte vengono mescolate
     if(head==NULL)
@@ -96,7 +87,7 @@ void peek_players(Player *current,Player *head_player){
     {
         if(current->character.name!=temp->character.name)
         {
-            printf("[%d] %s ha %d punti dallo scorso turno, e tot danni\n",count,temp->username,temp->cfu_score);
+            printf("[%d] %s ha %d punti dallo scorso turno, e questi danni\n",count,temp->username,temp->cfu_score);
             print_dmg_cards(temp->dmg);
             count++;
         }
@@ -104,7 +95,7 @@ void peek_players(Player *current,Player *head_player){
     }
 }
 
-void peek_all_players(Player *current,Player *head_player){
+void peek_all_players(Player *head_player) {
 
     printf("Stampo le informazioni riguardanti i giocatori:\n");
     Player *temp=head_player;
@@ -206,18 +197,6 @@ int validate(CFU_Cards*card){
         printf("La carta che vuoi giocare è una carta instantanea, "
                "seleziona una carta valida per questo step del gioco\n");
         return 0;
-    }
-}
-
-void suggerimento(CFU_Cards*mano, Board board){
-    for (int i = 0; i < HAND; ++i) {
-        if (mano->effect>=AUMENTA)
-        {
-            printf("La carta %s per l'opzione %d può essere giocata "
-                   "dopo il calcolo del punteggio\n",mano->name,i);
-            board.flags[i]=1;
-        }
-        mano = mano->next;
     }
 }
 
@@ -371,27 +350,6 @@ void print_board(Player *head,Board *board){
 }
 
 
-//sposta la carta danno in fondo al mazzo
-void salva_dmg(DMG_cards *dmgCards){
-    DMG_cards *current=dmgCards;
-    DMG_cards *prev=NULL;
-    while(current->next!=NULL)
-    {
-        prev=current;
-        current=current->next;
-    }
-    prev->next=NULL;
-    current->next=dmgCards;
-    dmgCards=current;
-}
-
-
-/**
- * La funzione trova il giocatore con il punteggio più alto e più basso e assegna la carta danno al giocatore con il punteggio più basso.
- * In caso di pareggio per il punteggio più basso nessun giocatore prende la carta danno e si ripete il turno fra i giocatori in pareggio.
- * In caso di pareggio per il punteggio più alto entrambi vincono il turno.
- *
- */
 
 bool conteggi(Board*board,Player**head,CFU_Cards **scarti)
 {
@@ -399,10 +357,7 @@ bool conteggi(Board*board,Player**head,CFU_Cards **scarti)
     int max=board->temporay_scores[0];
     int min=board->temporay_scores[0];
     int mincount=0;
-    int index_max=0;
     int index_min=0;
-    int tiemin=0;
-    int check=0;
 
     Player *current=*head;
 
@@ -411,7 +366,6 @@ bool conteggi(Board*board,Player**head,CFU_Cards **scarti)
         if(board->temporay_scores[i]>max)
         {
             max=board->temporay_scores[i];
-            index_max=i;
         }
         if(board->temporay_scores[i]<min)
         {

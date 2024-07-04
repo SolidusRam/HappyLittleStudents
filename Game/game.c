@@ -1,6 +1,6 @@
 #include "game.h"
 
-
+/*
 void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_player,Character character[4],int num_players)
 {
     //operazioni di lettura
@@ -53,24 +53,10 @@ void setup_game_test(CFU_Cards **cfuCards,DMG_cards **dmgCards,Player **head_pla
 
     current->next=NULL;
 
-
-    /*
-     *
-       for (int i = 0; i < num_players-1; ++i) {
-       current->next = create_player();
-       current=current->next;
-       current->character=character[i];
-       player_username(current->username);
-       fillCFUCards(current,cfuCards);
-       }
-       current->next=NULL;
-     *
-     * */
-
 }
+*/
 
-
-void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti,char *sav)
+bool turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_number,int numplayers,CFU_Cards **scarti,char *sav)
 {
     //inizializzo la board i player vengono aggiornati per eliminazione
 
@@ -85,7 +71,6 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
 
 
 
-    //salvataggio stato in file.save
     //stampa del numero turno
     printf("Inizia il turno numero %d\n",turn_number);
     printf("---------------------------\n");
@@ -105,13 +90,15 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
 
 
     //azioni giocatore fase di gioco CFU
-    //disattivato per controllo effetti
     for (int i = 0; i < numplayers; ++i) {
         //mostra le informazioni sul giocatore attuale
         printf("Turno del Giocatore: %s \n",temp_player->username);
         printf("Il tuo personaggio: %s \n",temp_player->character.name);
 
 
+        printf("[1]Gioca una carta CFU\n");
+        printf("[2]Mostra gli altri giocatori\n");
+        printf("[3]Esci dal gioco\n");
 //        selettore dell'azione contestuale
         int action=ask_for_action();
 
@@ -192,16 +179,17 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     }
 
 
-    printf("Stampa dopo il conteggio\n");
-    print_board(head_player,&board);
+//    printf("Stampa dopo il conteggio\n");
+//    print_board(head_player,&board);
 
 
 
 
-    //controllo se un player deve essere eliminato oppure ha vinto
+    //controllo se un player deve essere eliminato oppure ha vinto per punti
     Player * player_to_delete;
-    player_to_delete=win_check(head_player, numplayers, dmgCards);
+    player_to_delete=win_check(head_player, numplayers, dmgCards,&board);
 
+    if(board.win==true)return board.win;
 
     //eliminazione player
     delete_player(&head_player,player_to_delete,scarti,&dmgCards);
@@ -212,8 +200,8 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     {
         printf("Il giocatore %s ha vinto la partita",head_player->username);
         write_log(head_player->username,turn_number,NULL,3);
-
-        game_over();
+        board.win=true;
+        return board.win;
     }
 
     //pesca carte in difetto dal turno precendente per tutti i giocatori
@@ -226,18 +214,12 @@ void turn(CFU_Cards **cfuCards,DMG_cards *dmgCards,Player *head_player,int turn_
     }
 
 
-    //stampo tutti i player DEBUG
-    temp_player=head_player;
-    while (temp_player!=NULL)
-    {
-        print_player(temp_player);
-        temp_player=temp_player->next;
-    }
 
     free(board.ingame_cards);
     free(board.temporay_scores);
     free(board.flags);
     free(board.base_scores);
+    return board.win;
 }
 
 
@@ -304,7 +286,7 @@ int game_over(){
     exit(0) ;
 }
 
-Player * win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
+Player * win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo,Board *board)
 {
     /*
     Vince la partita il primo studente che arriva a 60 CFU o l’ultimo che non ha fatto rinuncia agli studi.
@@ -323,7 +305,8 @@ Player * win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
         if(current->cfu_score>=60)
         {
             printf("Il giocatore %s ha vinto la partita",current->username);
-            game_over();
+            board->win=true;
+            return NULL;
         }
         current=current->next;
     }
@@ -358,10 +341,6 @@ Player * win_check(Player*head_player,int numplayers,DMG_cards *dmgMazzo)
 
 }
 
-
-/** La funzione controlla se il giocatore ha la combinazione
- * di carte ostacolo che lo fa eliminare dal gioco
- * */
 
 int dmg_count( int  *count){
 

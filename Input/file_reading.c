@@ -148,7 +148,7 @@ void init_log(){
 
 
 char* list_saves(){
-    FILE* list = fopen("save_list.txt", "r");
+    FILE* list = fopen("Files/save_list.txt", "r");
     if(list==NULL){
         printf("Lista salvataggi non trovata\n");
         exit(1);
@@ -191,9 +191,8 @@ char* list_saves(){
 }
 
 
-//la funzione aggiunge il nuovo salvataggio
 void newSave(char*nome){
-    FILE* list = fopen("save_list.txt", "r");
+    FILE* list = fopen("Files/save_list.txt", "r");
     if(list==NULL){
         printf("Lista salvataggi non trovata\n");
         exit(1);
@@ -210,7 +209,7 @@ void newSave(char*nome){
     fclose(list);
 
     //scrivo il nuovo file
-    FILE* new_list = fopen("save_list.txt", "w");
+    FILE* new_list = fopen("Files/save_list.txt", "w");
 
     fprintf(new_list,"%d\n",num+1);
 

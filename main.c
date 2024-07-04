@@ -11,12 +11,11 @@ int main() {
     int num_players=0;
 
     //inzializzo le varibili
-    //definire meglio il numero delle carte per allocare bene la memoria
 
-    CFU_Cards *cfuCards=NULL;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
-    CFU_Cards *scarti=NULL;//= malloc(sizeof(CFU_Cards)*TOTALCFU);
+    CFU_Cards *cfuCards=NULL;
+    CFU_Cards *scarti=NULL;
 
-    DMG_cards *dmgCards=NULL;//= malloc(sizeof(DMG_cards)*TOTALDMG);
+    DMG_cards *dmgCards=NULL;
 
     Player *players=NULL;
 
@@ -41,14 +40,14 @@ int main() {
     }
     if(load==2)
     {
-        setup_game_test(&cfuCards,&dmgCards,&players,characters,4);
+        //setup_game_test(&cfuCards,&dmgCards,&players,characters,4);
         //chiedo il numero di giocatori della partita
         num_players=players_number();
 
         setup_game(&cfuCards,&dmgCards,&players,characters,num_players);
 
         //chiedo all'utente il nuovo nome del salvataggio
-        printf("Inserisci il nome per il nuovo salvataggio\n");
+        printf("Inserisci il nome del tuo nuovo SALVATAGGIO \n");
         player_username(nome_sav);
         strcat(nome_sav,".sav");
         printf("Il salvataggio sara' chiamato %s\n",nome_sav);
@@ -59,13 +58,13 @@ int main() {
 
 
 
-
     printf("inizio della partita\n");
 
     int turn_number=1;
 
-    while (turn_number<2){
-        turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti,nome_sav);
+    bool win=false;
+    while (win==false){
+        win=turn(&cfuCards,dmgCards,players,turn_number,num_players ,&scarti,nome_sav);
 
         dmgCards=dmgCards->next;
 

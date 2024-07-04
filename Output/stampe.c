@@ -73,13 +73,13 @@ void papiro()
            "          \\_/dc__________________________/.\n");
     */
 
-    // Define the width of your border
+    // Definisco la larghezza del bordo
     int border_width = 27;
 
-    // Define the string to print
+    // Stringa di prova
     char *message = "Hello World ";
 
-    // Calculate the number of spaces needed to center the message
+    //Calcolo gli spazi prima e dopo il messaggio
     int spaces_before = (border_width - strlen(message)) / 2;
     int spaces_after = border_width - strlen(message) - spaces_before;
 
@@ -92,7 +92,7 @@ void papiro()
            "         |                            |.    \n"
            "         |                            |.    \n");
 
-    // Print the middle part with the message
+    // Stampa il messaggio
     printf("         | ");
     for (int i = 0; i < spaces_before; i++) {
         printf(" ");
@@ -103,8 +103,8 @@ void papiro()
     }
     printf("|.\n");
 
-    // Print the bottom border
-    printf("         \\_/dc__________________________/\n");
+    // Stampa il fondo
+    printf("         \\_/____________________________/\n");
 
 
 }

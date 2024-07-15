@@ -10,12 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-//da cambiare//
-#define FILENAMEABS "C:\\Users\\lemai\\Desktop\\Pr1_progetto\\HappyLittleStudents\\Files\\savegame.sav"
-#define FILENAME "Files/savegame.sav"
-#define FILENAMESAV "Files/salvataggioProva.sav"
-
 /**
  * Funzione che legge il file binario di salvataggio
  * @param head_player lista dei giocatori

@@ -11,8 +11,9 @@
 
 #define CARTE "Files/carte.txt"
 #define OSTACOLI "Files/ostacoli.txt"
-
 #define PERSONAGGI "Files/personaggi.txt"
+#define LISTA_SALVATAGGI "Files/save_list.txt"
+#define LOG "Files/log.txt"
 
 /**
  * Funzione che legge le carte ostacolo dal file

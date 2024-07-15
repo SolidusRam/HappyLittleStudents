@@ -107,7 +107,7 @@ void character_reading(Character *characters)
 }
 
 void write_log(const char* player_name, int turn, const char* card_played,int flag) {
-    FILE* log_file = fopen("Files/log.txt", "a");  // Apri il file in modalità append
+    FILE* log_file = fopen(LOG, "a");  // Apri il file in modalità append
     if (log_file == NULL) {
         printf("Errore nell'apertura del file di log\n");
         return;
@@ -138,7 +138,7 @@ void write_log(const char* player_name, int turn, const char* card_played,int fl
 
 
 void init_log(){
-    FILE* log_file = fopen("Files/log.txt", "w");  // Apri il file in modalità scrittura
+    FILE* log_file = fopen(LOG, "w");  // Apri il file in modalità scrittura
     if (log_file == NULL) {
         printf("Errore nell'apertura del file di log\n");
         return;
@@ -148,7 +148,7 @@ void init_log(){
 
 
 char* list_saves(){
-    FILE* list = fopen("Files/save_list.txt", "r");
+    FILE* list = fopen(LISTA_SALVATAGGI, "r");
     if(list==NULL){
         printf("Lista salvataggi non trovata\n");
         exit(1);
@@ -192,7 +192,7 @@ char* list_saves(){
 
 
 void newSave(char*nome){
-    FILE* list = fopen("Files/save_list.txt", "r");
+    FILE* list = fopen(LISTA_SALVATAGGI, "r");
     if(list==NULL){
         printf("Lista salvataggi non trovata\n");
         exit(1);
@@ -209,7 +209,7 @@ void newSave(char*nome){
     fclose(list);
 
     //scrivo il nuovo file
-    FILE* new_list = fopen("Files/save_list.txt", "w");
+    FILE* new_list = fopen(LISTA_SALVATAGGI, "w");
 
     fprintf(new_list,"%d\n",num+1);
 

@@ -101,11 +101,26 @@ typedef struct Board{
 }Board;
 
 
+/**
+ * Funzione che mischia le carte del mazzo
+ * @param head puntatore alla testa del mazzo
+ */
 void shuffleCFU(CFU_Cards**);
 void shuffleDmg(DMG_cards **);
+
+/**
+ * Funzione che mischia i personaggi dal dato array
+ * @param characters array dei personaggi
+ */
 void shuffle_characters(Character*,size_t);
 
 Player *create_player();
+
+/**
+ * Funzione che inizializza la board
+ * ogni turno la board viene inizializzata con i valori base
+ * @param head puntatore alla testa del mazzo
+ */
 void initializeBoard(Board* board,int numplayers);
 
 void free_cards(CFU_Cards* head);
